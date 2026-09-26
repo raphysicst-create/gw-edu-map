@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "sgisReferenceDate": "2025-06-30",
+  "legalCodeReferenceDate": "2026-06-30",
+  "sourceSidoCode": "32",
+  "internalSidoCode": "51",
+  "neighborSidoCodes": [
+    { "sgisCode": "31", "internalCode": "41", "name": "경기도" },
+    { "sgisCode": "33", "internalCode": "43", "name": "충청북도" },
+    { "sgisCode": "37", "internalCode": "47", "name": "경상북도" }
+  ],
+  "regions": [
+    { "sgisCode": "32010", "internalCode": "51110", "legalDongCode": "5111000000", "name": "춘천시" },
+    { "sgisCode": "32020", "internalCode": "51130", "legalDongCode": "5113000000", "name": "원주시" },
+    { "sgisCode": "32030", "internalCode": "51150", "legalDongCode": "5115000000", "name": "강릉시" },
+    { "sgisCode": "32040", "internalCode": "51170", "legalDongCode": "5117000000", "name": "동해시" },
+    { "sgisCode": "32050", "internalCode": "51190", "legalDongCode": "5119000000", "name": "태백시" },
+    { "sgisCode": "32060", "internalCode": "51210", "legalDongCode": "5121000000", "name": "속초시" },
+    { "sgisCode": "32070", "internalCode": "51230", "legalDongCode": "5123000000", "name": "삼척시" },
+    { "sgisCode": "32510", "internalCode": "51720", "legalDongCode": "5172000000", "name": "홍천군" },
+    { "sgisCode": "32520", "internalCode": "51730", "legalDongCode": "5173000000", "name": "횡성군" },
+    { "sgisCode": "32530", "internalCode": "51750", "legalDongCode": "5175000000", "name": "영월군" },
+    { "sgisCode": "32540", "internalCode": "51760", "legalDongCode": "5176000000", "name": "평창군" },
+    { "sgisCode": "32550", "internalCode": "51770", "legalDongCode": "5177000000", "name": "정선군" },
+    { "sgisCode": "32560", "internalCode": "51780", "legalDongCode": "5178000000", "name": "철원군" },
+    { "sgisCode": "32570", "internalCode": "51790", "legalDongCode": "5179000000", "name": "화천군" },
+    { "sgisCode": "32580", "internalCode": "51800", "legalDongCode": "5180000000", "name": "양구군" },
+    { "sgisCode": "32590", "internalCode": "51810", "legalDongCode": "5181000000", "name": "인제군" },
+    { "sgisCode": "32600", "internalCode": "51820", "legalDongCode": "5182000000", "name": "고성군" },
+    { "sgisCode": "32610", "internalCode": "51830", "legalDongCode": "5183000000", "name": "양양군" }
+  ]
+}

@@ -1,3 +1,4 @@
+import { assertLegacyPipelineDisabled } from "./gangwon/legacy-guard";
 /**
  * Downloads every year's KESS "학교별 데이터셋" xlsx listed in
  * KESS_FILE_IDS (sources.ts) into data/raw/kess-<year>.xlsx, skipping any
@@ -12,6 +13,7 @@ import { KESS_FILE_IDS, kessDownloadUrl } from "./sources";
 const RAW_DIR = path.resolve(import.meta.dirname, "../../data/raw");
 
 async function main(): Promise<void> {
+  assertLegacyPipelineDisabled();
   const years = Object.keys(KESS_FILE_IDS)
     .map(Number)
     .sort((a, b) => b - a);
@@ -44,3 +46,4 @@ main().catch((err) => {
   console.error(err);
   process.exitCode = 1;
 });
+

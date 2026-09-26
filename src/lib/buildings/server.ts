@@ -2,11 +2,15 @@ import { fetchVworldPage } from "./transport";
 import type { Feature, Polygon, MultiPolygon } from "geojson";
 import { buildingProperties, type BuildingTile } from "./types";
 import { tileBounds } from "./tiles";
+import { GANGWON_EXTERNAL_MAPS } from "../profiles/external-maps";
 
 /** One deadline across all pages; no partial results may escape this function. */
 export async function fetchBuildingTile(x: number, y: number, options: {
   key: string; domain?: string; signal?: AbortSignal; fetcher?: typeof fetch; timeoutMs?: number;
 }): Promise<BuildingTile> {
+  if (!GANGWON_EXTERNAL_MAPS.buildings) {
+    throw new Error("Building source unavailable pending VWorld terms review");
+  }
   const signal = AbortSignal.any([AbortSignal.timeout(options.timeoutMs ?? 10_000), ...(options.signal ? [options.signal] : [])]);
   const bounds = tileBounds(x, y);
   const features: BuildingTile["features"] = [];

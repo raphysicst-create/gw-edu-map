@@ -1,4 +1,5 @@
 import type { School } from "./types";
+import { GANGWON_VIEW } from "../profiles/gangwon";
 import type { EducationIssuesFile } from "../issues/types";
 
 export interface SchoolChartMetric {
@@ -48,7 +49,7 @@ export function chartMaximum(schools: readonly School[], metric: SchoolChartMetr
 /** Zero-based linear encoding. Zoom changes visual scale, never the data domain or height ratios. */
 export function chartHeight(value: number | null, maximum: number, zoom: number, mode?: SchoolChartMetric["heightMode"]): number {
   if (value === null || !Number.isFinite(value) || value <= 0 || maximum <= 0) return 0;
-  const metersPerPixel = 40075016.686 * Math.cos(35.8 * Math.PI / 180) / (512 * 2 ** zoom);
+  const metersPerPixel = 40075016.686 * Math.cos(GANGWON_VIEW.latitude * Math.PI / 180) / (512 * 2 ** zoom);
   if (mode === "school-count") return 12 * metersPerPixel;
   return value / maximum * 150 * metersPerPixel;
 }

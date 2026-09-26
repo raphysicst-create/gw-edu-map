@@ -200,7 +200,7 @@ describe("Legend", () => {
         hasSchoolsWithoutLocation
       />,
     );
-    expect(screen.getByText("(특수학교는 위치 자료 없음)")).toBeInTheDocument();
+    expect(screen.getByText("(좌표 미확보 학교는 지도 점에서 제외)")).toBeInTheDocument();
   });
 
   // Task 6, Section C-추가 #5 — count 지표는 색 구간이 quantile(5분위)로 바뀌므로
@@ -269,6 +269,6 @@ describe("Legend", () => {
         hasSchoolsWithoutLocation={false}
       />,
     );
-    expect(screen.queryByText("(특수학교는 위치 자료 없음)")).not.toBeInTheDocument();
+    expect(screen.queryByText("(좌표 미확보 학교는 지도 점에서 제외)")).not.toBeInTheDocument();
   });
 });

@@ -12,8 +12,8 @@ import {
 } from "@/components/map/camera";
 import { ELEVATION_MAX } from "@/lib/scales";
 
-// Roughly 전북's bbox (see public/data/regions.geojson after `npm run data:regions`).
-const JB_BBOX: [number, number, number, number] = [125.97, 35.3, 127.91, 36.16];
+// Synthetic extent spanning Gangwon's east-west and north-south range.
+const GANGWON_BBOX: [number, number, number, number] = [127.0, 36.9, 129.5, 38.6];
 const SIZE = { width: 1600, height: 900 };
 const PADDING = 60;
 
@@ -53,7 +53,7 @@ function expectAllContained(
 
 describe("fitViewToPoints", () => {
   it("keeps every corner of a synthetic bbox inside the padded frame at an arbitrary pitch (50) / bearing -15", () => {
-    const corners = bboxCorners(JB_BBOX);
+    const corners = bboxCorners(GANGWON_BBOX);
     const result = fitViewToPoints(corners, SIZE, {
       pitch: 50,
       bearing: -15,
@@ -83,24 +83,24 @@ describe("fitViewToPoints", () => {
 
 describe("fitOverview", () => {
   it("returns a finite zoom within [minZoom, maxZoom]", () => {
-    const viewState = fitOverview(JB_BBOX, [], SIZE);
+    const viewState = fitOverview(GANGWON_BBOX, [], SIZE);
     expect(Number.isFinite(viewState.zoom)).toBe(true);
     expect(viewState.zoom).toBeGreaterThanOrEqual(VIEW_LIMITS.minZoom);
     expect(viewState.zoom).toBeLessThanOrEqual(VIEW_LIMITS.maxZoom);
   });
 
   it("returns finite longitude/latitude roughly centered on the bbox", () => {
-    const viewState = fitOverview(JB_BBOX, [], SIZE);
+    const viewState = fitOverview(GANGWON_BBOX, [], SIZE);
     expect(Number.isFinite(viewState.longitude)).toBe(true);
     expect(Number.isFinite(viewState.latitude)).toBe(true);
-    expect(viewState.longitude).toBeGreaterThan(JB_BBOX[0]);
-    expect(viewState.longitude).toBeLessThan(JB_BBOX[2]);
-    expect(viewState.latitude).toBeGreaterThan(JB_BBOX[1]);
-    expect(viewState.latitude).toBeLessThan(JB_BBOX[3]);
+    expect(viewState.longitude).toBeGreaterThan(GANGWON_BBOX[0]);
+    expect(viewState.longitude).toBeLessThan(GANGWON_BBOX[2]);
+    expect(viewState.latitude).toBeGreaterThan(GANGWON_BBOX[1]);
+    expect(viewState.latitude).toBeLessThan(GANGWON_BBOX[3]);
   });
 
   it("uses the fixed overview pitch/bearing and view limits", () => {
-    const viewState = fitOverview(JB_BBOX, [], SIZE);
+    const viewState = fitOverview(GANGWON_BBOX, [], SIZE);
     expect(viewState.pitch).toBe(OVERVIEW_PITCH);
     expect(viewState.bearing).toBe(OVERVIEW_BEARING);
     expect(viewState.minZoom).toBe(VIEW_LIMITS.minZoom);
@@ -110,23 +110,21 @@ describe("fitOverview", () => {
   });
 
   it("keeps the bbox corners AND every label point inside the padded canvas (the acceptance bar: nothing clipped)", () => {
-    // Worst-case-ish label points: at/near the bbox edges, like a region
-    // whose labelPoint sits close to 전북's outer boundary (e.g. 부안군/고창군
-    // on the west coast, 무주군/장수군 to the east).
+    // Synthetic label points at or near the Gangwon bbox edges.
     const labelPoints: [number, number][] = [
-      [JB_BBOX[0] + 0.02, JB_BBOX[1] + 0.02],
-      [JB_BBOX[2] - 0.02, JB_BBOX[3] - 0.02],
-      [126.65, 35.68], // ~부안군
-      [127.72, 35.83], // ~무주군
-      [127.17, 35.82], // ~전주시 (interior)
+      [GANGWON_BBOX[0] + 0.02, GANGWON_BBOX[1] + 0.02],
+      [GANGWON_BBOX[2] - 0.02, GANGWON_BBOX[3] - 0.02],
+      [127.5, 38.1],
+      [129.1, 37.4],
+      [128.2, 37.8], // interior
     ];
-    const viewState = fitOverview(JB_BBOX, labelPoints, SIZE);
-    expectAllContained([...bboxCorners(JB_BBOX), ...labelPoints], viewState, SIZE, 60);
+    const viewState = fitOverview(GANGWON_BBOX, labelPoints, SIZE);
+    expectAllContained([...bboxCorners(GANGWON_BBOX), ...labelPoints], viewState, SIZE, 60);
   });
 });
 
 describe("fitRegion", () => {
-  const REGION_BBOX: [number, number, number, number] = [127.0, 35.7, 127.24, 35.9]; // ~전주시
+  const REGION_BBOX: [number, number, number, number] = [127.7, 37.8, 127.95, 38.0]; // synthetic ~춘천시
 
   it("returns a finite zoom, pitch 58, and a fly-to transition", () => {
     const viewState = fitRegion(REGION_BBOX, SIZE);
@@ -182,8 +180,8 @@ describe("constants", () => {
     expect(CONTROLLER.keyboard).toBe(false);
     expect(CONTROLLER.inertia).toBe(300);
     expect(CONTROLLER.maxBounds).toEqual([
-      [125.6, 34.7],
-      [128.7, 36.7],
+      [126.8, 36.8],
+      [129.7, 38.7],
     ]);
     expect(CONTROLLER.rubberBand).toBe(true);
   });

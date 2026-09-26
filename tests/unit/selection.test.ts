@@ -50,20 +50,20 @@ describe("nextRegion", () => {
 });
 
 describe("regionRankList", () => {
-  it("orders the 시군 codes present in the map by descending value (rank 1 first)", () => {
+  it("orders the Gangwon 시군 codes present in the map by descending value (rank 1 first)", () => {
     const map = new Map<string, number | null>([
-      ["52110", 30],
-      ["52130", 10],
-      ["52140", 20],
+      ["51110", 30],
+      ["51130", 10],
+      ["51150", 20],
     ]);
     const list = regionRankList(map);
-    expect(list[0]).toBe("52110");
-    expect(list[1]).toBe("52140");
-    expect(list[2]).toBe("52130");
+    expect(list[0]).toBe("51110");
+    expect(list[1]).toBe("51150");
+    expect(list[2]).toBe("51130");
   });
 
-  it("always returns all 14 REGION_CODES, even when the map only has some of them", () => {
-    const map = new Map<string, number | null>([["52110", 100]]);
+  it("always returns all REGION_CODES, even when the map only has some of them", () => {
+    const map = new Map<string, number | null>([["51110", 100]]);
     const list = regionRankList(map);
     expect(list).toHaveLength(REGION_CODES.length);
     expect(new Set(list)).toEqual(new Set(REGION_CODES));
@@ -71,11 +71,11 @@ describe("regionRankList", () => {
 
   it("puts ranked (non-null) codes before unranked (null-value) codes", () => {
     const map = new Map<string, number | null>([
-      ["52110", null],
-      ["52130", 5],
+      ["51110", null],
+      ["51130", 5],
     ]);
     const list = regionRankList(map);
-    expect(list.indexOf("52130")).toBeLessThan(list.indexOf("52110"));
+    expect(list.indexOf("51130")).toBeLessThan(list.indexOf("51110"));
   });
 
   it("keeps unranked codes in REGION_CODES order among themselves (stable fallback)", () => {
@@ -86,25 +86,25 @@ describe("regionRankList", () => {
 
   it("gives tied values the same rank, keeping their REGION_CODES relative order (stable sort)", () => {
     const map = new Map<string, number | null>([
-      ["52110", 10],
-      ["52130", 10],
+      ["51110", 10],
+      ["51130", 10],
     ]);
     const list = regionRankList(map);
-    // Both rank 1 (tie) — REGION_CODES lists 52110 before 52130, stable sort preserves that.
-    expect(list.indexOf("52110")).toBeLessThan(list.indexOf("52130"));
+    // Both rank 1 (tie) — REGION_CODES lists 51110 before 51130, stable sort preserves that.
+    expect(list.indexOf("51110")).toBeLessThan(list.indexOf("51130"));
   });
 });
 
 describe("selectionAnnouncement", () => {
   it("matches the brief's example format", () => {
     expect(
-      selectionAnnouncement({ name: "전주시", label: "학생수", valueText: "70,851명", rank: 1, total: 14 }),
-    ).toBe("전주시 선택됨, 학생수 70,851명, 14개 시군 중 1위");
+      selectionAnnouncement({ name: "춘천시", label: "학생수", valueText: "70,851명", rank: 1, total: REGION_CODES.length }),
+    ).toBe(`춘천시 선택됨, 학생수 70,851명, ${REGION_CODES.length}개 시군 중 1위`);
   });
 
   it("falls back to '순위 없음' when rank is null (no data for this region)", () => {
     expect(
-      selectionAnnouncement({ name: "전주시", label: "학생수", valueText: "자료 없음", rank: null, total: 14 }),
-    ).toBe("전주시 선택됨, 학생수 자료 없음, 순위 없음");
+      selectionAnnouncement({ name: "춘천시", label: "학생수", valueText: "자료 없음", rank: null, total: REGION_CODES.length }),
+    ).toBe("춘천시 선택됨, 학생수 자료 없음, 순위 없음");
   });
 });

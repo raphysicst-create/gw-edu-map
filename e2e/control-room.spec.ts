@@ -3,7 +3,7 @@ import { test, expect, docShot } from "./fixtures";
 for (const [width, height] of [[1440, 900], [1024, 768], [390, 844], [360, 640]]) {
   test(`관제실 ${width}×${height}: 전체 지도와 HUD가 컨트롤을 가리지 않는다`, async ({ page }) => {
     await page.setViewportSize({ width, height });
-    await page.goto("/?scene=flat&region=52110&school=B000005959");
+    await page.goto("/?scene=flat&region=51110&school=e2e-school-01");
     const hud = page.getByTestId("school-hud");
     await expect(hud).toBeVisible();
     await expect.poll(() => page.evaluate(() => {

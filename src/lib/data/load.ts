@@ -1,171 +1,77 @@
-/**
- * Fetches every file DataProvider needs and validates the result against
- * the indicator registry. No React import.
- */
-import type { ClosedSchoolsFile } from "../closedSchools/types";
 import { isRegionCode, PROVINCE_CODE, REGION_CODES } from "../geo/regions";
 import { INDICATORS } from "../indicators/registry";
-import type { IndicatorFile, Manifest, SeriesFile } from "../indicators/types";
-import type { SchoolsFile } from "../schools/types";
+import type { IndicatorFile, SeriesFile } from "../indicators/types";
 import { valueMap } from "../stats";
-import type { DataBundle, NeighborsFeatureCollection, RegionsFeatureCollection } from "./types";
+import { assertDatasetIdentity, assertReleaseManifest, DataPreparationError, releaseFileUrl, type PublishedManifest, type ReleaseManifest } from "./release";
+import type { DataBundle } from "./types";
 
-// Narrower than `typeof fetch` (which also accepts URL/Request input) since
-// every call site here always passes a plain string path — `fetch` itself
-// still satisfies this type (a function accepting a wider input type is a
-// valid substitute), and it lets tests inject a fetchImpl typed over plain
-// strings without fighting the DOM lib's URL|RequestInfo union.
-type FetchImpl = (url: string) => Promise<Response>;
+type FetchImpl = (url: string, init?: RequestInit) => Promise<Response>;
 
-async function fetchJson<T>(fetchImpl: FetchImpl, url: string): Promise<T> {
-  const res = await fetchImpl(url);
-  if (!res.ok) {
-    throw new Error(`loadBundle: failed to fetch ${url} (HTTP ${res.status})`);
-  }
-  return (await res.json()) as T;
+/** Files are immutable; the manifest is revalidated before any data request. */
+export async function fetchReleaseFile<T>(manifest: ReleaseManifest, logical: string, fetchImpl: FetchImpl = fetch, signal?: AbortSignal): Promise<T> {
+  const response = await fetchImpl(releaseFileUrl(manifest, logical), { signal });
+  if (!response.ok) throw new Error(`자료를 불러오지 못했습니다: ${logical} (HTTP ${response.status})${response.status === 404 ? ". 자료 버전이 갱신되었을 수 있습니다. 새로고침해 주세요." : ""}`);
+  const data: unknown = await response.json();
+  assertDatasetIdentity(data, manifest);
+  return data as T;
 }
 
-/**
- * Loads every file the dashboard needs in one pass, all via `Promise.all`
- * (per the task brief's simplification over the original plan — regions.geojson
- * is not staged/resolved ahead of the rest; total payload is a few hundred KB,
- * not worth a two-phase load). Fetches `indicators/<id>.json` for every
- * registry indicator, and `series/<id>.json` for every indicator EXCEPT
- * `aggregate.kind === 'external'` ones (currently only students_change_5y) —
- * build-indicators.ts never writes a series file for those, so requesting one
- * would just 404.
- */
 export async function loadBundle(fetchImpl: FetchImpl = fetch): Promise<DataBundle> {
-  const [regions, neighbors, charset, manifest, schools, closedSchools] = await Promise.all([
-    fetchJson<RegionsFeatureCollection>(fetchImpl, "/data/regions.geojson"),
-    fetchJson<NeighborsFeatureCollection>(fetchImpl, "/data/neighbors.geojson"),
-    fetchJson<string>(fetchImpl, "/data/charset.json"),
-    fetchJson<Manifest>(fetchImpl, "/data/manifest.json"),
-    fetchJson<SchoolsFile>(fetchImpl, "/data/schools.json"),
-    fetchJson<ClosedSchoolsFile>(fetchImpl, "/data/closed-schools.json"),
+  const response = await fetchImpl("/data/manifest.json", { cache: "no-cache" });
+  if (!response.ok) throw new Error(`자료 목록을 불러오지 못했습니다 (HTTP ${response.status}).`);
+  const manifest: unknown = await response.json();
+  assertReleaseManifest(manifest);
+  if (manifest.releaseStatus === "preparing") throw new DataPreparationError(manifest);
+  const read = <T>(logical: string) => fetchReleaseFile<T>(manifest, logical, fetchImpl);
+  const indicatorIds = INDICATORS.filter(d => manifest.indicators[d.id].status === "available").map(d => d.id);
+  const seriesIds = indicatorIds.filter(id => `series/${id}.json` in manifest.files);
+  const [regions, neighbors, charsetFile, schools, closedSchools, indicatorFiles, seriesFiles] = await Promise.all([
+    read<DataBundle["regions"]>("regions.geojson"),
+    manifest.features.neighbors.status === "available" ? read<DataBundle["neighbors"]>("neighbors.geojson") : Promise.resolve({ type: "FeatureCollection" as const, features: [] }),
+    read<{ charset: string }>("charset.json"),
+    read<DataBundle["schools"]>("schools.json"),
+    manifest.features.closedSchools.status === "available" ? read<NonNullable<DataBundle["closedSchools"]>>("closed-schools.json") : Promise.resolve(null),
+    Promise.all(indicatorIds.map(id => read<IndicatorFile>(`indicators/${id}.json`))),
+    Promise.all(seriesIds.map(id => read<SeriesFile>(`series/${id}.json`))),
   ]);
-
-  const indicatorIds = INDICATORS.map((d) => d.id);
-
-  // The app only ever fetches indicators it knows about (the static
-  // registry) — it never derives its fetch list from the manifest. But the
-  // manifest is the pipeline's own record of what it actually built, so
-  // cross-check every registry id against it BEFORE issuing any
-  // indicator/series fetch below. A registry id missing from the manifest
-  // means the data build is stale relative to the registry (e.g. someone
-  // added an indicator to registry.ts without re-running the pipeline);
-  // fail loudly with the exact ids and the fix, instead of a confusing 404
-  // (or a silently-undefined bundle entry) partway through the Promise.all
-  // below. The reverse — a manifest id with no matching registry entry,
-  // e.g. a retired indicator — is fine and deliberately not checked here.
-  // Fix round 2, finding 3 — public/data/** (including manifest.json) is
-  // cached for up to 1h (see next.config.ts's headers()); a returning
-  // visitor can briefly get a fresh JS bundle paired with a stale cached
-  // manifest right after a data-refresh deploy, hitting this branch even
-  // though nothing is actually broken. The THROWN message must therefore be
-  // the ordinary, temporary-sounding user-facing string DataProvider's error
-  // UI shows (never a raw indicator id list or an npm command, which would
-  // confuse/alarm an end user) — the full developer diagnosis goes to
-  // console.error instead, where it's still there for a developer actually
-  // debugging a genuinely stale build.
-  const missingFromManifest = indicatorIds.filter((id) => !(id in manifest.indicators));
-  if (missingFromManifest.length > 0) {
-    console.error(
-      `loadBundle: manifest.json 에 없는 지표: ${missingFromManifest.join(", ")} — npm run data:build 를 다시 실행하세요`,
-    );
-    throw new Error("데이터가 갱신 중입니다. 잠시 후 새로고침해 주세요.");
-  }
-
-  const seriesIds = INDICATORS.filter((d) => d.aggregate.kind !== "external").map((d) => d.id);
-
-  const [indicatorFiles, seriesFiles] = await Promise.all([
-    Promise.all(
-      indicatorIds.map((id) => fetchJson<IndicatorFile>(fetchImpl, `/data/indicators/${id}.json`)),
-    ),
-    Promise.all(seriesIds.map((id) => fetchJson<SeriesFile>(fetchImpl, `/data/series/${id}.json`))),
-  ]);
-
-  const indicators: Record<string, IndicatorFile> = {};
-  indicatorIds.forEach((id, i) => {
-    indicators[id] = indicatorFiles[i];
-  });
-
-  const series: Record<string, SeriesFile> = {};
-  seriesIds.forEach((id, i) => {
-    series[id] = seriesFiles[i];
-  });
-
-  return { regions, neighbors, charset, manifest, schools, closedSchools, indicators, series };
+  return {
+    manifest: manifest as PublishedManifest, regions, neighbors, charset: charsetFile.charset, schools, closedSchools,
+    indicators: Object.fromEntries(indicatorIds.map((id, i) => [id, indicatorFiles[i]])),
+    series: Object.fromEntries(seriesIds.map((id, i) => [id, seriesFiles[i]])),
+  };
 }
 
-/**
- * Validates a loaded bundle against the registry: every registered indicator
- * id has an indicator file, every indicator file has a (level-less) row for
- * all 14 시군 plus the 52000 (전북 전체) row, regions has exactly 14
- * features, and charset is non-empty. Throws one Error listing every problem
- * found (not just the first), so a broken data build fails with a complete
- * diagnosis instead of a game of whack-a-mole.
- */
 export function assertBundle(bundle: DataBundle): void {
+  assertReleaseManifest(bundle.manifest);
   const problems: string[] = [];
-
   for (const def of INDICATORS) {
+    const availability = bundle.manifest.indicators[def.id];
     const file = bundle.indicators[def.id];
-    if (!file) {
-      problems.push(`missing indicators/${def.id}.json`);
+    if (availability.status === "unavailable") {
+      if (file) problems.push(`미제공 지표에 파일이 있습니다: ${def.id}`);
       continue;
     }
+    if (!file) { problems.push(`지표 파일 누락: ${def.id}`); continue; }
+    assertDatasetIdentity(file, bundle.manifest);
     const map = valueMap(file);
-    const missingRegions = REGION_CODES.filter((code) => !map.has(code));
-    if (missingRegions.length > 0) {
-      problems.push(`indicators/${def.id}.json is missing rows for: ${missingRegions.join(", ")}`);
-    }
-    if (!map.has(PROVINCE_CODE)) {
-      problems.push(`indicators/${def.id}.json is missing the ${PROVINCE_CODE} (전북 전체) row`);
-    }
+    if (file.id !== def.id || !availability.years.includes(file.year) || file.referenceDate !== availability.referenceDate) problems.push(`지표 식별자·기준일 불일치: ${def.id}`);
+    const expected = [...REGION_CODES, PROVINCE_CODE];
+    if (expected.some(code => !map.has(code)) || file.rows.some(row => !expected.includes(row.regionCode) || (row.value !== null && !Number.isFinite(row.value)))) problems.push(`시군·값 오류: ${def.id}`);
+    if (new Set(file.rows.map(row => `${row.regionCode}/${row.level ?? "all"}`)).size !== file.rows.length) problems.push(`중복 지표 행: ${def.id}`);
   }
-
-  if (bundle.regions.features.length !== REGION_CODES.length) {
-    problems.push(
-      `regions.geojson has ${bundle.regions.features.length} features, expected ${REGION_CODES.length}`,
-    );
+  const codes = bundle.regions.features.map(f => f.properties.code);
+  if (codes.length !== REGION_CODES.length || new Set(codes).size !== REGION_CODES.length || codes.some(code => !isRegionCode(code))) problems.push("강원 18개 시군 경계가 일치하지 않습니다.");
+  if (typeof bundle.charset !== "string" || !bundle.charset.length) problems.push("지도 글꼴 문자 목록이 없습니다.");
+  const schools = bundle.schools.schools;
+  if (!schools.length || new Set(schools.map(s => s.id)).size !== schools.length) problems.push("학교가 없거나 식별자가 중복됩니다.");
+  if (schools.some(s => !isRegionCode(s.regionCode))) problems.push("강원 밖 학교가 포함되어 있습니다.");
+  if (schools.some(s => (s.lat === null) !== (s.lng === null) || (s.lat !== null && (!Number.isFinite(s.lat) || s.lat < 33 || s.lat > 39 || !Number.isFinite(s.lng) || s.lng! < 124 || s.lng! > 132)))) problems.push("학교 좌표의 결측 또는 좌표계가 올바르지 않습니다.");
+  if (schools.some(s => [s.students, s.classes, s.teachers].some(value => value !== null && (!Number.isFinite(value) || value < 0)))) problems.push("학교 통계에 유효하지 않은 수가 있습니다.");
+  for (const [id, series] of Object.entries(bundle.series)) {
+    assertDatasetIdentity(series, bundle.manifest);
+    const years = bundle.manifest.indicators[id]?.years ?? [];
+    if (series.id !== id || series.rows.some(row => (!isRegionCode(row.regionCode) && row.regionCode !== PROVINCE_CODE) || !years.includes(row.year) || (row.value !== null && !Number.isFinite(row.value))) || new Set(series.rows.map(row => `${row.regionCode}/${row.year}`)).size !== series.rows.length) problems.push(`시계열 지역·연도·중복 오류: ${id}`);
   }
-
-  if (bundle.charset.length === 0) {
-    problems.push("charset is empty");
-  }
-
-  if (bundle.schools.schools.length === 0) {
-    problems.push("schools.json has 0 schools");
-  } else {
-    const badRegionSchools = bundle.schools.schools.filter((s) => !isRegionCode(s.regionCode));
-    if (badRegionSchools.length > 0) {
-      problems.push(
-        `schools.json has ${badRegionSchools.length} school(s) with a regionCode outside the 14 시군: ` +
-          badRegionSchools
-            .slice(0, 5)
-            .map((s) => `${s.name}(${s.regionCode})`)
-            .join(", "),
-      );
-    }
-  }
-
-  // Task 5 — closed-schools.json: every row must resolve to one of the 14
-  // 시군 (mirrors the schools.json regionCode check above). An empty row
-  // list is NOT flagged as a problem here (unlike schools.json) — an
-  // all-zero 폐교 dataset would be a legitimate, if surprising, real state.
-  const badRegionClosedSchools = bundle.closedSchools.rows.filter((r) => !isRegionCode(r.regionCode));
-  if (badRegionClosedSchools.length > 0) {
-    problems.push(
-      `closed-schools.json has ${badRegionClosedSchools.length} row(s) with a regionCode outside the 14 시군: ` +
-        badRegionClosedSchools
-          .slice(0, 5)
-          .map((r) => `${r.name}(${r.regionCode})`)
-          .join(", "),
-    );
-  }
-
-  if (problems.length > 0) {
-    throw new Error(`assertBundle: ${problems.length} problem(s) found:\n- ${problems.join("\n- ")}`);
-  }
+  if (bundle.closedSchools?.rows.some(s => !isRegionCode(s.regionCode))) problems.push("강원 밖 폐교가 포함되어 있습니다.");
+  if (problems.length) throw new Error(`강원 자료 정합성 오류:\n${problems.join("\n")}`);
 }

@@ -17,7 +17,7 @@ import { formatDelta, formatShare } from "@/lib/tooltipText";
 
 export interface RegionPanelProps {
   showSchools?: boolean;
-  bundle: Pick<DataBundle, "indicators" | "series" | "schools" | "closedSchools">;
+  bundle: Pick<DataBundle, "indicators" | "series" | "schools" | "closedSchools" | "manifest">;
   /** The currently-highlighted school (map point click / this panel's own row click), or null. Owned by Dashboard, mirrored to DeckMap so either side can drive it. */
   highlightedSchoolId: string | null;
   /** Called with a school id to highlight it, or null to clear. This component does its own "click the same row again -> clear" toggle before calling it (mirroring DeckMap's point-click handler). */
@@ -112,7 +112,7 @@ export default function RegionPanel({ bundle, highlightedSchoolId, onHighlightSc
   // first (a reasonable default; the whole list is short enough — see the
   // per-region table in task-5-report.md — that no further filter/sort UI
   // is needed here, unlike the 학교 목록 above).
-  const regionClosedSchools = bundle.closedSchools.rows
+  const regionClosedSchools = (bundle.closedSchools?.rows ?? [])
     .filter((s) => s.regionCode === regionCode)
     .slice()
     .sort((a, b) => b.year - a.year);
@@ -275,7 +275,7 @@ export default function RegionPanel({ bundle, highlightedSchoolId, onHighlightSc
             학교 {filteredSchools.length}개 · 소규모 {smallCount}개
             {noLocationCount > 0 && <> · 위치 없음 {noLocationCount}개</>}
           </p>
-          <p className="text-[10px] text-ink-muted">위치 기준 {bundle.schools.referenceDate.location}</p>
+          <p className="text-[10px] text-ink-muted">{bundle.schools.referenceDate.location ? `위치 기준 ${bundle.schools.referenceDate.location}` : "좌표 자료 미확보"}</p>
         </div>
 
         <div className="mb-2 flex flex-wrap gap-1">
@@ -365,12 +365,13 @@ export default function RegionPanel({ bundle, highlightedSchoolId, onHighlightSc
       </section>}
 
       <section className="mb-4">
+        {!bundle.closedSchools ? <p className="text-xs text-ink-muted">폐교 자료 미제공 · {bundle.manifest.features.closedSchools.status === "unavailable" && bundle.manifest.features.closedSchools.reason}</p> :
         <details data-testid="closed-schools-section">
           <summary className="cursor-pointer text-xs text-ink-muted hover:text-ink">
             폐교 목록 ({regionClosedSchools.length}개)
           </summary>
           {regionClosedSchools.length === 0 ? (
-            <p className="mt-2 text-xs text-ink-muted">폐교 이력이 없습니다</p>
+            <p className="mt-2 text-xs text-ink-muted">이 명단에 등재된 폐교가 없습니다</p>
           ) : (
             <table className="mt-2 w-full border-collapse text-xs">
               <tbody>
@@ -389,11 +390,11 @@ export default function RegionPanel({ bundle, highlightedSchoolId, onHighlightSc
               </tbody>
             </table>
           )}
-        </details>
+        </details>}
       </section>
 
       <footer className="text-[10px] text-ink-muted">
-        {def.source.name} · {referenceDateLabel(file)}
+        {file ? `${file.source.name} · ${referenceDateLabel(file)}` : "자료 미제공"}
       </footer>
     </div>
   );

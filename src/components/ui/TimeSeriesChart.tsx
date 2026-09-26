@@ -73,7 +73,7 @@ export default function TimeSeriesChart({ data, label, place, unit, format, onSh
     </svg>
     <p className="mt-1 text-sm font-semibold tabular-nums" aria-live="polite">
       {active.year}년 {active.value === null ? "자료 없음" : `${formatNumber(active.value)}${unit}`}
-      {delta !== null && <span className="ml-2 text-xs font-normal text-ink-muted">전년 대비 {delta > 0 ? "+" : delta < 0 ? "−" : "±"}{formatNumber(Math.abs(delta))}{changeUnit}</span>}
+      {delta !== null && previous && <span className="ml-2 text-xs font-normal text-ink-muted">{previous.year === active.year - 1 ? "전년" : `${previous.year}년`} 대비 {delta > 0 ? "+" : delta < 0 ? "−" : "±"}{formatNumber(Math.abs(delta))}{changeUnit}</span>}
     </p>
     <div className="mt-3 grid gap-1" style={{ gridTemplateColumns: `repeat(${rows.length}, minmax(0, 1fr))` }} aria-label="연도별 값">
       {rows.map((row) => <button key={row.year} type="button" aria-pressed={row.year === active.year} onClick={() => setSelectedYear(row.year)} className="min-h-12 rounded border border-line bg-surface px-1 py-1 text-center text-xs aria-pressed:border-accent aria-pressed:bg-accent-soft">

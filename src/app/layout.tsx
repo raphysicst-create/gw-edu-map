@@ -11,19 +11,19 @@ const notoSansKr = Noto_Sans_KR({
   variable: "--font-sans",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jb-edu-map.vercel.app";
-const siteTitle = `${ACTIVE_PROFILE.province.shortName}교육지도`;
-const siteDescription = `${ACTIVE_PROFILE.province.shortName}의 학교와 교육 현황을 지도에서 살펴보세요. 시군별 통계와 교육문제를 함께 비교할 수 있습니다.`;
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const siteTitle = `${ACTIVE_PROFILE.province.shortName} 교육지도`;
+const siteDescription = "강원 학교와 시군별 교육 현황을 살펴보는 개인 제작 업무 참고용 도구입니다.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
   title: siteTitle,
   description: siteDescription,
-  alternates: { canonical: "/" },
+  ...(siteUrl ? { alternates: { canonical: "/" } } : {}),
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "/",
+    ...(siteUrl ? { url: "/" } : {}),
     siteName: siteTitle,
     title: siteTitle,
     description: siteDescription,

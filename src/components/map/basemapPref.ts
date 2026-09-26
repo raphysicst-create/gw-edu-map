@@ -22,7 +22,7 @@
  */
 export type BasemapMode = "off" | "night" | "satellite" | "base";
 
-const STORAGE_KEY = "jbmap.basemap";
+const STORAGE_KEY = "edu-map:gangwon:basemap:v1";
 const DEFAULT_MODE: BasemapMode = "night";
 
 function parse(raw: string | null): BasemapMode {

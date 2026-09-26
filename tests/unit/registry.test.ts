@@ -41,17 +41,17 @@ describe("INDICATORS registry", () => {
     }
   });
 
-  it("sources every KESS-derived indicator (aggregate.kind !== 'external', plus students_change_5y) from KESS", () => {
+  it("sources every school-statistics indicator from the Gangwon education office", () => {
     for (const def of INDICATORS) {
       if (def.aggregate.kind === "external" && def.aggregate.file !== "series/students_total.json") continue; // 폐교 지표 — a different source, see the next test
-      expect(def.source.name).toContain("KESS");
+      expect(def.source.name).toContain("강원특별자치도교육청 교육통계");
     }
   });
 
-  it("sources the 3 폐교 지표 from 전북특별자치도교육청 폐교재산 현황, not KESS", () => {
+  it("sources the 3 폐교 지표 from the Gangwon education office, not KESS", () => {
     for (const id of ["closed_schools", "closed_schools_unused", "closed_schools_recent"]) {
       const def = indicatorById(id);
-      expect(def?.source.name).toContain("폐교재산 현황");
+      expect(def?.source.name).toContain("강원특별자치도교육청 폐교 자료");
       expect(def?.source.name).not.toContain("KESS");
     }
   });
@@ -90,7 +90,7 @@ describe("INDICATORS registry", () => {
   it("marks students_total, schools_total, and teachers_total as byLevel", () => {
     // teachers_total needs byLevel even though the brief's registry table only
     // annotates students_total/schools_total explicitly: validate.ts's own
-    // check (3) requires 52000/<level> teacher values to compare against the
+    // check (3) requires province/<level> teacher values to compare against the
     // official per-level figures (8,116/4,935/5,377/482), which only exist if
     // this indicator produces level-tagged rows.
     expect(indicatorById("students_total")?.byLevel).toBe(true);

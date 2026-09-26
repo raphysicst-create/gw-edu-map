@@ -28,12 +28,13 @@ function stripBom(text: string): string {
  * as `string[]`; ragged rows (fewer/more fields than the header) are
  * returned as-is, since validating column counts is the caller's job.
  */
-export function parseCsv(text: string): string[][] {
+export function parseCsv(text: string, options: { strict?: boolean } = {}): string[][] {
   const src = stripBom(text);
   const rows: string[][] = [];
   let row: string[] = [];
   let field = "";
   let inQuotes = false;
+  let closedQuote = false;
   let sawAnyField = false;
   const n = src.length;
   let i = 0;
@@ -41,6 +42,7 @@ export function parseCsv(text: string): string[][] {
   const pushField = (): void => {
     row.push(field);
     field = "";
+    closedQuote = false;
   };
   const pushRow = (): void => {
     pushField();
@@ -60,6 +62,7 @@ export function parseCsv(text: string): string[][] {
           continue;
         }
         inQuotes = false;
+        closedQuote = true;
         i += 1;
         continue;
       }
@@ -68,6 +71,12 @@ export function parseCsv(text: string): string[][] {
       continue;
     }
 
+    if (options.strict && closedQuote && ch !== "," && ch !== "\r" && ch !== "\n") {
+      throw new Error("CSV 닫힌 따옴표 뒤에 허용되지 않은 문자가 있습니다.");
+    }
+    if (options.strict && ch === '"' && field !== "") {
+      throw new Error("CSV 인용부호는 필드의 처음에서만 열 수 있습니다.");
+    }
     if (ch === '"' && field === "") {
       // Only treat a quote as field-opening at the start of a field — a
       // stray '"' mid-field (not spec-compliant CSV, but tolerate rather
@@ -103,6 +112,7 @@ export function parseCsv(text: string): string[][] {
     i += 1;
   }
 
+  if (options.strict && inQuotes) throw new Error("CSV 따옴표가 닫히지 않았습니다.");
   // Trailing field/row when the file doesn't end with a newline.
   if (sawAnyField || field.length > 0) {
     pushRow();

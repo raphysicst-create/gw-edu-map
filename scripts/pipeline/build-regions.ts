@@ -307,6 +307,11 @@ async function loadLabelOffsets(): Promise<LabelOffsets> {
 }
 
 async function main() {
+  if (ACTIVE_PROFILE.id === "gangwon") {
+    throw new Error(
+      "[build-regions] Gangwon boundaries must use the verified national SGIS ZIP via the Gangwon release pipeline; this legacy admdongkor downloader is disabled.",
+    );
+  }
   await ensureSourceDownloaded();
   const inputText = await readFile(RAW_PATH, "utf8");
   const labelOffsets = await loadLabelOffsets();

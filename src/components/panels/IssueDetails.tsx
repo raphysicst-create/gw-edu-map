@@ -69,6 +69,7 @@ export function IssueDetails({ bundle, data, model, region }: {
     </section>;
   }
   if (model.issue.id === "closed-assets") {
+    if (!bundle.closedSchools) return <p className="text-sm">폐교 자료를 제공하지 않습니다.</p>;
     const rows = bundle.closedSchools.rows.filter(r => !region || r.regionCode === region);
     const unused = rows.filter(r => r.usage === "미활용");
     return <section aria-label="폐교재산 목록" className="space-y-3">

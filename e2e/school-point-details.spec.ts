@@ -29,18 +29,18 @@ async function clickOnlySchoolPoint(page: Page, offsetX = 0) {
   }, { x: point.x + offsetX, y: point.y })).toBe(point.id);
   await page.mouse.click(bounds.x + point.x + offsetX, bounds.y + point.y);
   await expect(page).toHaveURL(new RegExp(`school=${point.id}`));
-  await expect(page).toHaveURL(/region=52110/);
+  await expect(page).toHaveURL(/region=51110/);
 }
 
 test("통계 화면에서 학교 점을 누르면 해당 위치에 HUD가 열린다", async ({ page }) => {
-  await page.goto("/?scene=flat&schoolChart=dots&view=schools&region=52110");
+  await page.goto("/?scene=flat&schoolChart=dots&view=schools&region=51110");
   await openPanel(page);
-  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("전주초등학교");
+  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("강원테스트초등학교");
   await page.getByRole("tab", { name: "시군 통계" }).click();
   await clickOnlySchoolPoint(page, 10);
   await expect(page).toHaveURL(/view=statistics/);
   await expect(page.getByRole("complementary")).toHaveCount(0);
-  await expect(page.getByTestId("school-hud")).toContainText("전주초등학교");
+  await expect(page.getByTestId("school-hud")).toContainText("강원테스트초등학교");
   await expect(page.getByRole("complementary").getByRole("region", { name: "선택한 학교" })).toHaveCount(0);
   await expect(page.getByTestId("school-hud")).toContainText("학생");
   const placement = await page.evaluate(() => {
@@ -57,20 +57,20 @@ test("통계 화면에서 학교 점을 누르면 해당 위치에 HUD가 열린
 });
 
 test("기본 지도 설정에서도 학교 점 주변을 누르면 상세가 열린다", async ({ page }) => {
-  await page.goto("/?scene=flat&view=schools&region=52110");
+  await page.goto("/?scene=flat&view=schools&region=51110");
   await openPanel(page);
-  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("전주초등학교");
+  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("강원테스트초등학교");
   await clickOnlySchoolPoint(page, 10);
-  await expect(page.getByTestId("school-hud")).toContainText("전주초등학교");
+  await expect(page.getByTestId("school-hud")).toContainText("강원테스트초등학교");
 });
 
 test("모바일에서 학교 점을 누르면 정보를 바로 볼 수 있다", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/?scene=flat&schoolChart=dots&view=schools&region=52110");
+  await page.goto("/?scene=flat&schoolChart=dots&view=schools&region=51110");
   await openPanel(page);
-  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("전주초등학교");
+  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("강원테스트초등학교");
   await page.getByRole("button", { name: "패널 닫기" }).click();
   await clickOnlySchoolPoint(page, 10);
   await expect(page.getByRole("dialog")).toHaveCount(0);
-  await expect(page.getByTestId("school-hud")).toContainText("전주초등학교");
+  await expect(page.getByTestId("school-hud")).toContainText("강원테스트초등학교");
 });

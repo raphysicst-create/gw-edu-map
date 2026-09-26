@@ -4,6 +4,7 @@ import { INDICATORS } from "@/lib/indicators/registry";
 import { GROUP_LABELS, GROUP_ORDER } from "@/lib/indicators/groups";
 import type { SeriesFile } from "@/lib/indicators/types";
 import { displayLabel } from "@/lib/stats";
+import { useData } from "@/lib/data/DataProvider";
 
 export interface IndicatorPickerProps {
   value: string;
@@ -28,6 +29,8 @@ const RADIO_GROUP_NAME = "indicator";
 
 /** Top-bar indicator selector: 4 grouped, keyboard-accessible radio sets (one radio per registered indicator). */
 export default function IndicatorPicker({ value, onChange, series = {} }: IndicatorPickerProps) {
+  const state = useData();
+  const manifest = state.status === "ready" ? state.bundle.manifest : state.status === "preparing" ? state.manifest : null;
   return (
     <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
       {GROUP_ORDER.map((group) => {
@@ -40,6 +43,7 @@ export default function IndicatorPicker({ value, onChange, series = {} }: Indica
             </legend>
             {items.map((def) => {
               const checked = value === def.id;
+              const availability = manifest?.indicators[def.id];
               const descriptionId = `indicator-description-${def.id}`;
               return (
                 // Task 5, Section C — def.description renders small, just
@@ -73,6 +77,7 @@ export default function IndicatorPicker({ value, onChange, series = {} }: Indica
                   </label>
                   <span id={descriptionId} className="max-w-[220px] pl-2 text-[10px] leading-snug text-ink-muted">
                     {def.description}
+                    {availability?.status === "unavailable" && <span className="block">미제공 · {availability.reason}</span>}
                   </span>
                 </div>
               );

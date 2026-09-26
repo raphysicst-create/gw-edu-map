@@ -21,10 +21,10 @@ function countDef(overrides: Partial<IndicatorDef> = {}): IndicatorDef {
 }
 
 const map14 = new Map<string, number | null>([
-  ["52110", 100],
-  ["52130", 50],
-  ["52140", 10],
-  ["52000", 9999], // must be excluded from domain computation
+  ["51110", 100],
+  ["51130", 50],
+  ["51150", 10],
+  ["51000", 9999], // must be excluded from domain computation
 ]);
 
 describe("ELEVATION_FLOOR / ELEVATION_MAX", () => {
@@ -56,33 +56,33 @@ describe("domainOf", () => {
 
   it("excludes null values from the computed domain", () => {
     const map = new Map<string, number | null>([
-      ["52110", 100],
-      ["52130", null],
-      ["52140", 10],
+      ["51110", 100],
+      ["51130", null],
+      ["51150", 10],
     ]);
     expect(domainOf(countDef({ kind: "ratio" }), map)).toEqual([10, 100]);
   });
 
-  it("excludes the 52000 row from the computed domain", () => {
+  it("excludes the 51000 row from the computed domain", () => {
     const map = new Map<string, number | null>([
-      ["52110", 5],
-      ["52000", 99999],
+      ["51110", 5],
+      ["51000", 99999],
     ]);
     expect(domainOf(countDef({ kind: "count" }), map)).toEqual([0, 5]);
   });
 
   it("widens a zero-width domain to [min, min+1] to avoid div-by-zero", () => {
     const map = new Map<string, number | null>([
-      ["52110", 7],
-      ["52130", 7],
+      ["51110", 7],
+      ["51130", 7],
     ]);
     expect(domainOf(countDef({ kind: "ratio" }), map)).toEqual([7, 8]);
   });
 
   it("supports negative ratio domains (e.g. a decline-everywhere percent-change indicator)", () => {
     const map = new Map<string, number | null>([
-      ["52110", -4.9],
-      ["52130", -19.8],
+      ["51110", -4.9],
+      ["51130", -19.8],
     ]);
     expect(domainOf(countDef({ kind: "ratio" }), map)).toEqual([-19.8, -4.9]);
   });
@@ -92,52 +92,52 @@ describe("makeElevationScale", () => {
   it("maps the domain min to FLOOR and the domain max to ELEVATION_MAX", () => {
     const def = countDef({ kind: "ratio", domain: [0, 100] });
     const map = new Map<string, number | null>([
-      ["52110", 0],
-      ["52130", 100],
+      ["51110", 0],
+      ["51130", 100],
     ]);
     const elevationOf = makeElevationScale(def, map);
-    expect(elevationOf("52110")).toBeCloseTo(ELEVATION_FLOOR, 5);
-    expect(elevationOf("52130")).toBeCloseTo(ELEVATION_MAX, 5);
+    expect(elevationOf("51110")).toBeCloseTo(ELEVATION_FLOOR, 5);
+    expect(elevationOf("51130")).toBeCloseTo(ELEVATION_MAX, 5);
   });
 
   it("linearly interpolates between FLOOR and MAX", () => {
     const def = countDef({ kind: "ratio", domain: [0, 100] });
-    const map = new Map<string, number | null>([["52110", 50]]);
+    const map = new Map<string, number | null>([["51110", 50]]);
     const elevationOf = makeElevationScale(def, map);
-    expect(elevationOf("52110")).toBeCloseTo(ELEVATION_FLOOR + (ELEVATION_MAX - ELEVATION_FLOOR) * 0.5, 5);
+    expect(elevationOf("51110")).toBeCloseTo(ELEVATION_FLOOR + (ELEVATION_MAX - ELEVATION_FLOOR) * 0.5, 5);
   });
 
   it("returns FLOOR for a null value", () => {
     const def = countDef({ kind: "ratio", domain: [0, 100] });
-    const map = new Map<string, number | null>([["52110", null]]);
+    const map = new Map<string, number | null>([["51110", null]]);
     const elevationOf = makeElevationScale(def, map);
-    expect(elevationOf("52110")).toBe(ELEVATION_FLOOR);
+    expect(elevationOf("51110")).toBe(ELEVATION_FLOOR);
   });
 
   it("returns FLOOR for a code missing from the map entirely", () => {
     const def = countDef({ kind: "ratio", domain: [0, 100] });
     const elevationOf = makeElevationScale(def, new Map());
-    expect(elevationOf("52110")).toBe(ELEVATION_FLOOR);
+    expect(elevationOf("51110")).toBe(ELEVATION_FLOOR);
   });
 
   it("clamps values above the domain max to ELEVATION_MAX", () => {
     const def = countDef({ kind: "ratio", domain: [0, 100] });
-    const map = new Map<string, number | null>([["52110", 500]]);
+    const map = new Map<string, number | null>([["51110", 500]]);
     const elevationOf = makeElevationScale(def, map);
-    expect(elevationOf("52110")).toBeCloseTo(ELEVATION_MAX, 5);
+    expect(elevationOf("51110")).toBeCloseTo(ELEVATION_MAX, 5);
   });
 
   it("clamps values below the domain min to FLOOR", () => {
     const def = countDef({ kind: "ratio", domain: [10, 100] });
-    const map = new Map<string, number | null>([["52110", -5]]);
+    const map = new Map<string, number | null>([["51110", -5]]);
     const elevationOf = makeElevationScale(def, map);
-    expect(elevationOf("52110")).toBeCloseTo(ELEVATION_FLOOR, 5);
+    expect(elevationOf("51110")).toBeCloseTo(ELEVATION_FLOOR, 5);
   });
 
   it("applies a sqrt transform to the normalized value when def.scale is 'sqrt'", () => {
     const def = countDef({ kind: "ratio", domain: [0, 100], scale: "sqrt" });
-    const map = new Map<string, number | null>([["52110", 25]]); // norm=0.25, sqrt(0.25)=0.5
+    const map = new Map<string, number | null>([["51110", 25]]); // norm=0.25, sqrt(0.25)=0.5
     const elevationOf = makeElevationScale(def, map);
-    expect(elevationOf("52110")).toBeCloseTo(ELEVATION_FLOOR + (ELEVATION_MAX - ELEVATION_FLOOR) * 0.5, 5);
+    expect(elevationOf("51110")).toBeCloseTo(ELEVATION_FLOOR + (ELEVATION_MAX - ELEVATION_FLOOR) * 0.5, 5);
   });
 });

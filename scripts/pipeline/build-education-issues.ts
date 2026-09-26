@@ -1,3 +1,4 @@
+import { assertLegacyPipelineDisabled } from "./gangwon/legacy-guard";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,6 +10,7 @@ import { ACTIVE_PROFILE } from "../../src/lib/profiles";
 import { INCLUDED_STATUSES } from "./sources";
 import { assertIssueData } from "../../src/lib/issues/validate";
 
+assertLegacyPipelineDisabled();
 const root = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "../..",
@@ -92,3 +94,4 @@ await writeFile(
 console.log(
   `교육문제 자료 생성: ${schools.schools.length}개 학교 · 14개 시군 · ${data.statsReferenceDate}`,
 );
+

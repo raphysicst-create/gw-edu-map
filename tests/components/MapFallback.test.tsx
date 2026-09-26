@@ -12,9 +12,9 @@ import type { School } from "@/lib/schools/types";
 
 /** Deliberately NOT REGIONS' declaration order — exercises real rank sorting (mirrors tests/components/RegionList.test.tsx's own fixture). */
 const VALUES: Record<string, number> = {
-  "52110": 70851, // 전주시 — rank 1
-  "52130": 50000, // 군산시 — rank 2
-  "52140": 1000, // 익산시 — rank 3 (smallest of the 3 given here)
+  "51110": 70851, // 춘천시 — rank 1
+  "51130": 50000, // 원주시 — rank 2
+  "51150": 1000, // 강릉시 — rank 3 (smallest of the 3 given here)
 };
 
 function studentsTotalFile(): IndicatorFile {
@@ -25,8 +25,8 @@ function studentsTotalFile(): IndicatorFile {
     source: { name: "KESS 테스트", url: "https://example.com", year: 2026 },
     rows: [
       ...Object.entries(VALUES).map(([regionCode, value]) => ({ regionCode, value })),
-      { regionCode: "52000", value: Object.values(VALUES).reduce((a, b) => a + b, 0) },
-      // Every other 시군: no data (null) — a realistic partial fixture, not all 14.
+      { regionCode: "51000", value: Object.values(VALUES).reduce((a, b) => a + b, 0) },
+      // Every other 시군: no data (null) — a realistic partial fixture, not all 18.
       ...REGIONS.map((r) => r.code)
         .filter((code) => !(code in VALUES))
         .map((regionCode) => ({ regionCode, value: null })),
@@ -44,7 +44,7 @@ function bundleFixture() {
 for (const reason of ["webgl", "error"] as const) {
   it(`${reason}: retains located school details and their actions`, async () => {
     const school: School = { id: "test-school", name: "대체화면학교", level: "elem", status: "운영", branch: false,
-      lat: 35.82, lng: 127.14, regionCode: "52110", students: 60, classes: 6, teachers: 10, studentsPerClass: 10, small: true };
+      lat: 37.88, lng: 127.73, regionCode: "51110", students: 60, classes: 6, teachers: 10, studentsPerClass: 10, small: true };
     const onClose = vi.fn();
     const onStatistics = vi.fn();
     render(<MapFallback indicatorId="students_total" bundle={bundleFixture()} selectedCode={null} onSelect={vi.fn()}
@@ -53,7 +53,7 @@ for (const reason of ["webgl", "error"] as const) {
     expect(detail.getByRole("heading", { name: school.name })).toBeVisible();
     expect(detail.getByText("60명")).toBeVisible();
     await userEvent.click(detail.getByRole("button", { name: "해당 시군 통계 보기" }));
-    expect(onStatistics).toHaveBeenCalledWith("52110");
+    expect(onStatistics).toHaveBeenCalledWith("51110");
     await userEvent.click(detail.getByRole("button", { name: "학교 선택 해제" }));
     expect(onClose).toHaveBeenCalledOnce();
   });
@@ -81,16 +81,16 @@ describe("MapFallback", () => {
     expect(screen.getByText(/오류/)).toBeInTheDocument();
   });
 
-  it("renders a real <table> with one row per 시군 (14 rows), ranked largest-first", () => {
+  it("renders a real <table> with one row per 시군 (18 rows), ranked largest-first", () => {
     render(
       <MapFallback indicatorId="students_total" bundle={bundleFixture()} selectedCode={null} onSelect={vi.fn()} reason="webgl" />,
     );
     const rows = screen.getAllByRole("row"); // includes the header row
     expect(rows).toHaveLength(REGIONS.length + 1);
     const dataRows = within(screen.getByRole("table")).getAllByRole("row").slice(1);
-    expect(within(dataRows[0]).getByText("전주시")).toBeInTheDocument();
-    expect(within(dataRows[1]).getByText("군산시")).toBeInTheDocument();
-    expect(within(dataRows[2]).getByText("익산시")).toBeInTheDocument();
+    expect(within(dataRows[0]).getByText("춘천시")).toBeInTheDocument();
+    expect(within(dataRows[1]).getByText("원주시")).toBeInTheDocument();
+    expect(within(dataRows[2]).getByText("강릉시")).toBeInTheDocument();
   });
 
   it("shows each row's formatted value and rank", () => {
@@ -118,9 +118,9 @@ describe("MapFallback", () => {
       <MapFallback indicatorId="students_total" bundle={bundleFixture()} selectedCode={null} onSelect={vi.fn()} reason="webgl" />,
     );
     const bars = screen.getAllByTestId("fallback-bar-fill");
-    // 전주시 is the domain max (count-kind floors at 0) -> a full-width (100%) bar.
+    // 춘천시 is the domain max (count-kind floors at 0) -> a full-width (100%) bar.
     expect(bars[0]).toHaveStyle({ width: "100%" });
-    // 익산시 (1,000 of [0, 70851]) is much narrower than 전주시's.
+    // 강릉시 (1,000 of [0, 70851]) is much narrower than 춘천시's.
     const widthOf = (el: HTMLElement) => Number(el.style.width.replace("%", ""));
     expect(widthOf(bars[2])).toBeLessThan(widthOf(bars[0]));
     expect(widthOf(bars[2])).toBeGreaterThan(0);
@@ -130,8 +130,8 @@ describe("MapFallback", () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
     render(<MapFallback indicatorId="students_total" bundle={bundleFixture()} selectedCode={null} onSelect={onSelect} reason="webgl" />);
-    await user.click(screen.getByRole("button", { name: /전주시/ }));
-    expect(onSelect).toHaveBeenCalledWith("52110");
+    await user.click(screen.getByRole("button", { name: /춘천시/ }));
+    expect(onSelect).toHaveBeenCalledWith("51110");
   });
 
   // Fix round 1/5, finding 3: the name <button> sits inside its <tr>, which
@@ -141,7 +141,7 @@ describe("MapFallback", () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
     render(<MapFallback indicatorId="students_total" bundle={bundleFixture()} selectedCode={null} onSelect={onSelect} reason="webgl" />);
-    await user.click(screen.getByRole("button", { name: /전주시/ }));
+    await user.click(screen.getByRole("button", { name: /춘천시/ }));
     expect(onSelect).toHaveBeenCalledTimes(1);
   });
 
@@ -154,16 +154,16 @@ describe("MapFallback", () => {
     // onClick (the mouse-only convenience), not the button's handler.
     await user.click(within(dataRows[0]).getByText("70,851"));
     expect(onSelect).toHaveBeenCalledTimes(1);
-    expect(onSelect).toHaveBeenCalledWith("52110");
+    expect(onSelect).toHaveBeenCalledWith("51110");
   });
 
   it("marks the currently-selected region's row with aria-current", () => {
     render(
-      <MapFallback indicatorId="students_total" bundle={bundleFixture()} selectedCode="52130" onSelect={vi.fn()} reason="webgl" />,
+      <MapFallback indicatorId="students_total" bundle={bundleFixture()} selectedCode="51130" onSelect={vi.fn()} reason="webgl" />,
     );
     const dataRows = within(screen.getByRole("table")).getAllByRole("row").slice(1);
-    const gunsanRow = dataRows.find((r) => within(r).queryByText("군산시"));
-    expect(gunsanRow).toHaveAttribute("aria-current", "true");
+    const wonjuRow = dataRows.find((r) => within(r).queryByText("원주시"));
+    expect(wonjuRow).toHaveAttribute("aria-current", "true");
   });
 
   it("throws for an unknown indicatorId (same contract as DeckMap/RegionList)", () => {
@@ -184,14 +184,14 @@ it("keeps issue values and region selection available when WebGL is unavailable"
   const model: IssueMapModel = {
     issue: PUBLISHED_ISSUES[0], metric: "designation", title: "인구감소지역 지정",
     date: "공식 자료 확인 2026-09-22", note: "공식 지정 현황입니다.",
-    regions: REGIONS.map(({code}) => ({code, value: code === "52140" ? "attention" : null, text: code === "52140" ? "관심지역" : "자료 없음", color: [100, 100, 100, 85]})),
+    regions: REGIONS.map(({code}) => ({code, value: code === "51150" ? "attention" : null, text: code === "51150" ? "관심지역" : "자료 없음", color: [100, 100, 100, 85]})),
     schools: [], legend: [], provinceText: "관심지역 1곳", sources: [],
   };
   render(<MapFallback indicatorId="students_total" bundle={bundleFixture()} issueModel={model} selectedCode={null} onSelect={onSelect} reason="webgl" />);
   expect(screen.getByRole("heading", {name: "인구감소지역 지정"})).toBeInTheDocument();
   expect(screen.getByText("관심지역")).toBeInTheDocument();
-  expect(screen.getAllByRole("row")).toHaveLength(15);
+  expect(screen.getAllByRole("row")).toHaveLength(REGIONS.length + 1);
   expect(screen.queryByText("70,851")).not.toBeInTheDocument();
-  await userEvent.click(screen.getByRole("button", {name: "익산시"}));
-  expect(onSelect).toHaveBeenCalledWith("52140");
+  await userEvent.click(screen.getByRole("button", {name: "강릉시"}));
+  expect(onSelect).toHaveBeenCalledWith("51150");
 });

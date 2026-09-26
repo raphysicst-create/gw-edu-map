@@ -11,24 +11,24 @@
 import { formatArea, formatDecimal, formatInt, formatPercent } from "../format";
 import type { IndicatorDef, IndicatorSource } from "./types";
 
-const KESS_SOURCE: IndicatorSource = {
-  name: "한국교육개발원 교육통계서비스(KESS) 교육기본통계 학교별 데이터셋",
-  url: "https://kess.kedi.re.kr/contents/dataset",
+const GWE_SOURCE: IndicatorSource = {
+  name: "강원특별자치도교육청 교육통계 (공개 파일별 기준일 확인)",
+  url: "https://open.gwe.go.kr/open/index.do",
   year: 2026,
 };
 
 /**
  * Task 5 — 폐교 지표. Duplicated (not imported) from
  * scripts/pipeline/sources.ts's own CLOSED_SCHOOLS_SOURCE, matching this
- * file's existing precedent (KESS_SOURCE above is likewise a local copy, not
+ * file's existing precedent (GWE_SOURCE above is likewise a local copy, not
  * an import of scripts/pipeline/sources.ts's KESS_STATS_SOURCE) — this keeps
  * src/lib/indicators/** free of any scripts/pipeline import, which must stay
  * a one-way dependency (pipeline -> src/lib, never the reverse).
  */
 const CLOSED_SCHOOLS_SOURCE: IndicatorSource = {
-  name: "전북특별자치도교육청 폐교재산 현황(공공데이터포털)",
-  url: "https://www.data.go.kr/data/15021709/fileData.do",
-  year: 2026,
+  name: "강원특별자치도교육청 폐교 자료 (공개 조건 확인 중)",
+  url: "https://www.gwe.go.kr/main/index.do",
+  year: 2025,
 };
 
 /**
@@ -52,7 +52,7 @@ export const INDICATORS: IndicatorDef[] = [
     kind: "count",
     byLevel: true,
     format: formatInt,
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "sum", field: "students" },
     description: "초·중·고·특수 재학생 총원입니다. 학생수가 많을수록 학령인구 기반이 두터운 지역입니다.",
   },
@@ -65,7 +65,7 @@ export const INDICATORS: IndicatorDef[] = [
     kind: "count",
     byLevel: true,
     format: formatInt,
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "count", predicate: "isMain" },
     description: "운영 중인 본교 수입니다(분교장·폐교 제외). 학생수·소규모학교 비율과 함께 보면 통폐합 압력을 가늠할 수 있습니다.",
   },
@@ -77,7 +77,7 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "neutral",
     kind: "count",
     format: formatInt,
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "sum", field: "classes" },
     description: "전체 학급수입니다. 학급당 학생수와 함께 보면 교육 여건의 밀도를 가늠할 수 있습니다.",
   },
@@ -89,9 +89,9 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "higherWorse",
     kind: "ratio",
     format: (v) => formatDecimal(v, 1),
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "ratio", numerator: "students", denominator: "classes" },
-    description: "학급당 학생수가 낮을수록 소규모·분산 배치 경향입니다. 전북 평균과 비교하세요.",
+    description: "학급당 학생수가 낮을수록 소규모·분산 배치 경향입니다. 강원 평균과 비교하세요.",
   },
   {
     id: "teachers_total",
@@ -106,7 +106,7 @@ export const INDICATORS: IndicatorDef[] = [
     // indicator produces level-tagged rows.
     byLevel: true,
     format: formatInt,
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "sum", field: "teachers" },
     description: "재직 교원 총수입니다. 교원 1인당 학생수와 함께 보면 지역별 교육 인프라 배치를 비교할 수 있습니다.",
   },
@@ -118,7 +118,7 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "higherWorse",
     kind: "ratio",
     format: (v) => formatDecimal(v, 1),
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "ratio", numerator: "students", denominator: "teachers" },
     description: "교원 1인당 학생수가 낮을수록 교육 여건이 여유롭다고 해석할 수 있습니다.",
   },
@@ -130,7 +130,7 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "higherBetter",
     kind: "ratio",
     format: formatArea,
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "ratio", numerator: "siteArea", denominator: "students" },
     description: "학생 1인당 학교 부지 면적입니다. 넓을수록 교육 환경의 물리적 여유가 큽니다.",
   },
@@ -142,7 +142,7 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "neutral",
     kind: "ratio",
     format: (v) => formatDecimal(v, 1),
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "ratio", numerator: "classrooms", denominator: "isMain" },
     description: "본교 1개교당 평균 교실수로, 시설 규모를 나타냅니다.",
   },
@@ -154,9 +154,9 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "higherWorse",
     kind: "count",
     format: formatInt,
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "count", predicate: "small" },
-    description: "학생수 60명 이하 소규모학교 수입니다. 통폐합 논의의 직접 대상이 되는 학교 규모입니다.",
+    description: "학생수 60명 이하 본교 수입니다. 학교 규모를 살펴보기 위한 자체 탐색 기준이며 통폐합 대상 지정을 뜻하지 않습니다.",
     caveat: "소규모학교 기준: 학생수 60명 이하(자체 기준). 교육부 지역규모별 기준과 다를 수 있습니다.",
   },
   {
@@ -167,7 +167,7 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "higherWorse",
     kind: "ratio",
     format: (v) => formatPercent(v, 1),
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "share", predicate: "small" },
     description: "전체 본교 중 소규모학교(학생수 60명 이하)가 차지하는 비율입니다.",
     caveat: "소규모학교 기준: 학생수 60명 이하(자체 기준). 교육부 지역규모별 기준과 다를 수 있습니다.",
@@ -180,9 +180,9 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "higherWorse",
     kind: "count",
     format: formatInt,
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "count", predicate: "zeroEntrants" },
-    description: "해당 연도 신입생이 0명인 학교 수입니다. 향후 소규모화·통폐합 위험이 큰 학교를 가리킵니다.",
+    description: "해당 연도 입학생수가 명시적으로 0인 본교 수입니다. 휴교를 포함하며 향후 통폐합 여부를 예측하지 않습니다.",
   },
   {
     id: "rural_school_share",
@@ -192,7 +192,7 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "neutral",
     kind: "ratio",
     format: (v) => formatPercent(v, 1),
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "share", predicate: "ruralArea" },
     description: "면지역에 위치한 학교의 비율입니다. 높을수록 농산어촌 분산 배치 경향이 강합니다.",
   },
@@ -204,9 +204,9 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "neutral",
     kind: "count",
     format: formatInt,
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "sum", field: "specialClasses" },
-    description: "일반학교 특수학급과 특수학교 학급을 포함한 수입니다. 일반학교 현황은 교육문제의 특수교육에서 별도로 확인합니다.",
+    description: "일반학교 특수학급과 특수학교 학급을 포함한 수입니다. 특수교육 서비스의 충분성이나 효과를 뜻하지 않습니다.",
     caveat: "특수학교 포함. 일반학급 배치 대상자 등을 포함한 특수교육 대상자 총원과 다릅니다.",
   },
   {
@@ -217,20 +217,20 @@ export const INDICATORS: IndicatorDef[] = [
     polarity: "neutral",
     kind: "count",
     format: formatInt,
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "sum", field: "specialStudents" },
-    description: "일반학교 특수학급 학생과 특수학교 학생을 포함한 수입니다. 교육문제의 특수교육에서는 두 범위를 분리합니다.",
+    description: "일반학교 특수학급 학생과 특수학교 학생을 포함한 수입니다. 두 학교 유형의 모집단이 다른 점에 유의해야 합니다.",
     caveat: "특수학교 포함. 일반학급 배치 대상자 등을 포함한 특수교육 대상자 총원과 다릅니다.",
   },
   {
     id: "students_change_5y",
     group: "scale",
-    label: "학생수 5년 증감률",
+    label: "학생수 증감률",
     unit: "%",
     polarity: "higherBetter",
     kind: "ratio",
     format: (v) => formatPercent(v, 1),
-    source: KESS_SOURCE,
+    source: GWE_SOURCE,
     aggregate: { kind: "external", file: "series/students_total.json", field: "change5y" },
     description: "학생수 증감률입니다. 마이너스(-)가 클수록 학령인구 감소가 가파른 지역입니다.",
     // Fix round 1/5, finding 5: the previous wording only described the
@@ -268,7 +268,7 @@ export const INDICATORS: IndicatorDef[] = [
     source: CLOSED_SCHOOLS_SOURCE,
     aggregate: { kind: "external", file: CLOSED_SCHOOLS_AGGREGATE_FILE, field: "count" },
     description: "교육청 폐교재산 현황에 등재된 폐교 수입니다(기준일 시점). 매각 등으로 처분된 폐교는 등재에서 빠질 수 있습니다.",
-    caveat: "전북특별자치도교육청 폐교재산 현황 기준(하단 출처의 기준일 참조). 분교장을 포함하며, 본교 기준인 학교수 지표와 집계 범위가 다릅니다.",
+    caveat: "강원특별자치도교육청 폐교재산 현황 기준(하단 출처의 기준일 참조). 분교장을 포함하며, 본교 기준인 학교수 지표와 집계 범위가 다릅니다.",
   },
   {
     id: "closed_schools_unused",
@@ -286,7 +286,7 @@ export const INDICATORS: IndicatorDef[] = [
     // on the 기준일, not a statement that no plan exists. Reworded to
     // describe the classification itself.
     description: "활용현황이 '미활용'으로 분류된 폐교 수입니다.",
-    caveat: "전북특별자치도교육청 폐교재산 현황 기준(하단 출처의 기준일 참조). 활용현황구분명이 '미활용'인 행만 집계합니다.",
+    caveat: "강원특별자치도교육청 폐교재산 현황 기준(하단 출처의 기준일 참조). 활용현황구분명이 '미활용'인 행만 집계합니다.",
   },
   {
     id: "closed_schools_recent",
@@ -305,7 +305,7 @@ export const INDICATORS: IndicatorDef[] = [
     // generically here, no literal year, since this file has no access to the
     // actual built data at authoring time; the real 기준일 always renders via
     // the source line below.
-    caveat: "기준: 하단 출처의 기준일이 속한 연도를 포함해 최근 10개년(폐교연도 기준)을 집계합니다. 전북특별자치도교육청 폐교재산 현황 기준(하단 출처의 기준일 참조).",
+    caveat: "기준: 하단 출처의 기준일이 속한 연도를 포함해 최근 10개년(폐교연도 기준)을 집계합니다. 강원특별자치도교육청 폐교재산 현황 기준(하단 출처의 기준일 참조).",
   },
 ];
 
@@ -316,3 +316,4 @@ export const DEFAULT_INDICATOR_ID = "students_total";
 export function indicatorById(id: string): IndicatorDef | undefined {
   return INDICATORS.find((d) => d.id === id);
 }
+

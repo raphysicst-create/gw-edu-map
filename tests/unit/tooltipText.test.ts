@@ -57,59 +57,59 @@ describe("formatDelta", () => {
 });
 
 describe("makeLinesOf", () => {
-  // 52110 전주시, 52130 군산시, 52140 익산시 — real REGION_CODES so nameOf()
+  // 51110 춘천시, 51130 원주시, 51150 강릉시 — real REGION_CODES so nameOf()
   // resolves a real name instead of falling back to the raw code.
   const countMap = new Map<string, number | null>([
-    ["52110", 700],
-    ["52130", 100],
-    ["52140", null],
+    ["51110", 700],
+    ["51130", 100],
+    ["51150", null],
     [PROVINCE_CODE, 500],
   ]);
 
   it("returns the 2-line '자료 없음' branch when the region has no value", () => {
     const linesOf = makeLinesOf({ def: countDef, label: "학생수", map: countMap });
-    const lines = linesOf("52140");
-    expect(lines).toEqual(["익산시", "학생수: 자료 없음"]);
+    const lines = linesOf("51150");
+    expect(lines).toEqual(["강릉시", "학생수: 자료 없음"]);
   });
 
   it("renders the rank line as '{REGION_CODES.length}개 시군 중 n위' (fix round 2 — not hardcoded '14개')", () => {
     const linesOf = makeLinesOf({ def: countDef, label: "학생수", map: countMap });
-    const lines = linesOf("52110");
-    expect(lines[0]).toBe("전주시");
+    const lines = linesOf("51110");
+    expect(lines[0]).toBe("춘천시");
     expect(lines[2]).toBe(`${REGION_CODES.length}개 시군 중 1위`);
   });
 
-  it("uses '전북 대비 비중' wording (share, not a delta) for a count-kind indicator — 시군값/52000값×100", () => {
+  it("uses '강원 대비 비중' wording (share, not a delta) for a count-kind indicator — 시군값/51000값×100", () => {
     const linesOf = makeLinesOf({ def: countDef, label: "학생수", map: countMap });
-    // 52110: 700 / 500(province) * 100 = 140%
-    const lines = linesOf("52110");
-    const expectedShare = shareOfProvince(countMap, "52110")!;
+    // 51110: 700 / 500(province) * 100 = 140%
+    const lines = linesOf("51110");
+    const expectedShare = shareOfProvince(countMap, "51110")!;
     expect(expectedShare).toBe(140);
-    expect(lines[3]).toBe(`전북 대비 비중 ${formatShare(expectedShare)}`);
+    expect(lines[3]).toBe(`강원 대비 비중 ${formatShare(expectedShare)}`);
   });
 
   it("a count-kind share is never signed, even for a region under the province total", () => {
     const linesOf = makeLinesOf({ def: countDef, label: "학생수", map: countMap });
-    // 52130: 100 / 500(province) * 100 = 20%
-    const lines = linesOf("52130");
-    const expectedShare = shareOfProvince(countMap, "52130")!;
+    // 51130: 100 / 500(province) * 100 = 20%
+    const lines = linesOf("51130");
+    const expectedShare = shareOfProvince(countMap, "51130")!;
     expect(expectedShare).toBe(20);
-    expect(lines[3]).toBe(`전북 대비 비중 ${formatShare(expectedShare)}`);
+    expect(lines[3]).toBe(`강원 대비 비중 ${formatShare(expectedShare)}`);
     expect(lines[3]).not.toMatch(/[+-]/);
   });
 
-  it("uses '전북 평균 대비' wording for a ratio-kind indicator", () => {
+  it("uses '강원 평균 대비' wording for a ratio-kind indicator", () => {
     const ratioMap = new Map<string, number | null>([
-      ["52110", 20],
-      ["52130", 15],
+      ["51110", 20],
+      ["51130", 15],
       [PROVINCE_CODE, 18],
     ]);
     const linesOf = makeLinesOf({ def: ratioDef, label: "학급당 학생수", map: ratioMap });
-    const lines = linesOf("52110");
-    expect(lines[3]).toBe(`전북 평균 대비 +${formatPercent(2)}`);
+    const lines = linesOf("51110");
+    expect(lines[3]).toBe(`강원 평균 대비 +${formatPercent(2)}`);
   });
 
-  it('shows "순위 없음" for a code that has a value but is excluded from ranking (52000 itself)', () => {
+  it('shows "순위 없음" for a code that has a value but is excluded from ranking (51000 itself)', () => {
     const linesOf = makeLinesOf({ def: countDef, label: "학생수", map: countMap });
     const lines = linesOf(PROVINCE_CODE);
     // PROVINCE_CODE is deliberately not a recognized RegionCode (geo/regions.ts),
@@ -118,23 +118,23 @@ describe("makeLinesOf", () => {
     expect(lines[2]).toBe("순위 없음");
   });
 
-  it("shows '자료 없음' on the share line (count-kind) when the province (52000) value itself is null", () => {
+  it("shows '자료 없음' on the share line (count-kind) when the province (51000) value itself is null", () => {
     const map = new Map<string, number | null>([
-      ["52110", 100],
+      ["51110", 100],
       [PROVINCE_CODE, null],
     ]);
     const linesOf = makeLinesOf({ def: countDef, label: "학생수", map });
-    const lines = linesOf("52110");
-    expect(lines[3]).toBe("전북 대비 비중: 자료 없음");
+    const lines = linesOf("51110");
+    expect(lines[3]).toBe("강원 대비 비중: 자료 없음");
   });
 
-  it("shows '자료 없음' on the delta line (ratio-kind) when the province (52000) value itself is null", () => {
+  it("shows '자료 없음' on the delta line (ratio-kind) when the province (51000) value itself is null", () => {
     const map = new Map<string, number | null>([
-      ["52110", 20],
+      ["51110", 20],
       [PROVINCE_CODE, null],
     ]);
     const linesOf = makeLinesOf({ def: ratioDef, label: "학급당 학생수", map });
-    const lines = linesOf("52110");
-    expect(lines[3]).toBe("전북 평균 대비: 자료 없음");
+    const lines = linesOf("51110");
+    expect(lines[3]).toBe("강원 평균 대비: 자료 없음");
   });
 });

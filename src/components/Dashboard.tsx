@@ -4,6 +4,7 @@ import { parseAsString, useQueryState } from "nuqs";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import IssueExplorer from "@/components/panels/IssueExplorer";
+import { DataAvailability, IssueAvailability } from "@/components/panels/DataAvailability";
 import { useIssueData } from "@/lib/issues/useIssueData";
 import { issueById } from "@/lib/issues/registry";
 import { buildIssueModel } from "@/lib/issues/model";
@@ -104,10 +105,11 @@ function DashboardInner({
         indicatorId,
       ),
     bundle.schools,
+    bundle.manifest,
   );
   const issueModel = useMemo(() => {
     const definition = issueById(issueId);
-    return definition && issueState.status === "ready"
+    return definition && bundle.manifest.issues[definition.id].status === "available" && issueState.status === "ready"
       ? buildIssueModel(bundle, issueState.data, definition, issueMetric, issueLevel)
       : null;
   }, [issueId, issueMetric, issueState, bundle, issueLevel]);
@@ -118,15 +120,20 @@ function DashboardInner({
         indicatorId,
         issueModel,
         issueState.status === "ready" ? issueState.data : null,
+        issueId,
       ),
-    [bundle, indicatorId, issueModel, issueState],
+    [bundle, indicatorId, issueModel, issueState, issueId],
   );
   const needsFacts =
     !!issueId ||
     ["special_classes", "special_students", "zero_entrant_schools"].includes(
       indicatorId,
     );
-  const metricPending = needsFacts && issueState.status !== "ready";
+  const unavailable = issueId && bundle.manifest.issues[issueId]?.status === "unavailable"
+    ? bundle.manifest.issues[issueId]
+    : bundle.manifest.indicators[indicatorId];
+  const unavailableReason = unavailable?.status === "unavailable" ? unavailable.reason : null;
+  const metricPending = !unavailableReason && needsFacts && issueState.status !== "ready" && issueState.status !== "unavailable";
   const [highlightedSchoolId, setHighlightedSchoolId] = useQueryState(
     "school",
     parseAsString.withOptions({ history: "push", shallow: true }),
@@ -372,7 +379,9 @@ function DashboardInner({
                 onStatistics={showStatistics}
               />
             ) : tab === "issues" ? (
-              issueState.status === "ready" ? (
+              issueState.status === "unavailable" || (issueId && bundle.manifest.issues[issueId]?.status === "unavailable") ? (
+                <IssueAvailability manifest={bundle.manifest} selected={issueId} onSelect={setIssue} />
+              ) : issueState.status === "ready" ? (
                 <IssueExplorer
                   bundle={bundle}
                   data={issueState.data}
@@ -506,6 +515,7 @@ function DashboardInner({
               )}
             </div>
           )}
+          {unavailableReason && <p role="status" className="absolute left-4 right-4 top-48 z-20 rounded-lg border border-line bg-surface p-4 text-sm lg:left-auto lg:top-40 lg:max-w-md">자료 미제공 · {unavailableReason}</p>}
           <button
             ref={panelButtonRef}
             type="button"
@@ -569,11 +579,12 @@ function DashboardBody() {
 
   return (
     <div className="cyber-shell bg-paper text-ink">
-      <TopBar indicatorId={indicatorId} bundle={bundle} onExploreIssues={() => setExploreRequest(n => n + 1)} />
+      <TopBar indicatorId={indicatorId} bundle={bundle} preparing={state.status === "preparing"} onExploreIssues={() => setExploreRequest(n => n + 1)} />
       {state.status === "loading" && (
         <CenteredMessage>데이터 불러오는 중…</CenteredMessage>
       )}
       {state.status === "error" && <DataErrorMessage error={state.error} />}
+      {state.status === "preparing" && <DataAvailability manifest={state.manifest} />}
       {state.status === "ready" && (
         <DashboardInner
           bundle={state.bundle}

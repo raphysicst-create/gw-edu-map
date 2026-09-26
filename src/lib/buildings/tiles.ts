@@ -1,9 +1,10 @@
+import { GANGWON_VIEW } from "../profiles/gangwon";
 export const BUILDING_ZOOM = 16;
 const N = 2 ** BUILDING_ZOOM;
 const xOf = (lng: number) => Math.floor((lng + 180) / 360 * N);
 const yOf = (lat: number) => Math.floor((1 - Math.asinh(Math.tan(lat * Math.PI / 180)) / Math.PI) / 2 * N);
-// Derived from public/data/regions.geojson, including coastal islands; one tile margin.
-export const TILE_RANGE = { minX: xOf(125.96651) - 1, maxX: xOf(127.91147) + 1, minY: yOf(36.15642) - 1, maxY: yOf(35.2992) + 1 };
+// Request limits only; the display extent is not a source of building geometry.
+export const TILE_RANGE = { minX: xOf(GANGWON_VIEW.extent[0]) - 1, maxX: xOf(GANGWON_VIEW.extent[2]) + 1, minY: yOf(GANGWON_VIEW.extent[3]) - 1, maxY: yOf(GANGWON_VIEW.extent[1]) + 1 };
 export function validBuildingTile(z: number, x: number, y: number): boolean {
   return z === BUILDING_ZOOM && Number.isInteger(x) && Number.isInteger(y) &&
     x >= TILE_RANGE.minX && x <= TILE_RANGE.maxX && y >= TILE_RANGE.minY && y <= TILE_RANGE.maxY;

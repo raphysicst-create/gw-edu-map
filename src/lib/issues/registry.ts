@@ -5,10 +5,10 @@ import type { EducationIssue } from "./types";
 export const POLICY_SOURCE = ACTIVE_PROFILE.policy.source;
 export const EDUCATION_ISSUES = ACTIVE_PROFILE.policy.issues;
 export const PUBLISHED_ISSUES = EDUCATION_ISSUES.filter((issue) => issue.status === "published");
-export const ISSUE_IDS = PUBLISHED_ISSUES.map((issue) => issue.id);
-export const ISSUE_METRICS = PUBLISHED_ISSUES.flatMap((issue) => issue.metrics);
+export const ISSUE_IDS = EDUCATION_ISSUES.map((issue) => issue.id);
+export const ISSUE_METRICS = EDUCATION_ISSUES.flatMap((issue) => issue.metrics);
 export function issueById(id: string | null) {
-  return PUBLISHED_ISSUES.find((issue) => issue.id === id) ?? null;
+  return EDUCATION_ISSUES.find((issue) => issue.id === id) ?? null;
 }
 export function resolveIssueMetric(issue: EducationIssue, metric: string | null) {
   return metric && issue.metrics.includes(metric) ? metric : issue.metrics[0];

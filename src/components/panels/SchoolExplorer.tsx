@@ -56,6 +56,7 @@ export function SchoolDetail({
             {SCHOOL_LEVEL_LABELS[school.level]}
           </p>
           <h2 className="mt-1 font-semibold">{school.name}</h2>
+          <p className="mt-1 text-xs text-ink-muted">{school.status}{school.branch ? " · 분교장" : " · 본교"}</p>
         </div>
         <button
           type="button"
@@ -83,6 +84,8 @@ export function SchoolDetail({
           </div>
         ))}
       </dl>
+      {school.statisticsSource && <p className="mt-3 text-xs text-ink-muted">기준 {school.statisticsSource.referenceDate} · <a href={school.statisticsSource.url} target="_blank" rel="noreferrer" className="underline">{school.statisticsSource.name}</a></p>}
+      {school.address && <p className="mt-2 text-xs text-ink-muted">{school.address}</p>}
       {school.locationSource && (
         <div className="mt-3 text-xs text-ink-muted">
           <p>{school.locationSource.address}</p>

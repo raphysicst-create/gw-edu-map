@@ -1,5 +1,5 @@
 export type Scene = "city" | "flat";
-export const SCENE_PREF_KEY = "jb-edu-map:scene:v1";
+export const SCENE_PREF_KEY = "edu-map:gangwon:scene:v1";
 export function readScenePref(): Scene {
   try { return localStorage.getItem(SCENE_PREF_KEY) === "flat" ? "flat" : "city"; } catch { return "city"; }
 }

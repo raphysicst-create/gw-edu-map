@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "profileId": "gangwon",
+  "sources": [
+    {
+      "sourceId": "gwe-2026-major-work-plan",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "2026 강원교육 주요업무계획",
+      "landingUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcyMTEyMTA5NTQ%3D",
+      "downloadUrl": "https://www.gwe.go.kr/cmm/fileDown.do?encKey=MTEyMzE4&type=fileMng",
+      "officialEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcyMTEyMTA5NTQ%3D",
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:52:59Z",
+      "scope": "강원특별자치도교육청의 2026년 정책계획. 정책 의도와 사업명을 확인하는 문서이며 2022년 학교별 통계의 기준일 또는 2026년 실적 자료가 아님.",
+      "coveredRegions": [],
+      "schoolLevels": [],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "29df87552f4637673f54d8f8d080a2b3b975955ae90bef4574a96011ae42d615",
+      "localPath": "data/raw/gangwon/research-schools/gwe-2026-major-work-plan.pdf",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "강원특별자치도교육청 공식 주요업무계획 페이지가 해당 PDF를 직접 첨부함. 표지에 2026 강원교육 주요업무계획 및 발행기관 표기 확인."
+      },
+      "limitations": [
+        "게시 페이지와 PDF에서 이 파일에 적용되는 공공누리 유형 또는 구체적인 가공·재배포·저장 조건을 확인하지 못함. 교육청 일반 저작권 안내만으로 파일별 허락을 추정하지 않음.",
+        "게시일과 수치 조사기준일이 확인되지 않음. PDF 생성 메타데이터는 게시일의 증거로 사용하지 않음.",
+        "계획상의 사업·지원 대상·예산·목표는 실제 집행 결과나 학교별 통계가 아님. 2022년 교육부 학교별 통계와 동일 시점의 수치처럼 제시할 수 없음.",
+        "전체 10개 주제에 대한 정책 근거와 파일별 이용조건의 독립 검토가 끝나지 않아 정책 주제 공개에 사용하지 않음."
+      ],
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "requiresSession": true,
+      "requestHeaders": {
+        "Referer": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcyMTEyMTA5NTQ%3D"
+      },
+      "downloadMethod": "GET",
+      "policyYear": 2026,
+      "pdfPageCount": 200,
+      "publicationManagementNumber": "72-7801000-100008-10"
+    },
+    {
+      "sourceId": "gwe-2026-special-education-plan",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "2026 강원특수교육 운영계획",
+      "landingUrl": "https://www.gwe.go.kr/main/bbs/view.do?bbsSn=48548&key=bTIzMDkxMTk1OTM5Mjc%3D",
+      "downloadUrl": "https://www.gwe.go.kr/cmm/fileDown.do?encKey=MTEzOTEx&type=bbs",
+      "officialEvidenceUrl": "https://www.gwe.go.kr/main/bbs/view.do?bbsSn=48548&key=bTIzMDkxMTk1OTM5Mjc%3D",
+      "referenceDate": null,
+      "publishedAt": "2026-02-03",
+      "retrievedAt": "2026-09-25T17:59:42.375Z",
+      "scope": "교육청 문화체육특수교육과의 2026년 특수교육 운영계획. 표지 수록월은 2026년 1월이며 2022년 학교 통계의 동시점 정책이나 2026년 집행 실적으로 사용하지 않음.",
+      "coveredRegions": [],
+      "schoolLevels": [],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "f59376f4111b8ab07cc39227ea2bd454d80febab1108d9b38e0ecb559126d105",
+      "localPath": "data/raw/gangwon/research-schools/gwe-2026-special-education-plan.hwp",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "별도 검사자가 본청 게시물 48548의 문화체육특수교육과 작성·2026-02-03 게시·HWP 직접 첨부와 표지 발행부서를 확인함."
+      },
+      "limitations": [
+        "게시물 및 읽을 수 있는 HWP 본문·표지에서 파일별 공공누리 유형이나 이용조건을 확인하지 못함. 내부 그림 형태의 표시를 전 페이지 렌더링으로 검사한 것은 아니므로 부재를 단정하지 않고 공개를 보류함.",
+        "정책 계획이며 학교별 조사통계나 집행 실적을 증명하는 자료가 아님. 개별 수치의 조사기준일·모집단을 추정하지 않음.",
+        "취득시각은 해당 다운로드로 생성된 파일의 LastWriteTimeUtc를 사용함. 별도의 HTTP 완료 시각 로그는 없음.",
+        "GET과 Referer 헤더로 다운로드 성공. 사전 세션은 사용하지 않았으며 Referer 헤더가 필수인지는 검사하지 않음."
+      ],
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "downloadMethod": "GET",
+      "requiresSession": false,
+      "requestHeaders": {
+        "Referer": "https://www.gwe.go.kr/main/bbs/view.do?bbsSn=48548&key=bTIzMDkxMTk1OTM5Mjc%3D"
+      },
+      "policyYear": 2026,
+      "documentMonth": "2026-01",
+      "byteLength": 1510400
+    }
+  ]
+}

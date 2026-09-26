@@ -1,3 +1,4 @@
+import { assertLegacyPipelineDisabled } from "./gangwon/legacy-guard";
 /**
  * Parses every downloaded data/raw/kess-<year>.xlsx into
  * data/interim/kess-<year>.json ({ year, referenceDate, source, rows }).
@@ -37,6 +38,7 @@ function formatDropped(dropped: Record<string, number>): string {
 }
 
 async function main(): Promise<void> {
+  assertLegacyPipelineDisabled();
   await mkdir(INTERIM_DIR, { recursive: true });
 
   const years = Object.keys(KESS_FILE_IDS)
@@ -85,3 +87,4 @@ main().catch((err) => {
   console.error(err);
   process.exitCode = 1;
 });
+

@@ -5,7 +5,8 @@ import { withNuqsTestingAdapter } from "nuqs/adapters/testing";
 import TopBar from "@/components/panels/TopBar";
 import type { DataBundle } from "@/lib/data/types";
 import { PROVINCE_CODE } from "@/lib/geo/regions";
-import type { IndicatorFile, Manifest } from "@/lib/indicators/types";
+import type { IndicatorFile } from "@/lib/indicators/types";
+import { publishedManifest } from "../fixtures/gangwon-release";
 
 const KESS_REFERENCE_DATE = "2026-04-01";
 const CLOSED_SCHOOLS_REFERENCE_DATE = "2026-07-16";
@@ -20,8 +21,8 @@ function indicatorFile(id: string, referenceDate: string): IndicatorFile {
   };
 }
 
-function manifestFixture(): Manifest {
-  return { latestYear: 2026, indicators: {}, builtAt: "2026-01-01T00:00:00.000Z", sources: [] };
+function manifestFixture() {
+  return publishedManifest(["schools_total", "students_total", "teachers_total", "small_schools", "closed_schools"]);
 }
 
 /**

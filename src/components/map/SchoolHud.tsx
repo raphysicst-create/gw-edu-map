@@ -78,6 +78,7 @@ export default function SchoolHud({
             </div>
           ))}
         </dl>
+        {school.statisticsSource && <p className="mt-2 text-[11px] text-ink-muted">통계 기준 {school.statisticsSource.referenceDate} · <a href={school.statisticsSource.url} target="_blank" rel="noopener noreferrer" className="underline">통계 원문</a></p>}
         {metric.kind !== "region" && (
           <div className="mt-2 flex items-baseline justify-between gap-2 rounded-md border border-accent/25 bg-accent-soft/45 px-2 py-1.5 text-xs">
             <span className="truncate text-ink-muted">{metric.title}</span>

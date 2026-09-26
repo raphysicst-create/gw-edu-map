@@ -2,11 +2,14 @@ import { PROVINCE_CODE, REGION_CODES } from "../geo/regions";
 import { PUBLISHED_ISSUES } from "./registry";
 import type { SchoolsFile } from "../schools/types";
 import type { EducationIssuesFile } from "./types";
+import type { ReleaseManifest } from "../data/release";
+import { EDUCATION_ISSUES } from "./registry";
 
 /** Validate cached/network data before exposing it to a map. */
 export function assertIssueData(
   value: unknown,
   schools: SchoolsFile,
+  manifest?: ReleaseManifest,
 ): asserts value is EducationIssuesFile {
   const fail = () => {
     throw new Error(
@@ -15,13 +18,14 @@ export function assertIssueData(
   };
   if (!value || typeof value !== "object") return fail();
   const data = value as EducationIssuesFile;
+  const published = manifest ? EDUCATION_ISSUES.filter(issue => manifest.issues[issue.id].status === "available") : PUBLISHED_ISSUES;
   if (
     data.version !== 1 ||
     data.statsReferenceDate !== schools.referenceDate.stats ||
     !data.designations ||
     !data.schools ||
     !Array.isArray(data.sources) ||
-    data.sources.length < 2
+    data.sources.length < 1
   )
     return fail();
   for (const source of data.sources) {
@@ -50,16 +54,17 @@ export function assertIssueData(
     const facts = data.schools[school.id];
     if (
       !facts ||
-      typeof facts.kediCode !== "string" ||
-      !facts.kediCode ||
-      facts.kediCode !== school.kediCode ||
-      seen.has(facts.kediCode) ||
       typeof facts.isMain !== "boolean" ||
       !["기존", "신설", "휴교"].includes(facts.status)
     )
       return fail();
+    const locator = facts.sourceRecord;
+    const key = facts.kediCode ? `kedi:${facts.kediCode}` : locator ? `${locator.sourceId}:${locator.sheet}:${locator.row}` : null;
+    if (!key || seen.has(key)) return fail();
+    if (facts.kediCode && facts.kediCode !== school.kediCode) return fail();
+    if (!facts.kediCode && (!locator?.sourceId || !locator.sheet || !Number.isInteger(locator.row) || locator.row < 1 || JSON.stringify(locator) !== JSON.stringify(school.sourceRecord))) return fail();
     if (facts.isMain === school.branch) return fail();
-    seen.add(facts.kediCode);
+    seen.add(key);
     for (const n of [
       facts.entrants,
       facts.specialClasses,
@@ -69,8 +74,8 @@ export function assertIssueData(
     ]) {
       if (n !== undefined && n !== null && (!Number.isInteger(n) || n < 0)) return fail();
     }
-    if (PUBLISHED_ISSUES.some((issue) => issue.metrics.includes("librarian-schools")) && facts.librarianTeachers === undefined) return fail();
-    if (PUBLISHED_ISSUES.some((issue) => issue.metrics.includes("counselor-schools")) && facts.counselorTeachers === undefined) return fail();
+    if (published.some((issue) => issue.metrics.includes("librarian-schools")) && facts.librarianTeachers === undefined) return fail();
+    if (published.some((issue) => issue.metrics.includes("counselor-schools")) && facts.counselorTeachers === undefined) return fail();
   }
   if (data.specialTrends !== undefined) {
     if (!Array.isArray(data.specialTrends)) return fail();
@@ -89,7 +94,7 @@ export function assertIssueData(
         if (!keys.has(`${code}:${year}`)) return fail();
   }
 
-  const resourceIssues = PUBLISHED_ISSUES.filter((issue) =>
+  const resourceIssues = published.filter((issue) =>
     ["basic-learning", "reading", "care", "wellbeing", "career", "ai-education"].includes(issue.id),
   );
   if (resourceIssues.length) {
@@ -112,7 +117,7 @@ export function assertIssueData(
       if (!resource || !data.resourceSources[resource.issue] || !resource.name ||
         (resource.regionCode !== null && !REGION_CODES.includes(resource.regionCode)) ||
         (resource.schoolId !== null && !schoolIds.has(resource.schoolId))) return fail();
-      if (resource.metric && !PUBLISHED_ISSUES.find((issue) => issue.id === resource.issue)?.metrics.includes(resource.metric)) return fail();
+      if (resource.metric && !published.find((issue) => issue.id === resource.issue)?.metrics.includes(resource.metric)) return fail();
       if ([resource.capacity, resource.enrolled].some((n) => n !== undefined && n !== null && (!Number.isInteger(n) || n < 0))) return fail();
       if ((resource.lat != null || resource.lng != null) &&
         (resource.lat == null || resource.lng == null || !Number.isFinite(resource.lat) || !Number.isFinite(resource.lng))) return fail();

@@ -1,7 +1,8 @@
 import type { Manifest } from "@/lib/indicators/types";
+import type { ReleaseManifest } from "@/lib/data/release";
 
 export interface FooterProps {
-  manifest: Manifest;
+  manifest: Manifest & Partial<Pick<ReleaseManifest, "files">>;
 }
 
 /**
@@ -30,7 +31,7 @@ export default function Footer({ manifest }: FooterProps) {
             rel="noreferrer"
             className="underline decoration-dotted underline-offset-2 hover:text-ink"
           >
-            {source.name}
+            {source.providerName ? `${source.providerName} · ` : ""}{source.name}
           </a>
           <span>
             기준일 {source.referenceDate}
@@ -46,6 +47,7 @@ export default function Footer({ manifest }: FooterProps) {
         학교수 정의: 초·중·고·특수 본교, 폐교 제외(분교장 제외)
       </span>
       <span data-testid="footer-small-school-definition">소규모학교 기준: 학생수 60명 이하</span>
+      {manifest.files?.["provenance.json"] && <a className="underline" href={`/data/${manifest.files["provenance.json"].path}`} target="_blank" rel="noreferrer">원자료·집계 범위·결측 보고서</a>}
     </div>
   );
 }

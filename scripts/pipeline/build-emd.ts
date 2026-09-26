@@ -26,6 +26,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import type { Feature, FeatureCollection, MultiPolygon, Polygon } from "geojson";
 
 import { isRegionCode, REGION_CODES } from "../../src/lib/geo/regions";
+import { ACTIVE_PROFILE } from "../../src/lib/profiles";
 import {
   ensureSourceDownloaded,
   JB_SIDO,
@@ -137,6 +138,11 @@ export async function transformEmd(rawGeojsonText: string): Promise<Map<string, 
 }
 
 async function main() {
+  if (ACTIVE_PROFILE.id === "gangwon") {
+    throw new Error(
+      "[build-emd] Gangwon administrative-dong boundaries must use the verified national SGIS ZIP via the Gangwon release pipeline; this legacy admdongkor downloader is disabled.",
+    );
+  }
   await ensureSourceDownloaded();
   const inputText = await readFile(RAW_PATH, "utf8");
 

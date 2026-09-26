@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { readReleased } from "./releaseFixture";
 import { INDICATORS } from "@/lib/indicators/registry";
 import { ISSUE_METRICS } from "@/lib/issues/registry";
 import { schoolChartMetric, chartMaximum, chartHeight } from "@/lib/schools/chart";
 import type { School } from "@/lib/schools/types";
 import type { EducationIssuesFile } from "@/lib/issues/types";
 
-const schools: School[] = JSON.parse(readFileSync("public/data/schools.json", "utf8")).schools;
-const facts: EducationIssuesFile = JSON.parse(readFileSync("public/data/education-issues.json", "utf8"));
+const schools: School[] = readReleased<{ schools: School[] }>("schools.json").schools;
+const facts: EducationIssuesFile = readReleased<EducationIssuesFile>("education-issues.json");
 const counts = ["schools_total", "small_schools", "zero_entrant_schools"];
 const proportional = ["students_total", "classes_total", "teachers_total", "students_per_class", "students_per_teacher", "special_classes", "special_students"];
 const dots = ["site_area_per_student", "classrooms_per_school", "small_school_share", "rural_school_share", "students_change_5y", "closed_schools", "closed_schools_unused", "closed_schools_recent"];

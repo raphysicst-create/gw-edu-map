@@ -1,3 +1,4 @@
+import { assertLegacyPipelineDisabled } from "./gangwon/legacy-guard";
 /**
  * Builds public/data/indicators/<id>.json (latest year snapshot),
  * public/data/series/<id>.json (all years, non-byLevel rows only), and
@@ -96,6 +97,7 @@ function computeChange5y(
 }
 
 async function main(): Promise<void> {
+  assertLegacyPipelineDisabled();
   const interim = loadInterimFiles();
   if (interim.size === 0) {
     throw new Error("[build-indicators] no data/interim/kess-<year>.json files found — run npm run data:kess first");
@@ -220,6 +222,7 @@ async function main(): Promise<void> {
     );
   }
   const schoolsFile = JSON.parse(readFileSync(schoolsJsonPath, "utf-8")) as SchoolsFile;
+  if (!schoolsFile.source.location || !schoolsFile.referenceDate.location) throw new Error("기존 빌드는 검증된 학교 위치 출처가 필요합니다.");
 
   const sources: Manifest["sources"] = [
     { name: KESS_STATS_SOURCE.name, url: KESS_STATS_SOURCE.url, referenceDate: kessLatestInterim.referenceDate },
@@ -253,3 +256,4 @@ main().catch((err) => {
   console.error(err);
   process.exitCode = 1;
 });
+

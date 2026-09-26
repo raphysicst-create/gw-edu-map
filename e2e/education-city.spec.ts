@@ -48,7 +48,7 @@ test("school selection switches density to values, keeping the statewide scale",
   await openPanel(page);
   await page
     .getByRole("searchbox", { name: "학교명 검색" })
-    .fill("전주초등학교");
+    .fill("강원테스트초등학교");
   await page.locator('[data-testid^="school-row-"]').first().click();
   await expect
     .poll(() =>
@@ -110,7 +110,10 @@ test("mobile topic selector, complete metric menu and selected school card fit",
   const box = await menu.boundingBox();
   expect(box!.x).toBeGreaterThanOrEqual(0);
   expect(box!.x + box!.width).toBeLessThanOrEqual(390);
-  await menu.getByRole("button", { name: "특수학교 수", exact: true }).click();
+  await menu.getByRole("radio", { name: "특수학급 수", exact: true }).click();
+  await expect(page.getByTestId("metric-legend")).toContainText("800학급");
+  await page.goto("/?view=issues&issue=special-education&issueMetric=special-schools");
+  await ready(page);
   await expect(page.getByTestId("metric-legend")).toContainText("11개교");
   await page.screenshot({ path: "test-results/education-city-mobile.png" });
   await openPanel(page);

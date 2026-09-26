@@ -28,32 +28,32 @@ describe("readBasemapPref/writeBasemapPref", () => {
   // (2차 개선 Task C). Those values must keep reading back as something
   // sensible for returning users, under the SAME storage key.
   it("migrates the old boolean values: '1' → satellite, '0' → off", () => {
-    vi.stubGlobal("window", { localStorage: fakeStorage({ "jbmap.basemap": "1" }) });
+    vi.stubGlobal("window", { localStorage: fakeStorage({ "edu-map:gangwon:basemap:v1": "1" }) });
     expect(readBasemapPref()).toBe("satellite");
     vi.unstubAllGlobals();
-    vi.stubGlobal("window", { localStorage: fakeStorage({ "jbmap.basemap": "0" }) });
+    vi.stubGlobal("window", { localStorage: fakeStorage({ "edu-map:gangwon:basemap:v1": "0" }) });
     expect(readBasemapPref()).toBe("off");
   });
 
   it("reads the four modes back verbatim and falls back to night on garbage", () => {
     for (const mode of ["off", "night", "satellite", "base"] as const) {
-      vi.stubGlobal("window", { localStorage: fakeStorage({ "jbmap.basemap": mode }) });
+      vi.stubGlobal("window", { localStorage: fakeStorage({ "edu-map:gangwon:basemap:v1": mode }) });
       expect(readBasemapPref()).toBe(mode);
       vi.unstubAllGlobals();
     }
-    vi.stubGlobal("window", { localStorage: fakeStorage({ "jbmap.basemap": "midnight" }) });
+    vi.stubGlobal("window", { localStorage: fakeStorage({ "edu-map:gangwon:basemap:v1": "midnight" }) });
     expect(readBasemapPref()).toBe("night");
   });
 
-  it("write stores the mode string under 'jbmap.basemap' and reads back round-trip", () => {
+  it("write stores the mode string under 'edu-map:gangwon:basemap:v1' and reads back round-trip", () => {
     const storage = fakeStorage();
     vi.stubGlobal("window", { localStorage: storage });
     writeBasemapPref("base");
-    expect(storage.setItem).toHaveBeenCalledWith("jbmap.basemap", "base");
+    expect(storage.setItem).toHaveBeenCalledWith("edu-map:gangwon:basemap:v1", "base");
     expect(readBasemapPref()).toBe("base");
 
     writeBasemapPref("off");
-    expect(storage.setItem).toHaveBeenCalledWith("jbmap.basemap", "off");
+    expect(storage.setItem).toHaveBeenCalledWith("edu-map:gangwon:basemap:v1", "off");
     expect(readBasemapPref()).toBe("off");
   });
 

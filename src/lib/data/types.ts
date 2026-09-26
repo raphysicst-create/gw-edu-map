@@ -7,7 +7,8 @@ import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
 
 import type { ClosedSchoolsFile } from "../closedSchools/types";
 import type { RegionsFeatureCollection } from "../geo/geo";
-import type { IndicatorFile, Manifest, SeriesFile } from "../indicators/types";
+import type { IndicatorFile, SeriesFile } from "../indicators/types";
+import type { PublishedManifest } from "./release";
 import type { SchoolsFile } from "../schools/types";
 
 // Re-exported (not redefined) — `RegionFeature`/`RegionsFeatureCollection`'s
@@ -34,12 +35,12 @@ export interface DataBundle {
    * here.
    */
   charset: string;
-  manifest: Manifest;
+  manifest: PublishedManifest;
   /** Task 4B — 전북 학교 점 위치 + KESS 통계 (school-level layer/panel data). */
   schools: SchoolsFile;
   /** Task 5 — 전북 폐교재산 현황 row list, backing RegionPanel's 폐교 목록 section (the closed_schools* indicator files only carry aggregated counts, not row-level 폐교명/연도/급/활용현황). */
-  closedSchools: ClosedSchoolsFile;
-  indicators: Record<string, IndicatorFile>;
+  closedSchools: ClosedSchoolsFile | null;
+  indicators: Partial<Record<string, IndicatorFile>>;
   /**
    * Keyed by indicator id, but NOT guaranteed to have an entry for every
    * registry id: indicators with `aggregate.kind === 'external'` (currently

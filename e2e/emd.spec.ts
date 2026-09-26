@@ -42,7 +42,7 @@ function readLayerOrderIndices(page: Page) {
 }
 
 test.describe("읍면동 경계", () => {
-  test("전주(52110) 선택 → emd-boundaries 레이어 표시(순서: regions 뒤·schools 앞) → 토글 OFF 시 사라짐 → 새로고침 후 OFF 유지 → 다시 ON, 콘솔 error 0", async ({
+  test("춘천(51110) 선택 → emd-boundaries 레이어 표시(순서: regions 뒤·schools 앞) → 토글 OFF 시 사라짐 → 새로고침 후 OFF 유지 → 다시 ON, 콘솔 error 0", async ({
     page,
   }) => {
     // CI fix (run 35570411276) — this test's reload/toggle cycle exceeded
@@ -54,21 +54,20 @@ test.describe("읍면동 경계", () => {
     });
     page.on("pageerror", (error) => consoleErrors.push(error.message));
 
-    await page.goto("/?region=52110");
+    await page.goto("/?region=51110");
     await openPanel(page);
   await openMapSettings(page);
     await page.getByRole("tab", { name: "시군 통계" }).click();
     await waitForMapReady(page);
-    await expect(page.getByRole("heading", { name: "전주시", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "춘천시", exact: true })).toBeVisible();
 
     // Default ON — no stored preference yet (task brief: "기본 ON").
     const toggle = page.getByRole("button", { name: "읍면동 경계" });
     await expect(toggle).toBeVisible();
     await expect(toggle).toHaveAttribute("aria-pressed", "true");
 
-    // The layer's data arrives asynchronously (a real fetch of the static
-    // public/data/emd/52110.geojson file — not stubbed) — expect.poll, no
-    // fixed wait, per the task brief.
+    // The layer arrives asynchronously from the shared synthetic release
+    // fixture; expect.poll avoids coupling this test to a fixed delay.
     await expect.poll(() => readEmdLayerDataLength(page), { timeout: 15000 }).toBeGreaterThan(0);
 
     const order = await readLayerOrderIndices(page);

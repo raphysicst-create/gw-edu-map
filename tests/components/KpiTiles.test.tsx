@@ -4,7 +4,8 @@ import { render, screen } from "@testing-library/react";
 import KpiTiles from "@/components/panels/KpiTiles";
 import { formatInt } from "@/lib/format";
 import { PROVINCE_CODE } from "@/lib/geo/regions";
-import type { IndicatorFile, Manifest, SeriesFile } from "@/lib/indicators/types";
+import type { IndicatorFile, SeriesFile } from "@/lib/indicators/types";
+import { publishedManifest } from "../fixtures/gangwon-release";
 
 function indicatorFile(id: string, latestValue: number): IndicatorFile {
   return {
@@ -16,15 +17,15 @@ function indicatorFile(id: string, latestValue: number): IndicatorFile {
   };
 }
 
-function seriesFile(id: string, values: { year: number; value: number }[]): SeriesFile {
+function seriesFile(id: string, values: { year: number; value: number | null }[]): SeriesFile {
   return {
     id,
     rows: values.map(({ year, value }) => ({ regionCode: PROVINCE_CODE, year, value })),
   };
 }
 
-function manifestFixture(): Manifest {
-  return { latestYear: 2026, indicators: {}, builtAt: "2026-01-01T00:00:00.000Z", sources: [] };
+function manifestFixture() {
+  return publishedManifest(["schools_total", "students_total", "teachers_total", "small_schools"]);
 }
 
 /**
@@ -111,6 +112,20 @@ function fixtureWithZeroDelta() {
   };
 }
 
+function fixtureWithSparseYears() {
+  const base = fixture();
+  return {
+    ...base,
+    indicators: { ...base.indicators, schools_total: indicatorFile("schools_total", 751) },
+    series: {
+      ...base.series,
+      schools_total: seriesFile("schools_total", [{ year: 2022, value: 751 }, { year: 2026, value: 751 }]),
+      students_total: seriesFile("students_total", [{ year: 2022, value: 168000 }, { year: 2026, value: 165958 }]),
+      teachers_total: seriesFile("teachers_total", [{ year: 2022, value: null }, { year: 2026, value: 12500 }]),
+    },
+  };
+}
+
 describe("KpiTiles", () => {
   it("renders all 4 fixed KPI tiles with their labels", () => {
     render(<KpiTiles {...fixture()} />);
@@ -120,7 +135,7 @@ describe("KpiTiles", () => {
     expect(screen.getByText("소규모학교 수")).toBeInTheDocument();
   });
 
-  it("renders each tile's 52000 (전북 전체) value formatted via the indicator's format()", () => {
+  it("renders each tile's 51000 (강원 전체) value formatted via the indicator's format()", () => {
     render(<KpiTiles {...fixture()} />);
     expect(screen.getByTestId("kpi-value-schools_total")).toHaveTextContent(formatInt(760));
     expect(screen.getByTestId("kpi-value-students_total")).toHaveTextContent(formatInt(165958));
@@ -173,6 +188,26 @@ describe("KpiTiles", () => {
     expect(delta).not.toHaveTextContent("—");
     expect(delta).toHaveAttribute("data-tone", "neutral");
     expect(delta).toHaveAttribute("title", "전년과 동일");
+  });
+
+  it("uses the actual baseline year for sparse deltas and zero change", () => {
+    render(<KpiTiles {...fixtureWithSparseYears()} />);
+    expect(screen.getByTestId("kpi-tile-schools_total")).toHaveAttribute("title", "2022 → 2026");
+    const unchanged = screen.getByTestId("kpi-delta-schools_total");
+    expect(unchanged).toHaveTextContent("±0");
+    expect(unchanged).toHaveAttribute("title", "2022년과 동일");
+    expect(unchanged).not.toHaveAttribute("title", "전년과 동일");
+    const decreased = screen.getByTestId("kpi-delta-students_total");
+    expect(decreased).toHaveTextContent(`▼ ${formatInt(2042)}`);
+    expect(screen.getByTestId("kpi-tile-students_total")).toHaveAttribute("title", "2022 → 2026");
+  });
+
+  it("shows no delta when the earlier sparse observation is null", () => {
+    render(<KpiTiles {...fixtureWithSparseYears()} />);
+    const delta = screen.getByTestId("kpi-delta-teachers_total");
+    expect(delta).toHaveTextContent("—");
+    expect(delta).not.toHaveTextContent("±0");
+    expect(delta).not.toHaveAttribute("title");
   });
 
   describe("delta color follows indicator polarity, not sign (Task 1 fix round 1, spec §1)", () => {

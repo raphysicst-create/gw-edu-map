@@ -59,6 +59,7 @@ export default function MapShell(props: DeckMapProps) {
   // Both unsupported WebGL and render errors must retain school details.
   // Unlocated schools already use Dashboard's panel-based detail path.
   const fallbackProps = {
+      mapMetric: props.mapMetric,
       issueModel: props.issueModel,
       indicatorId: props.indicatorId,
       bundle,

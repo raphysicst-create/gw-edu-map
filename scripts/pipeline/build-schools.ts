@@ -1,3 +1,4 @@
+import { assertLegacyPipelineDisabled } from "./gangwon/legacy-guard";
 /**
  * Builds public/data/schools.json (전북 학교 점 위치 + KESS 통계) and
  * data/interim/schools-match-report.json (매칭률/미매칭/시군 배정 실패 리포트)
@@ -94,6 +95,7 @@ function readKessInterim(): KessInterimFile {
 }
 
 async function main(): Promise<void> {
+  assertLegacyPipelineDisabled();
   const filename = findLocationCsvFile();
   const locationReferenceDate = referenceDateFromFilename(filename);
   console.log(`[build-schools] reading ${path.relative(ROOT, path.join(RAW_DIR, filename))} (기준일 ${locationReferenceDate}) ...`);
@@ -177,3 +179,4 @@ main().catch((err: unknown) => {
   console.error(err);
   process.exitCode = 1;
 });
+

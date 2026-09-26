@@ -11,7 +11,8 @@ export interface IssueSource {
   coveredRegions?: string[];
 }
 export interface SchoolIssueFacts {
-  kediCode: string;
+  kediCode?: string;
+  sourceRecord?: { sourceId: string; sheet: string; row: number };
   isMain: boolean;
   status: string;
   entrants: number | null;
@@ -61,7 +62,7 @@ export interface EducationIssue {
   question: string;
   description: string;
   policy: string;
-  policyPage: number;
+  policyPage: number | null;
   policyTask: string;
   status: "published" | "planned";
   metrics: string[];

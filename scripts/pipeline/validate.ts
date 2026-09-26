@@ -1,3 +1,4 @@
+import { assertLegacyPipelineDisabled } from "./gangwon/legacy-guard";
 /**
  * Validates the built public/data files:
  *  1. every indicator file has all 14 시군 + 52000 (base, non-byLevel rows)
@@ -333,6 +334,7 @@ function checkClosedSchools(indicatorFiles: Map<string, IndicatorFile>): void {
 }
 
 function main(): void {
+  assertLegacyPipelineDisabled();
   const expectedRegionCodes = new Set([...REGION_TABLE.map((r) => r.code), PROVINCE_CODE]);
   const indicatorFiles = new Map<string, IndicatorFile>();
 
@@ -450,3 +452,4 @@ function main(): void {
 }
 
 main();
+

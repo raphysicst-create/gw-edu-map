@@ -26,6 +26,12 @@ export interface School {
   studentsPerClass: number | null;
   small: boolean;
   kediCode?: string;
+  /** Official identifiers are never synthesized from school names. */
+  sourceSchoolIds?: Record<string, string>;
+  /** Internal locator of the original record; not an official school code. */
+  sourceRecord?: { sourceId: string; sheet: string; row: number };
+  statisticsSource?: SchoolSourceInfo;
+  address?: string;
   /**
    * Set (and lat/lng both null) only when this school's 학교급 isn't covered
    * by LOCATION_SOURCE_LEVELS at all (currently: 특수학교 — the location
@@ -53,11 +59,11 @@ export interface SchoolSourceInfo {
 /** public/data/schools.json's top-level shape. */
 export interface SchoolsFile {
   referenceDate: {
-    location: string;
+    location: string | null;
     stats: string;
   };
   source: {
-    location: SchoolSourceInfo;
+    location: SchoolSourceInfo | null;
     stats: SchoolSourceInfo;
   };
   schools: School[];

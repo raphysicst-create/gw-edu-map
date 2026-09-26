@@ -71,6 +71,7 @@ import SchoolHud from "@/components/map/SchoolHud";
 import { HUD_THEME, THEME } from "@/lib/theme";
 import { useHudLayout } from "./useHudLayout";
 import { useCamera } from "@/components/map/useCamera";
+import { GANGWON_EXTERNAL_MAPS } from "@/lib/profiles/external-maps";
 import { useEmdBoundaries } from "@/components/map/useEmdBoundaries";
 import { useFontGate } from "@/components/map/useFontGate";
 import { useRegionKeyboardNav } from "@/components/map/useRegionKeyboardNav";
@@ -148,7 +149,7 @@ function recordE2eEvent(event: JbmapEvent) {
 // string (Next.js's own behavior for an unset NEXT_PUBLIC_* var at runtime,
 // vs. simply undefined at build time) is treated the same as "no key" by
 // every `VWORLD_KEY &&` gate below.
-const VWORLD_KEY = process.env.NEXT_PUBLIC_VWORLD_KEY;
+const VWORLD_KEY = GANGWON_EXTERNAL_MAPS.basemap ? process.env.NEXT_PUBLIC_VWORLD_KEY : undefined;
 
 /** Task C — shown under the "배경 지도" MapOverlay control while the basemap is not `off`. No "기준일" word, no date string — those two specifically break e2e/closed-schools.spec.ts's footer-source assertions and tests/components/Footer.test.tsx's 기준일 count (see task-C-brief.md). */
 const BASEMAP_ATTRIBUTION = "배경지도 © 국토교통부 브이월드(VWorld)";
@@ -888,10 +889,10 @@ export default function DeckMap({
   // Only ever fetches while emdEnabled AND a 시군 is selected (see
   // useEmdBoundaries' own doc comment for why it's also safe re: e2e's
   // zero-console-error assertions) — null the rest of the time.
-  const emdFc = useEmdBoundaries(selectedCode, emdEnabled);
+  const { data: emdFc, error: emdError, retry: retryEmd } = useEmdBoundaries(selectedCode, emdEnabled, bundle.manifest);
 
   const buildingsVisible =
-    buildingsEnabled && buildingsActive(scene, zoom, mobile);
+    GANGWON_EXTERNAL_MAPS.buildings && buildingsEnabled && buildingsActive(scene, zoom, mobile);
   const buildingLayer = useMemo(
     () =>
       buildingsVisible
@@ -1319,6 +1320,7 @@ export default function DeckMap({
           </div>
         )}
       </MetricLegend>
+      {emdError && <div role="status" className="absolute bottom-16 left-4 z-20 max-w-sm rounded bg-surface p-3 text-xs">행정동 경계 · {emdError}<button type="button" className="ml-2 min-h-11 underline" onClick={retryEmd}>다시 시도</button></div>}
       <MapOverlay
         collapsible
         expanded={settingsOpen}
@@ -1326,7 +1328,7 @@ export default function DeckMap({
         items={overlayItems}
         attribution={basemapOn ? BASEMAP_ATTRIBUTION : undefined}
       >
-        {scene === "city" && (
+        {scene === "city" && GANGWON_EXTERNAL_MAPS.buildings && (
           <div
             className="max-w-full rounded border border-line bg-surface/90 px-2 py-1 text-[10px] text-ink-muted"
             role="status"
@@ -1360,6 +1362,7 @@ export default function DeckMap({
             )}
           </div>
         )}
+        {(!GANGWON_EXTERNAL_MAPS.basemap || !GANGWON_EXTERNAL_MAPS.buildings) && <p className="max-w-56 text-[10px] text-ink-muted">배경지도·건물 미제공 · {GANGWON_EXTERNAL_MAPS.reason}</p>}
       </MapOverlay>
       {contextLost && (
         <div
@@ -1387,3 +1390,4 @@ export default function DeckMap({
     </div>
   );
 }
+

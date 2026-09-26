@@ -5,8 +5,8 @@ import { withNuqsTestingAdapter } from "nuqs/adapters/testing";
 
 import { useMapQuery } from "@/lib/state/urlState";
 
-const A = "52110"; // 전주시
-const B = "52130"; // 군산시
+const A = "51110"; // 춘천시
+const B = "51130"; // 원주시
 
 /**
  * useMapQuery() itself has no DOM to render. A tiny harness component

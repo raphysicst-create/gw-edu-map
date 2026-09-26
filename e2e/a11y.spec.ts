@@ -71,12 +71,12 @@ test.describe("접근성", () => {
     await expect(page.getByRole("tab", { name: "교육문제" })).toHaveAttribute("aria-selected", "true");
     await page.keyboard.press("ArrowRight");
     await expect(page.getByRole("tab", { name: "시군 통계" })).toHaveAttribute("aria-selected", "true");
-    const firstRegionButton = page.getByRole("complementary").getByRole("button", { name: /전주시/ });
+    const firstRegionButton = page.getByRole("complementary").getByRole("button", { name: /춘천시/ });
     expect(await tabUntilFocused(page, firstRegionButton, 20)).toBe(true);
     await page.keyboard.press("Enter");
-    await expect(page.getByRole("heading", { name: "전주시", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "춘천시", exact: true })).toBeVisible();
     await openMapSettings(page);
-    await page.getByLabel("전북 학교 위치 지도").focus();
+    await page.getByLabel("강원 학교 위치 지도").focus();
     const schoolNames = page.getByRole("button", { name: "학교명", exact: true });
     expect(await tabUntilFocused(page, schoolNames, 10)).toBe(true);
     await page.keyboard.press("Enter");
@@ -95,7 +95,7 @@ test.describe("접근성", () => {
   await openMapSettings(page);
     await waitForMapReady(page);
 
-    await page.getByLabel("전북 학교 위치 지도").focus();
+    await page.getByLabel("강원 학교 위치 지도").focus();
     const resetView = page.getByRole("button", { name: "전체보기" });
     expect(await tabUntilFocused(page, resetView, 3)).toBe(true);
   });

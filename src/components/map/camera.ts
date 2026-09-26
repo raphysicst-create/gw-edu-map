@@ -1,6 +1,7 @@
 import { FlyToInterpolator, WebMercatorViewport } from "@deck.gl/core";
 
 import type { Bbox } from "@/lib/geo/geo";
+import { GANGWON_VIEW } from "@/lib/profiles/gangwon";
 
 // Preserve the geometry helpers used by legacy camera tests; the app uses road only.
 type MapDisplayMode = "road" | "terrain";
@@ -11,7 +12,7 @@ export const OVERVIEW_PITCH = 56;
 export const OVERVIEW_BEARING = 0;
 
 export const VIEW_LIMITS = {
-  minZoom: 7.5,
+  minZoom: GANGWON_VIEW.minZoom,
   maxZoom: 14,
   minPitch: 0,
   maxPitch: 72,
@@ -33,8 +34,8 @@ export const CONTROLLER = {
   keyboard: false,
   inertia: 300,
   maxBounds: [
-    [125.6, 34.7],
-    [128.7, 36.7],
+    [GANGWON_VIEW.extent[0], GANGWON_VIEW.extent[1]],
+    [GANGWON_VIEW.extent[2], GANGWON_VIEW.extent[3]],
   ] as [[number, number], [number, number]],
   rubberBand: true,
 };

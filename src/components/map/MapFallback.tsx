@@ -21,8 +21,10 @@ import { displayLabel, rank, valueMap } from "@/lib/stats";
 import { useEffect, useRef } from "react";
 import type { School } from "@/lib/schools/types";
 import { SchoolDetail } from "@/components/panels/SchoolExplorer";
+import type { MapMetricSpec } from "@/lib/mapMetrics";
 
 export interface MapFallbackProps {
+  mapMetric?: MapMetricSpec;
   issueModel?: IssueMapModel | null;
   indicatorId: string;
   bundle: Pick<DataBundle, "indicators" | "series">;
@@ -53,7 +55,7 @@ function rgbCss([r, g, b]: readonly number[]): string {
  * this table reads as a direct, consistent stand-in for the map, not a
  * separately-invented visualization.
  */
-export default function MapFallback({ indicatorId, bundle, selectedCode, onSelect, reason, issueModel, selectedSchool, onSchoolClose, onSchoolStatistics }: MapFallbackProps) {
+export default function MapFallback({ indicatorId, bundle, selectedCode, onSelect, reason, issueModel, selectedSchool, onSchoolClose, onSchoolStatistics, mapMetric }: MapFallbackProps) {
   const detailRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!selectedSchool) return;
@@ -65,6 +67,7 @@ export default function MapFallback({ indicatorId, bundle, selectedCode, onSelec
       <SchoolDetail school={selectedSchool} onClose={() => onSchoolClose?.()} onStatistics={onSchoolStatistics ?? onSelect} />
     </div>
   );
+  if (mapMetric?.unavailableReason) return <div className="cyber-fallback h-full overflow-y-auto bg-paper p-4"><p>{REASON_TEXT[reason]}</p>{detail}<h2>{mapMetric.title}</h2><p>자료 미제공 · {mapMetric.unavailableReason}</p></div>;
   if (issueModel) return <div className="cyber-fallback h-full overflow-y-auto bg-paper p-4">
     <p data-testid="map-fallback-reason" className="mb-3 text-sm">{REASON_TEXT[reason]}</p>
     {detail}

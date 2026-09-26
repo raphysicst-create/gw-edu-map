@@ -15,6 +15,9 @@ const eslintConfig = defineConfig([
     // Generated test-run output, not source:
     "playwright-report/**",
     "test-results/**",
+    // Downloaded source material, local research helpers, and generated intermediates.
+    "data/raw/**",
+    "data/interim/**",
     // Sibling agents' git worktrees (e.g. .claude/worktrees/<id>/.next/types/**)
     // live physically under this checkout but are their own independent trees;
     // linting them here is both wrong (not this repo's source) and unstable

@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "profileId": "gangwon",
+  "sources": [
+    {
+      "sourceId": "mods-sgis-administrative-boundaries-2025q2",
+      "profileId": "gangwon",
+      "providerName": "국가데이터처",
+      "providerType": "national-agency",
+      "title": "국가데이터처_SGIS 행정구역 통계 및 경계_20250630",
+      "landingUrl": "https://www.data.go.kr/data/15129688/fileData.do",
+      "downloadUrl": "https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000003681593&fileDetailSn=1&insertDataPrcus=N",
+      "officialEvidenceUrl": "https://www.data.go.kr/data/15129688/fileData.do",
+      "referenceDate": "2025-06-30",
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:13:46Z",
+      "scope": "전국 시도·시군구·행정동 2025년 2분기 SHP와 제공용 코드집. 강원 시군구 18개와 행정동 193개를 추출한다. 동보다 작은 집계구·격자는 별도 신청 대상이다.",
+      "coveredRegions": [
+        "춘천시",
+        "원주시",
+        "강릉시",
+        "동해시",
+        "태백시",
+        "속초시",
+        "삼척시",
+        "홍천군",
+        "횡성군",
+        "영월군",
+        "평창군",
+        "정선군",
+        "철원군",
+        "화천군",
+        "양구군",
+        "인제군",
+        "고성군",
+        "양양군"
+      ],
+      "schoolLevels": [],
+      "fields": [
+        "BASE_DATE",
+        "SIDO_CD",
+        "SIDO_NM",
+        "SIGUNGU_CD",
+        "SIGUNGU_NM",
+        "ADM_CD",
+        "ADM_NM",
+        "geometry"
+      ],
+      "license": "공공데이터포털: 이용허락범위 제한 없음",
+      "redistribution": "allowed",
+      "storagePolicy": "allowed",
+      "sha256": "f1cf0f9de453ac7eaacb273f39cee52851183372b9ddfda428a967c3a670b2c6",
+      "localPath": "data/raw/gangwon/research-spatial/sgis-administrative-boundaries-2025.zip",
+      "parserVersion": "gangwon-sgis-spatial-v1",
+      "reviewStatus": "publishable",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "공공데이터포털 원문 등록의 실제 제공기관이 국가데이터처이며 다운로드 ZIP 안에 2025년 2분기 시도·시군구·행정동 SHP, PRJ, CPG, 코드집이 있다."
+      },
+      "limitations": [
+        "원본 PRJ는 Korea 2000 Unified Coordinate System(EPSG:5179); 공개 GeoJSON은 WGS84 경위도로 재투영 필요",
+        "SGIS 강원 시도코드 32와 법정동/행정기관 시도코드 51은 별개",
+        "193개 행정동은 자료 자체의 2025-06-30 수록 개수"
+      ],
+      "publicationReview": {
+        "reviewer": "independent-verification",
+        "reviewedAt": "2026-09-25T15:27:12Z",
+        "evidence": "docs/GANGWON_VERIFICATION.md: official provider and unrestricted license; registered SHA; ZIP sidecar byte match; 18/3/193 geometry; 18 current legal-code crosswalk"
+      }
+    },
+    {
+      "sourceId": "molit-legal-dong-code-20260630",
+      "profileId": "gangwon",
+      "providerName": "국토교통부",
+      "providerType": "national-agency",
+      "title": "국토교통부_전국 법정동_20260630",
+      "landingUrl": "https://www.data.go.kr/data/15063424/fileData.do",
+      "downloadUrl": "https://www.data.go.kr/cmm/cmm/fileDownload.do?atchFileId=FILE_000000003687312&fileDetailSn=1&insertDataPrcus=N",
+      "officialEvidenceUrl": "https://www.data.go.kr/data/15063424/fileData.do",
+      "referenceDate": "2026-06-30",
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:13:46Z",
+      "scope": "현존 전국 법정동 10자리 코드와 명칭 CSV. 강원특별자치도 및 읍면동·리 명칭이 빈 18개 시군 행을 코드 대응에 사용한다.",
+      "coveredRegions": [
+        "춘천시",
+        "원주시",
+        "강릉시",
+        "동해시",
+        "태백시",
+        "속초시",
+        "삼척시",
+        "홍천군",
+        "횡성군",
+        "영월군",
+        "평창군",
+        "정선군",
+        "철원군",
+        "화천군",
+        "양구군",
+        "인제군",
+        "고성군",
+        "양양군"
+      ],
+      "schoolLevels": [],
+      "fields": [
+        "법정동코드",
+        "시도명",
+        "시군구명",
+        "읍면동명",
+        "리명",
+        "순번",
+        "생성일자"
+      ],
+      "license": "공공데이터포털: 이용허락범위 제한 없음",
+      "redistribution": "allowed",
+      "storagePolicy": "allowed",
+      "sha256": "e5657d4b53a16f72e42e9c0d91e84ff2d647e70dc56b9408da6fd057d0da45c3",
+      "localPath": "data/raw/gangwon/research-spatial/molit-legal-dong-20260630.csv",
+      "parserVersion": "gangwon-sgis-spatial-v1",
+      "reviewStatus": "publishable",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "포털 제공기관이 국토교통부이며 CSV의 강원 도 행과 18개 시군 행을 직접 확인했다. 이 자료는 SGIS 코드집이 아니라 법정동 코드다."
+      },
+      "limitations": [
+        "행정동 8자리 SGIS 코드와 직접 일치하지 않음",
+        "원문 설명은 행정표준코드관리시스템 바탕의 K-GeoP 용 가공자료이며 시스템 간 차이 가능성을 명시"
+      ],
+      "publicationReview": {
+        "reviewer": "independent-verification",
+        "reviewedAt": "2026-09-25T15:27:12Z",
+        "evidence": "docs/GANGWON_VERIFICATION.md: official provider and unrestricted license; registered SHA; ZIP sidecar byte match; 18/3/193 geometry; 18 current legal-code crosswalk"
+      }
+    },
+    {
+      "sourceId": "mois-gangwon-code-transition-20230611",
+      "profileId": "gangwon",
+      "providerName": "행정안전부",
+      "providerType": "national-agency",
+      "title": "230611 강원특별자치도 코드부여.xlsx",
+      "landingUrl": "https://mois.go.kr/frt/bbs/type001/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000052&nttId=100684",
+      "downloadUrl": "https://mois.go.kr/cmm/fms/FileDown.do?atchFileId=FILE_001181807m12AjO&fileSn=3",
+      "officialEvidenceUrl": "https://mois.go.kr/frt/bbs/type001/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000052&nttId=100684",
+      "referenceDate": "2023-06-11",
+      "publishedAt": "2023-06-01",
+      "retrievedAt": "2026-09-25T15:13:46Z",
+      "scope": "강원도에서 강원특별자치도로 전환한 2023-06-11 시행 행정기관(행정동) 및 관할 법정동 코드의 변경 전후 대응표.",
+      "coveredRegions": [
+        "춘천시",
+        "원주시",
+        "강릉시",
+        "동해시",
+        "태백시",
+        "속초시",
+        "삼척시",
+        "홍천군",
+        "횡성군",
+        "영월군",
+        "평창군",
+        "정선군",
+        "철원군",
+        "화천군",
+        "양구군",
+        "인제군",
+        "고성군",
+        "양양군"
+      ],
+      "schoolLevels": [],
+      "fields": [
+        "변경 전 행정동코드",
+        "변경 전 법정동코드",
+        "변경 후 행정동코드",
+        "변경 후 법정동코드",
+        "시도명",
+        "시군구명",
+        "읍면동명",
+        "동리명"
+      ],
+      "license": "행정안전부 저작권정책: 공공누리 제1유형 표시 자료는 출처표시 후 자유이용; 해당 게시물에 별도 공공누리 표시 미확인",
+      "redistribution": "unverified",
+      "storagePolicy": "allowed",
+      "sha256": "427bd51b385823b7ab5b6c9bad19da3941a374d47ca08613cc39b26e77cda337",
+      "localPath": "data/raw/gangwon/research-spatial/mois-gangwon-code-20230611.xlsx",
+      "parserVersion": "gangwon-sgis-spatial-v1",
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "행정안전부 공식 주민등록·인감 게시물이 전환 시행일과 첨부파일을 직접 게시한다. 2026-06-30 국토교통부 법정동 코드 CSV가 18개 시군 코드값을 별도로 재확인한다."
+      },
+      "limitations": [
+        "2023 전환 이력으로서 2026 현재 전체 행정동 코드표는 아님",
+        "게시물에 공공누리 표시가 확인되지 않아 XLSX 원문 재배포는 보류",
+        "2026 법정동 자료와 코드값이 같은 18개 시군도 코드 체계의 의미는 구분"
+      ]
+    }
+  ]
+}

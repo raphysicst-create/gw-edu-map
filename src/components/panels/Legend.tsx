@@ -132,7 +132,7 @@ export default function Legend({
           })}
           {hasSchoolsWithoutLocation && (
             <span className="text-[10px] text-ink-muted">
-              (특수학교는 위치 자료 없음)
+              (좌표 미확보 학교는 지도 점에서 제외)
             </span>
           )}
         </div>

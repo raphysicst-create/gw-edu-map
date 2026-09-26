@@ -1,5 +1,6 @@
 import { openPanel, openMapSettings, expect, test } from "./fixtures";
 import type { Page } from "@playwright/test";
+import { GANGWON_VIEW } from "../src/lib/profiles/gangwon";
 
 const columns = (page: Page) => page.evaluate(() => {
   type School = { id: string; students: number; teachers: number };
@@ -10,7 +11,7 @@ const columns = (page: Page) => page.evaluate(() => {
 test("원통은 현재 지표에 비례하고 검색·점 전환·뒤로가기에 반응한다", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
-  await page.goto("/?schoolChart=columns&scene=city&region=52110");
+  await page.goto("/?schoolChart=columns&scene=city&region=51110");
   await openPanel(page);
   await openMapSettings(page);
   await expect(page.locator("#school-map")).toHaveAttribute("data-map-ready", "true");
@@ -18,7 +19,7 @@ test("원통은 현재 지표에 비례하고 검색·점 전환·뒤로가기�
   const rows = (await columns(page)).filter(s => s.students > 0);
   expect(rows.length).toBeGreaterThan(10);
   expect(rows[0].height / rows[1].height).toBeCloseTo(rows[0].students / rows[1].students, 7);
-  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("전주초등학교");
+  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("강원테스트초등학교");
   await expect.poll(async () => (await columns(page)).length).toBe(1);
   const filtered = (await columns(page))[0];
   expect(filtered.height).toBeCloseTo(rows.find(s => s.id === filtered.id)!.height, 5);
@@ -31,7 +32,7 @@ test("원통은 현재 지표에 비례하고 검색·점 전환·뒤로가기�
   await openPanel(page);
   await openMapSettings(page);
   await expect(page.getByRole("radio", { name: "원통", exact: true })).toHaveAttribute("aria-checked", "true");
-  await page.goto("/?schoolChart=columns&scene=city&indicator=teachers_total&region=52110");
+  await page.goto("/?schoolChart=columns&scene=city&indicator=teachers_total&region=51110");
   await openPanel(page);
   await openMapSettings(page);
   await expect(page.getByTestId("school-chart-legend")).toContainText("원통 높이 · 교원수");
@@ -61,11 +62,11 @@ test("지역 전용 지표와 평면은 점을 유지하고 교육문제는 선�
 });
 
 test("원통 클릭은 학교를 선택하고 모바일에서도 전환할 수 있다", async ({ page }) => {
-  await page.goto("/?schoolChart=columns&scene=city&region=52110");
+  await page.goto("/?schoolChart=columns&scene=city&region=51110");
   await openPanel(page);
   await openMapSettings(page);
   await expect(page.locator("#school-map")).toHaveAttribute("data-map-ready", "true");
-  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("전주초등학교");
+  await page.getByRole("searchbox", { name: "학교명 검색" }).fill("강원테스트초등학교");
   await expect.poll(async () => (await columns(page)).length).toBe(1);
   const point = await page.evaluate(() => {
     type S = { id: string; lng: number; lat: number };
@@ -79,7 +80,7 @@ test("원통 클릭은 학교를 선택하고 모바일에서도 전환할 수 �
   await page.mouse.move(bounds.x + point.x, bounds.y + point.y);
   await expect(page.locator(".deck-tooltip")).toContainText("학생수");
   await page.mouse.click(bounds.x + point.x, bounds.y + point.y);
-  await expect(page.getByRole("heading", { name: "전주초등학교" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "강원테스트초등학교" })).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await openMapSettings(page);
   await page.getByRole("radio", { name: "점", exact: true }).click();
@@ -91,7 +92,7 @@ test("원통 클릭은 학교를 선택하고 모바일에서도 전환할 수 �
 
 
 test("학교수는 낮은 동일 높이로 표시한다", async ({ page }) => {
-  await page.goto("/?schoolChart=columns&scene=city&region=52110&indicator=schools_total");
+  await page.goto("/?schoolChart=columns&scene=city&region=51110&indicator=schools_total");
   await openPanel(page);
   await openMapSettings(page);
   await expect(page.getByTestId("school-chart-legend")).toContainText("원통 1개 = 학교 1교 · 낮은 동일 높이");
@@ -99,7 +100,7 @@ test("학교수는 낮은 동일 높이로 표시한다", async ({ page }) => {
   const rows = (await columns(page)).filter(s => s.height > 0);
   expect(new Set(rows.map(s => s.height)).size).toBe(1);
   const zoom = await page.evaluate(() => window.__jbmap!.deck.getViewports()[0].zoom);
-  const metersPerPixel = 40075016.686 * Math.cos(35.8 * Math.PI / 180) / (512 * 2 ** zoom);
+  const metersPerPixel = 40075016.686 * Math.cos(GANGWON_VIEW.latitude * Math.PI / 180) / (512 * 2 ** zoom);
   expect(rows[0].height / metersPerPixel).toBeCloseTo(12, 1);
   await page.screenshot({ path: "test-results/school-count-short-columns.png" });
 });

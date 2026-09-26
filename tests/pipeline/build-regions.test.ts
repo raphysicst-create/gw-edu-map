@@ -1,4 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import { readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import type { Feature, FeatureCollection, Polygon } from "geojson";
 
 import {
@@ -7,6 +11,26 @@ import {
   transformNeighbors,
   transformRegions,
 } from "../../scripts/pipeline/build-regions";
+
+vi.mock("../../src/lib/profiles", () => ({ ACTIVE_PROFILE: legacyJeonbukProfile() }));
+function legacyJeonbukProfile() {
+  return {
+    id: "jeonbuk-test",
+    province: { name: "전북특별자치도", shortName: "전북", aggregateCode: "52000" },
+    regions: [
+      { code: "52110", name: "전주시" }, { code: "52130", name: "군산시" },
+      { code: "52140", name: "익산시" }, { code: "52180", name: "정읍시" },
+      { code: "52190", name: "남원시" }, { code: "52210", name: "김제시" },
+      { code: "52710", name: "완주군" }, { code: "52720", name: "진안군" },
+      { code: "52730", name: "무주군" }, { code: "52740", name: "장수군" },
+      { code: "52750", name: "임실군" }, { code: "52770", name: "순창군" },
+      { code: "52790", name: "고창군" }, { code: "52800", name: "부안군" },
+    ],
+    boundary: { sidoCode: "52", neighborSidoCodes: ["44", "12", "47", "48"], sggCodeOverrides: { "52111": "52110", "52113": "52110" } },
+    schoolData: { kessSidoNames: ["전북", "전라북도", "전북특별자치도"], educationOfficeCodes: [], addressPrefixes: ["전북특별자치도", "전라북도"] },
+    files: { manualDir: "data/manual", closedSchoolsCsvPrefix: "전북특별자치도교육청_폐교재산 현황_" },
+  };
+}
 
 type SourceProps = {
   adm_nm: string;
@@ -87,6 +111,43 @@ function fixture(): FeatureCollection<Polygon, SourceProps> {
     ],
   };
 }
+
+function publicDataHashes(directory = path.resolve("public/data")): Record<string, string> {
+  const hashes: Record<string, string> = {};
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const file = path.join(directory, entry.name);
+    if (entry.isDirectory()) Object.assign(hashes, publicDataHashes(file));
+    else hashes[path.relative(path.resolve("public/data"), file)] = createHash("sha256").update(readFileSync(file)).digest("hex");
+  }
+  return hashes;
+}
+
+describe("legacy writer safety", () => {
+  it("blocks Jeonbuk pipeline CLIs under Gangwon and leaves public data unchanged", () => {
+    const before = publicDataHashes();
+    for (const script of [
+      "scripts/pipeline/build-regions.ts",
+      "scripts/pipeline/build-emd.ts",
+      "scripts/pipeline/build-schools.ts",
+      "scripts/pipeline/build-closed-schools.ts",
+    ]) {
+      let failure: { status?: number; stderr?: Buffer } | undefined;
+      try {
+        execFileSync(process.execPath, ["node_modules/tsx/dist/cli.mjs", script], {
+          cwd: process.cwd(),
+          encoding: "buffer",
+          stdio: "pipe",
+          env: { ...process.env, EDU_MAP_PROFILE: "gangwon", NEXT_PUBLIC_EDU_MAP_PROFILE: "gangwon" },
+        });
+      } catch (error) {
+        failure = error as { status?: number; stderr?: Buffer };
+      }
+      expect(failure?.status, `${script} should exit with the legacy-writer guard`).toBe(1);
+      expect(failure?.stderr?.toString("utf8")).toMatch(/Gangwon|강원|전북 원본·중간자료/);
+    }
+    expect(publicDataHashes()).toEqual(before);
+  }, 30_000);
+});
 
 describe("transformRegions", () => {
   it("dissolves 완산구/덕진구 into 전주시 (52110) and keeps 군산시 (52130), excluding 충남", async () => {

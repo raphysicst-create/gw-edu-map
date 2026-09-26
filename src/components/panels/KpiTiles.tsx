@@ -87,7 +87,9 @@ export default function KpiTiles({ indicators, series, manifest }: KpiTilesProps
         const deltaClass = isGoodChange ? "text-positive-text" : isBadChange ? "text-warning-text" : "text-ink-muted";
         const deltaText =
           delta === null ? "—" : delta === 0 ? "±0" : `${delta > 0 ? "▲" : "▼"} ${def.format(Math.abs(delta))}`;
-        const deltaTitle = delta === 0 ? "전년과 동일" : undefined;
+        const deltaTitle = delta === 0 && prevYear !== null
+          ? prevYear === latestYear - 1 ? "전년과 동일" : `${prevYear}년과 동일`
+          : undefined;
 
         return (
           <div

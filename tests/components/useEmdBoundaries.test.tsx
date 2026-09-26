@@ -1,199 +1,94 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import type { FeatureCollection } from "geojson";
-
 import { useEmdBoundaries } from "@/components/map/useEmdBoundaries";
+import { REGION_CODES } from "@/lib/geo/regions";
+import { publishedManifest, testAvailable, testIdentity, TEST_DATA_VERSION, TEST_SHA256, TEST_SOURCE_ID } from "../fixtures/gangwon-release";
 
-// The hook's cache (src/components/map/useEmdBoundaries.ts) is module-scope
-// and persists for the lifetime of this test FILE (one module import), not
-// just one `it()` — every test below therefore uses its OWN, never-reused
-// 시군 code (6 distinct REGION_CODES across the file) so a cache entry
-// populated by one test can never leak into another's assertions.
-function Harness({ code, enabled }: { code: string | null; enabled: boolean }) {
-  const fc = useEmdBoundaries(code, enabled);
-  return <span data-testid="result">{fc === null ? "null" : String(fc.features.length)}</span>;
+const manifest = publishedManifest();
+manifest.features.emd = testAvailable();
+for (const code of REGION_CODES) manifest.files[`emd/${code}.geojson`] = {
+  path: `releases/${TEST_DATA_VERSION}/emd/${code}.geojson`, sha256: TEST_SHA256, sourceIds: [TEST_SOURCE_ID],
+};
+function Harness({ code, enabled, version = manifest }: { code: string | null; enabled: boolean; version?: typeof manifest }) {
+  const { data, error, retry } = useEmdBoundaries(code, enabled, version);
+  return <div><span data-testid="result">{data === null ? "null" : String(data.features.length)}</span>
+    <span data-testid="error">{error ?? ""}</span><button onClick={retry}>다시 시도</button></div>;
 }
-
-function okResponse(fc: FeatureCollection): Response {
-  return { ok: true, json: async () => fc } as unknown as Response;
+function fc(count: number): FeatureCollection {
+  return { type: "FeatureCollection", features: Array.from({ length: count }, (_, index) => ({
+    type: "Feature", properties: { code: String(index), name: `검사용행정동${index}` },
+    geometry: { type: "Polygon", coordinates: [[[0, 0], [1, 0], [1, 1], [0, 0]]] },
+  })) };
 }
-
-function fcWith(featureCount: number): FeatureCollection {
-  return {
-    type: "FeatureCollection",
-    features: Array.from({ length: featureCount }, (_, i) => ({
-      type: "Feature",
-      properties: { code: String(i), name: `emd-${i}` },
-      geometry: { type: "Polygon", coordinates: [[[0, 0], [1, 0], [1, 1], [0, 0]]] },
-    })),
-  };
-}
+const ok = (count: number) => ({ ok: true, json: async () => ({ ...testIdentity(), ...fc(count) }) }) as Response;
+const url = (code: string) => `/data/releases/${TEST_DATA_VERSION}/emd/${code}.geojson`;
 
 describe("useEmdBoundaries", () => {
-  afterEach(() => {
-    vi.unstubAllGlobals();
-    vi.restoreAllMocks();
-  });
+  afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
-  it("(a) enabled=false never calls fetch", () => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
-
-    render(<Harness code="52110" enabled={false} />);
-
+  it("비활성, 미선택, 강원 밖 코드에서는 요청하지 않는다", () => {
+    const fetchMock = vi.fn(); vi.stubGlobal("fetch", fetchMock);
+    render(<><Harness code={REGION_CODES[0]} enabled={false} /><Harness code={null} enabled /><Harness code="99999" enabled /></>);
     expect(fetchMock).not.toHaveBeenCalled();
-    expect(screen.getByTestId("result")).toHaveTextContent("null");
+    expect(screen.getAllByTestId("result").every((node) => node.textContent === "null")).toBe(true);
   });
-
-  it("code=null never calls fetch, regardless of enabled", () => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
-
-    render(<Harness code={null} enabled={true} />);
-
+  it("미제공 행정동 경계는 사유를 보여주고 요청하지 않는다", () => {
+    const unavailable = publishedManifest();
+    const fetchMock = vi.fn(); vi.stubGlobal("fetch", fetchMock);
+    render(<Harness code={REGION_CODES[1]} enabled version={unavailable} />);
     expect(fetchMock).not.toHaveBeenCalled();
+    expect(screen.getByTestId("error")).toHaveTextContent("검증된 원본 미확보");
   });
-
-  it("a code outside the 14 REGION_CODES never calls fetch (avoids an unsuppressable 'failed to load resource' console entry for a file that can never exist)", () => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
-
-    render(<Harness code="99999" enabled={true} />);
-
-    expect(fetchMock).not.toHaveBeenCalled();
-  });
-
-  it("(b) a second hook MOUNT with the same code is a cache hit — fetch is called exactly once total", async () => {
-    const code = "52130";
-    const fetchMock = vi.fn(async () => okResponse(fcWith(3)));
-    vi.stubGlobal("fetch", fetchMock);
-
-    const first = render(<Harness code={code} enabled={true} />);
+  it("버전 경로에서 가져온 경계를 같은 버전·시군에 재사용한다", async () => {
+    const code = REGION_CODES[2];
+    const fetchMock = vi.fn(async () => ok(3)); vi.stubGlobal("fetch", fetchMock);
+    const first = render(<Harness code={code} enabled />);
     await waitFor(() => expect(screen.getByTestId("result")).toHaveTextContent("3"));
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenCalledWith(`/data/emd/${code}.geojson`);
+    expect(fetchMock).toHaveBeenCalledWith(url(code), expect.objectContaining({ signal: expect.any(AbortSignal) }));
     first.unmount();
-
-    // A brand-new mount (not a rerender of the same instance) — the cache is
-    // module-scope, so this must NOT trigger a second fetch.
-    render(<Harness code={code} enabled={true} />);
-    await waitFor(() => expect(screen.getByTestId("result")).toHaveTextContent("3"));
+    render(<Harness code={code} enabled />);
+    expect(screen.getByTestId("result")).toHaveTextContent("3");
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
-
-  it("(c) a late-arriving response for an ABANDONED code is ignored (stale guard) — the current code's result wins regardless of arrival order", async () => {
-    const codeA = "52140";
-    const codeB = "52180";
-    const resolvers = new Map<string, (body: FeatureCollection) => void>();
-    const fetchMock = vi.fn(
-      (url: string) =>
-        new Promise<Response>((resolve) => {
-          resolvers.set(url, (body) => resolve(okResponse(body)));
-        }),
-    );
-    vi.stubGlobal("fetch", fetchMock);
-
-    const { rerender } = render(<Harness code={codeA} enabled={true} />);
-    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/data/emd/${codeA}.geojson`));
-
-    rerender(<Harness code={codeB} enabled={true} />);
-    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/data/emd/${codeB}.geojson`));
-
-    // B (the CURRENT code) resolves first.
-    resolvers.get(`/data/emd/${codeB}.geojson`)!(fcWith(2));
+  it("선택이 바뀐 뒤 늦게 온 응답은 현재 시군을 덮어쓰지 않는다", async () => {
+    const a = REGION_CODES[3]; const b = REGION_CODES[4];
+    const resolvers = new Map<string, (response: Response) => void>();
+    vi.stubGlobal("fetch", vi.fn((path: string) => new Promise<Response>((resolve) => { resolvers.set(path, resolve); })));
+    const view = render(<Harness code={a} enabled />);
+    await waitFor(() => expect(resolvers.has(url(a))).toBe(true));
+    view.rerender(<Harness code={b} enabled />);
+    await waitFor(() => expect(resolvers.has(url(b))).toBe(true));
+    resolvers.get(url(b))!(ok(2));
     await waitFor(() => expect(screen.getByTestId("result")).toHaveTextContent("2"));
-
-    // A (the ABANDONED code) resolves LATE, after the code already moved on
-    // to B — must be silently ignored, not overwrite B's result.
-    resolvers.get(`/data/emd/${codeA}.geojson`)!(fcWith(1));
-    await new Promise((r) => setTimeout(r, 0));
+    resolvers.get(url(a))!(ok(1));
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(screen.getByTestId("result")).toHaveTextContent("2");
   });
-
-  it("(e) E-cache: a response that arrives AFTER the request was cancelled (unmount) is still cached — a later mount with the same code is a cache hit, no second fetch", async () => {
-    const code = "52710";
-    let resolveFetch!: (body: FeatureCollection) => void;
-    const fetchMock = vi.fn(
-      () =>
-        new Promise<Response>((resolve) => {
-          resolveFetch = (body) => resolve(okResponse(body));
-        }),
-    );
+  it("언마운트된 요청은 캐시하지 않고 재선택하면 다시 요청한다", async () => {
+    const code = REGION_CODES[5];
+    let resolveFirst!: (response: Response) => void;
+    const fetchMock = vi.fn().mockImplementationOnce(() => new Promise<Response>((resolve) => { resolveFirst = resolve; })).mockImplementation(async () => ok(4));
     vi.stubGlobal("fetch", fetchMock);
-
-    const first = render(<Harness code={code} enabled={true} />);
-    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/data/emd/${code}.geojson`));
-
-    // Unmount BEFORE the fetch resolves — runs the effect's cleanup
-    // (`cancelled = true`) while the fetch is still in flight.
-    first.unmount();
-
-    // The now-cancelled fetch resolves late. E-cache: the response must
-    // still be written into the module-scope cache even though this
-    // (unmounted) hook instance's own setFc is skipped for a cancelled
-    // request.
-    resolveFetch(fcWith(4));
-    await new Promise((r) => setTimeout(r, 0));
-
-    // A brand-new mount with the SAME code must be a pure cache hit — no
-    // second fetch call.
-    render(<Harness code={code} enabled={true} />);
+    const first = render(<Harness code={code} enabled />);
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    first.unmount(); resolveFirst(ok(1));
+    render(<Harness code={code} enabled />);
     await waitFor(() => expect(screen.getByTestId("result")).toHaveTextContent("4"));
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
-
-  it("(d) a network rejection resolves to null without ever calling console.error", async () => {
-    const code = "52190";
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    const fetchMock = vi.fn(async () => {
-      throw new Error("network down");
-    });
+  it("HTTP 오류를 노출하고 다시 시도로 복구한다", async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce({ ok: false, status: 503 }).mockResolvedValue(ok(2));
     vi.stubGlobal("fetch", fetchMock);
-
-    render(<Harness code={code} enabled={true} />);
-    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
-    await waitFor(() => expect(screen.getByTestId("result")).toHaveTextContent("null"));
-    expect(consoleError).not.toHaveBeenCalled();
+    render(<Harness code={REGION_CODES[6]} enabled />);
+    await waitFor(() => expect(screen.getByTestId("error")).toHaveTextContent("503"));
+    screen.getByRole("button", { name: "다시 시도" }).click();
+    await waitFor(() => expect(screen.getByTestId("result")).toHaveTextContent("2"));
   });
-
-  it("(d) an HTTP failure (res.ok=false) resolves to null without ever calling console.error", async () => {
-    const code = "52210";
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    const fetchMock = vi.fn(
-      async () =>
-        ({
-          ok: false,
-          status: 404,
-          json: async () => {
-            throw new Error("no body");
-          },
-        }) as unknown as Response,
-    );
-    vi.stubGlobal("fetch", fetchMock);
-
-    render(<Harness code={code} enabled={true} />);
-    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
-    await waitFor(() => expect(screen.getByTestId("result")).toHaveTextContent("null"));
-    expect(consoleError).not.toHaveBeenCalled();
-  });
-
-  it("(d) a JSON parse failure resolves to null without ever calling console.error", async () => {
-    const code = "52800";
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    const fetchMock = vi.fn(
-      async () =>
-        ({
-          ok: true,
-          json: async () => {
-            throw new SyntaxError("Unexpected token");
-          },
-        }) as unknown as Response,
-    );
-    vi.stubGlobal("fetch", fetchMock);
-
-    render(<Harness code={code} enabled={true} />);
-    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
-    await waitFor(() => expect(screen.getByTestId("result")).toHaveTextContent("null"));
-    expect(consoleError).not.toHaveBeenCalled();
+  it("다른 release의 경계 응답을 차단한다", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, json: async () => ({ ...fc(1), ...testIdentity(), dataVersion: "old-version" }) })));
+    render(<Harness code={REGION_CODES[7]} enabled />);
+    await waitFor(() => expect(screen.getByTestId("error")).toHaveTextContent("서로 다른 버전"));
+    expect(screen.getByTestId("result")).toHaveTextContent("null");
   });
 });

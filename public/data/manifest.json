@@ -1,175 +1,693 @@
 {
-  "latestYear": 2026,
-  "indicators": {
-    "students_total": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+  "profileId": "gangwon",
+  "schemaVersion": 2,
+  "dataVersion": "gangwon-2022-563a6bb6162048a7",
+  "releaseStatus": "limited",
+  "latestYear": 2022,
+  "builtAt": "2026-09-25T17:52:14.437Z",
+  "sources": [
+    {
+      "sourceId": "moe-school-level-2022",
+      "providerName": "교육부",
+      "name": "2022년 유초중등 학교별 학년별 학생수 학급수 입학 졸업 교원 직원 면적(코드포함)",
+      "url": "https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=92557&lev=0&m=0310",
+      "referenceDate": "2022-04-01",
+      "publishedAt": "2022-09-14"
+    },
+    {
+      "sourceId": "mods-sgis-administrative-boundaries-2025q2",
+      "providerName": "국가데이터처",
+      "name": "국가데이터처_SGIS 행정구역 통계 및 경계_20250630",
+      "url": "https://www.data.go.kr/data/15129688/fileData.do",
+      "referenceDate": "2025-06-30"
+    },
+    {
+      "sourceId": "molit-legal-dong-code-20260630",
+      "providerName": "국토교통부",
+      "name": "국토교통부_전국 법정동_20260630",
+      "url": "https://www.data.go.kr/data/15063424/fileData.do",
+      "referenceDate": "2026-06-30"
+    }
+  ],
+  "files": {
+    "schools.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/schools.json",
+      "sha256": "c102aadaa6588442372d3ec33feacd350fd46f88a07f8eea5c3511ab1c4da81a",
+      "sourceIds": [
+        "moe-school-level-2022"
       ]
     },
-    "schools_total": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "regions.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/regions.geojson",
+      "sha256": "4d6dfa112b472c493db91111f9bde6e886e42f7aa40fab01fc70a8f9134a956b",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "classes_total": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "neighbors.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/neighbors.geojson",
+      "sha256": "da7384ceb3f3bee0f4e163ca500d53e9042a204586f9511273b57e5f0032ba2e",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "students_per_class": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "charset.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/charset.json",
+      "sha256": "24a7b08552eb3c209bea1da595921830f8452b8d608915c15bc56d1b484902c3",
+      "sourceIds": [
+        "moe-school-level-2022",
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "teachers_total": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "education-issues.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/education-issues.json",
+      "sha256": "d879bb3483a8d225a83018c9e8890a28d4707986b9597b60637cf0b78fef83a3",
+      "sourceIds": [
+        "moe-school-level-2022"
       ]
     },
-    "students_per_teacher": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "emd/51110.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51110.geojson",
+      "sha256": "7ec0cf235ce25f09e58346b7ce342c4c9319ef6083fa188ed82e5d02267f6219",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "site_area_per_student": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "emd/51130.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51130.geojson",
+      "sha256": "07d632c84e35df1c5f0a1c6b78d17a0594a3ead7de834915f7a0c4dff8bc571a",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "classrooms_per_school": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "emd/51150.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51150.geojson",
+      "sha256": "99045336b7a790360e7b7c6b93fe0244cb8811a752a14b41e99785e13b29d567",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "small_schools": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "emd/51170.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51170.geojson",
+      "sha256": "9f0681a297e15505f774ad663ff3c1800209c5900fe9174be5bf2c8012d0122b",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "small_school_share": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "emd/51190.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51190.geojson",
+      "sha256": "0e25c979033ebb4ab866398af37acc7ea6dd0c584c7434dfb3a2b76ee377d6d7",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "zero_entrant_schools": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "emd/51210.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51210.geojson",
+      "sha256": "e89f6ad9353e730cef923497c0e0c5c21c568eda55e29237ae4408abf74eb0a6",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "rural_school_share": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "emd/51230.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51230.geojson",
+      "sha256": "a7d4ccff31a218676f44d12c74b64b03e69a5bcfde1119566a91021a7fecb0f4",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "special_classes": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "emd/51720.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51720.geojson",
+      "sha256": "8d0a57e5ee976854a5dff65cd9ee6ddd247413b73cb803b909571bd37c28d034",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "special_students": {
-      "years": [
-        2022,
-        2023,
-        2024,
-        2025,
-        2026
+    "emd/51730.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51730.geojson",
+      "sha256": "d6ed7697bbba926494a2c3eec1967e507853140a920efef933bd085c98a9562d",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "students_change_5y": {
-      "years": [
-        2026
+    "emd/51750.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51750.geojson",
+      "sha256": "a2679bb813f1bc99f8b81d6d789c2493a0dd971086d07859f27971b8d38b0378",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "closed_schools": {
-      "years": [
-        2026
+    "emd/51760.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51760.geojson",
+      "sha256": "2a6666659c249468ba316426ad7da83b1175ecd216f20602428c069f8df2035a",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "closed_schools_unused": {
-      "years": [
-        2026
+    "emd/51770.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51770.geojson",
+      "sha256": "cef5b33b40ab6425d9cdb9ae5b9ee72ae12fbcd0ba5e28447be9bd20372d85a1",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     },
-    "closed_schools_recent": {
-      "years": [
-        2026
+    "emd/51780.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51780.geojson",
+      "sha256": "90a680bc170cbd8b9db1b0e419130fe22a4d8d73f29ef29f0879ad9595854833",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
+      ]
+    },
+    "emd/51790.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51790.geojson",
+      "sha256": "3722ea0ce7d4a4c7183421261b8f0a7e76f2c448be6e7690d1ff045e646a1be3",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
+      ]
+    },
+    "emd/51800.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51800.geojson",
+      "sha256": "3d86759934e892279e95bf7d8235f825cac254206dc2be1c4436964d992d73cb",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
+      ]
+    },
+    "emd/51810.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51810.geojson",
+      "sha256": "50326a0a7991585b54e7d75478032c5032cb9cb3fc0a7cdc6e7ce90a243d572b",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
+      ]
+    },
+    "emd/51820.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51820.geojson",
+      "sha256": "7df681705d16fe6cfcd1c4473efa7dcbe145ce884c78754ef818f148a4ab928f",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
+      ]
+    },
+    "emd/51830.geojson": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/emd/51830.geojson",
+      "sha256": "cbdfff5d35264a63082737d9304a6185b56582b9025200ddad25a55bed62655d",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
+      ]
+    },
+    "indicators/students_total.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/students_total.json",
+      "sha256": "f176c33b880ef78fcd89f2b88f81713defd7d8ed85fc793d941b566ddaa2889e",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/students_total.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/students_total.json",
+      "sha256": "ee1145f41820791c8e669f649e808e16a12b242e3cc2882693bbfed198370823",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/schools_total.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/schools_total.json",
+      "sha256": "696a9f01a5ee887e84ce11cb3f3c579f4e0ebdf1fb320a85fb12c2fd086c88de",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/schools_total.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/schools_total.json",
+      "sha256": "122b1673bfa1b35c20fca6bea529f548781dd99743c62a63e5d5a8563640de89",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/classes_total.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/classes_total.json",
+      "sha256": "f3c36ffb819f45804e831426bf4c766b1b122978ce1c163d7fe958a90131922a",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/classes_total.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/classes_total.json",
+      "sha256": "aa10c059d7aab158e8a0e3c9531e9e1ff06633a37d318e219e325cf941dd8bbf",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/students_per_class.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/students_per_class.json",
+      "sha256": "4c1ca7a257076f1b6005f001a6f3e2d98d2be595598ec9d6564cc16cc24d0918",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/students_per_class.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/students_per_class.json",
+      "sha256": "e53d5dcee374d33d76e717b9e98eda787c9d391061bfb342d3079d03e8561ed1",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/teachers_total.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/teachers_total.json",
+      "sha256": "a2217130f78f1c1519943b15115c00a2901f2e8edc107905deb456886b3b9c49",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/teachers_total.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/teachers_total.json",
+      "sha256": "0b78e76b74a050fb9fe339982d93b9efc2220751bb3f92a3b95ca93e2422d676",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/students_per_teacher.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/students_per_teacher.json",
+      "sha256": "fe89abf414fcf4d7c580667e749cf9c6df1dd4d455968a4b9a5c03d715de9712",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/students_per_teacher.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/students_per_teacher.json",
+      "sha256": "d21dfb9bfe03a58bc196b8ddd9b633e869e3a8ab923869a6de5c19ff1f53279a",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/site_area_per_student.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/site_area_per_student.json",
+      "sha256": "c9711ceff6ce6cad9fa9447065c977614b40ffb278340931fb83311a58cfe101",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/site_area_per_student.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/site_area_per_student.json",
+      "sha256": "19ebd256932bd9ceb9cf57e63723c6729d136fb1b943f6273119934bf5995a05",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/small_schools.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/small_schools.json",
+      "sha256": "4f36dc891bbcd6acdba1bd4a6e6190f5e55884461734a062538d62d886464989",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/small_schools.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/small_schools.json",
+      "sha256": "3d9794d26b71b14d9b9d8865ca6aa53084d584ee3cae4cc342c92ab5f23382b6",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/small_school_share.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/small_school_share.json",
+      "sha256": "891323e42d6608436eaa6c83479f9f8d20b34a971205df5f426ce439a4a27a1e",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/small_school_share.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/small_school_share.json",
+      "sha256": "535af63823f6914d1647dcf334a6686cd2e6fa054ec5666151cefaebf353fc78",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/zero_entrant_schools.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/zero_entrant_schools.json",
+      "sha256": "d446738c680278af54a247785cb6e98887e7a92a2502972f36503a41dbe3214b",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/zero_entrant_schools.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/zero_entrant_schools.json",
+      "sha256": "13a75d2e29f6471b1a56793b00c905f09817b761396cbfc589e680eb1cf51b1a",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/rural_school_share.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/rural_school_share.json",
+      "sha256": "89bf5e49e718eb9db7b2ef6a62d4984d857cb88da417a51f56877e4384710d9d",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/rural_school_share.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/rural_school_share.json",
+      "sha256": "be31cc4e80767e3c12de7cd65bceca775b580ff99410e26488f5044c4fe950cb",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/special_classes.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/special_classes.json",
+      "sha256": "0e95d132bfae701c83ec8b062b362aba4216803fe3b05c9b7bee151f837db75f",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/special_classes.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/special_classes.json",
+      "sha256": "8f595dfae297717f8d8eaef1ee41c7179ed00d47d6ceec2a2df4bfbe00df1542",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "indicators/special_students.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/indicators/special_students.json",
+      "sha256": "6bc5f96d2c508ab27a5c67c1aec0cb9761434a23442b78e8adfa5ee8f7eebca0",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "series/special_students.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/series/special_students.json",
+      "sha256": "f8fb1cb9beeec6c959deec708232b9cbc453d2948bf62d068bb1199067fc7d36",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ]
+    },
+    "provenance.json": {
+      "path": "releases/gangwon-2022-563a6bb6162048a7/provenance.json",
+      "sha256": "54ee76d70565c9d72045b8e1bedee19f41dc0415c60ecbc059027f7d708acffb",
+      "sourceIds": [
+        "moe-school-level-2022",
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
       ]
     }
   },
-  "builtAt": "2026-09-22T08:25:48.348Z",
-  "sources": [
-    {
-      "name": "한국교육개발원 교육통계서비스(KESS) 교육기본통계 학교별 데이터셋",
-      "url": "https://kess.kedi.re.kr/contents/dataset",
-      "referenceDate": "2026-04-01"
+  "indicators": {
+    "students_total": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
     },
-    {
-      "name": "한국교육시설안전원 초중등학교위치 표준데이터",
-      "url": "https://www.data.go.kr/data/15159184/fileData.do",
-      "referenceDate": "2026-03-20"
+    "schools_total": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
     },
-    {
-      "name": "통계청 SGIS 기반 행정동 경계(vuski/admdongkor)",
-      "url": "https://raw.githubusercontent.com/vuski/admdongkor/master/ver20260701/HangJeongDong_ver20260701.geojson",
-      "referenceDate": "2026-07-01"
+    "classes_total": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
     },
-    {
-      "name": "전북특별자치도교육청 폐교재산 현황(공공데이터포털)",
-      "url": "https://www.data.go.kr/data/15021709/fileData.do",
-      "referenceDate": "2026-07-16",
-      "publishedAt": "2026-07-20"
+    "students_per_class": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "teachers_total": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "students_per_teacher": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "site_area_per_student": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "classrooms_per_school": {
+      "status": "unavailable",
+      "years": [],
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "reason": "2022 원본 교실 유형별 결측과 본분교 시설 중복 여부를 확인 중입니다."
+    },
+    "small_schools": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "small_school_share": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "zero_entrant_schools": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "rural_school_share": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "special_classes": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "special_students": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시.",
+      "years": [
+        2022
+      ]
+    },
+    "students_change_5y": {
+      "status": "unavailable",
+      "years": [],
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "reason": "2022년 단독 시점만 검증되어 학생수 증감률과 다년 추이를 제공하지 않습니다."
+    },
+    "closed_schools": {
+      "status": "unavailable",
+      "reason": "전체 폐교재산 명단이 필요합니다. 미활용 부분목록으로 대체하지 않습니다.",
+      "sourceIds": [],
+      "years": []
+    },
+    "closed_schools_unused": {
+      "status": "unavailable",
+      "reason": "취득한 미활용 명단의 가공·재배포 조건을 확인하고 있습니다.",
+      "sourceIds": [],
+      "years": []
+    },
+    "closed_schools_recent": {
+      "status": "unavailable",
+      "reason": "전체 등재 폐교와 폐교연도 자료가 필요합니다.",
+      "sourceIds": [],
+      "years": []
     }
-  ]
+  },
+  "issues": {
+    "school-size": {
+      "status": "unavailable",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "reason": "2022 학교 통계는 지표에서 제공합니다. 교육문제 화면의 정책 근거는 원문별 공개 조건을 확인 중입니다."
+    },
+    "regional-sustainability": {
+      "status": "unavailable",
+      "reason": "행정안전부 지정 근거와 비교 가능한 학교 시계열",
+      "sourceIds": []
+    },
+    "special-education": {
+      "status": "unavailable",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "reason": "2022 학교 통계는 지표에서 제공합니다. 교육문제 화면의 정책 근거는 원문별 공개 조건을 확인 중입니다."
+    },
+    "closed-assets": {
+      "status": "unavailable",
+      "reason": "전체 폐교재산 명단·현재 활용상태·가공 및 재배포 조건",
+      "sourceIds": []
+    },
+    "basic-learning": {
+      "status": "unavailable",
+      "reason": "교육청 소속 지원센터의 공식 명단과 지원 범위",
+      "sourceIds": []
+    },
+    "reading": {
+      "status": "unavailable",
+      "reason": "교육청 도서관 명단과 학교별 사서교사 통계",
+      "sourceIds": []
+    },
+    "care": {
+      "status": "unavailable",
+      "reason": "강원교육청·강원도청의 돌봄 명단과 운영 범위",
+      "sourceIds": []
+    },
+    "wellbeing": {
+      "status": "unavailable",
+      "reason": "Wee센터 공식 명단과 학교별 상담교사 배치 통계",
+      "sourceIds": []
+    },
+    "career": {
+      "status": "unavailable",
+      "reason": "강원교육청 공식 진로 사업과 제공 지역",
+      "sourceIds": []
+    },
+    "ai-education": {
+      "status": "unavailable",
+      "reason": "적용연도별 공식 지정학교 명단·사업명·대상·기간",
+      "sourceIds": []
+    }
+  },
+  "features": {
+    "schools": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "2022-04-01 강원 초·중·고·특수학교. 폐교 제외·휴교 포함. 학생·학급·교원은 분교 포함, 학교수·소규모·신입생 0명·면지역 비율은 본교 기준. 시군 명칭으로 현재 코드에 연결하며 경계 기준일은 별도 표시. 좌표 미확보 학교는 검색·상세에서만 제공."
+    },
+    "regions": {
+      "status": "available",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
+      ],
+      "referenceDate": "2025-06-30",
+      "scope": "정부 SGIS 2025년 2분기 시군구 경계 중 강원 18시군. 통계지역코드를 현재 법정동 시군 코드에 명시적으로 대응."
+    },
+    "neighbors": {
+      "status": "available",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
+      ],
+      "referenceDate": "2025-06-30",
+      "scope": "정부 SGIS 인접 경기·충북·경북 시도 경계"
+    },
+    "emd": {
+      "status": "available",
+      "sourceIds": [
+        "mods-sgis-administrative-boundaries-2025q2",
+        "molit-legal-dong-code-20260630"
+      ],
+      "referenceDate": "2025-06-30",
+      "scope": "정부 SGIS 강원 행정동 경계 193개. 법정동 경계와 구별."
+    },
+    "closedSchools": {
+      "status": "unavailable",
+      "reason": "전체 폐교재산 명단이 필요합니다. 미활용 부분목록으로 대체하지 않습니다.",
+      "sourceIds": []
+    },
+    "educationIssues": {
+      "status": "available",
+      "sourceIds": [
+        "moe-school-level-2022"
+      ],
+      "referenceDate": "2022-04-01",
+      "scope": "학교별 입학생·특수학급·사서·상담교사 통계. 인구감소 지정과 정책·기관 명단은 미제공."
+    }
+  }
 }

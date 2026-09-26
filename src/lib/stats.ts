@@ -16,9 +16,9 @@ import type { IndicatorDef, IndicatorFile, SeriesFile } from "./indicators/types
  * not read byLevel breakdown rows). Null values are preserved (not dropped)
  * so callers can distinguish "no data" from "region absent".
  */
-export function valueMap(file: IndicatorFile): Map<string, number | null> {
+export function valueMap(file: IndicatorFile | undefined): Map<string, number | null> {
   const map = new Map<string, number | null>();
-  for (const row of file.rows) {
+  for (const row of file?.rows ?? []) {
     if (row.level !== undefined) continue;
     map.set(row.regionCode, row.value);
   }
@@ -173,7 +173,7 @@ export function changeYearRange(series: SeriesFile | undefined): [number, number
 export function displayLabel(def: IndicatorDef, series: Record<string, SeriesFile>): string {
   if (def.id === "students_change_5y") {
     const range = changeYearRange(series.students_total);
-    if (range) return def.label.replace("5년", `${range[0]}→${range[1]}`);
+    if (range && range[0] !== range[1]) return `학생수 ${range[0]}→${range[1]} 증감률`;
   }
   return def.label;
 }

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import type { WebMercatorViewport } from "@deck.gl/core";
 import { writeFile } from "node:fs/promises";
 
@@ -11,7 +11,7 @@ test("live building scenes, picking, cache and movement metrics", async ({ page 
   await page.goto("/?scene=city");
   await expect(page.locator("#school-map")).toHaveAttribute("data-labels-ready","true");
   await page.screenshot({path:"test-results/live-overview.png"});
-  const places: [string,number,number][] = [["jeonju",127.148,35.824],["gunsan",126.736,35.967],["jinan",127.425,35.791],["island",126.411,35.811]];
+  const places: [string,number,number][] = [["chuncheon",127.73,37.88],["wonju",127.95,37.34],["gangneung",128.9,37.75],["sokcho",128.59,38.2]];
   const snapshots: unknown[]=[];
   for(let i=0;i<10;i++) {
     const [name,lng,lat]=places[i%places.length];
@@ -57,32 +57,34 @@ test("live building scenes, picking, cache and movement metrics", async ({ page 
 test("real buildings preserve school picking and both issue overlays", async ({page}) => {
   test.skip(process.env.LIVE_BUILDINGS !== "1", "Requires real VWorld data");
   test.setTimeout(90000);
-  await page.goto("/?scene=city&school=B000005959");
+  await page.goto("/?scene=city&school=e2e-school-01");
   await expect(page.locator("#school-map")).toHaveAttribute("data-labels-ready","true");
   await expect.poll(()=>page.evaluate(()=>window.__jbmap!.deck.getViewports()[0].zoom)).toBeCloseTo(16,2);
   await expect(page.getByText(/건물 조회:/)).toBeVisible();
   const point = await page.evaluate(()=>{
     const deck=window.__jbmap!.deck;
     const schoolLayer=deck.props.layers?.flat().find(l=>l && "id" in l && l.id==="schools") as unknown as {props:{data:{id:string,lng:number,lat:number}[]}};
-    const school=schoolLayer.props.data.find(s=>s.id==="B000005959")!;
+    const school=schoolLayer.props.data.find(s=>s.id==="e2e-school-01")!;
     const [x,y]=deck.getViewports()[0].project([school.lng,school.lat,1]);
     const hit=deck.pickObject({x,y,radius:1});
     return {x,y,id:hit?.object?.id,layer:hit?.layer?.id};
   });
-  expect(point.id).toBe("B000005959");
+  expect(point.id).toBe("e2e-school-01");
   expect(point.layer).toBe("schools");
   const canvas=await page.locator("canvas").boundingBox();
   await page.mouse.click(canvas!.x+point.x,canvas!.y+point.y);
-  await expect(page.getByRole("heading",{name:"전주초등학교"})).toBeVisible();
+  await expect(page.getByRole("heading",{name:"강원테스트초등학교"})).toBeVisible();
   await page.screenshot({path:"test-results/live-school-picking.png"});
-  const response = await page.request.get("/data/schools.json");
-  expect(response.ok()).toBe(true);
-  const schools = (await response.json()).schools as { id: string; name: string; small: boolean; branch: boolean; lat: number | null; lng: number | null; regionCode: string }[];
-  const smallSchool = schools.find(s => s.small && !s.branch && s.lat !== null && s.lng !== null && s.regionCode === "52110");
+  const schools = await page.evaluate(async () => {
+    const manifest = await fetch("/data/manifest.json").then(response => response.json());
+    const path = manifest.files["schools.json"].path;
+    return fetch(`/data/${path}`).then(response => response.json()).then(data => data.schools);
+  }) as { id: string; name: string; small: boolean; branch: boolean; lat: number | null; lng: number | null; regionCode: string }[];
+  const smallSchool = schools.find(s => s.small && !s.branch && s.lat !== null && s.lng !== null && s.regionCode === "51110");
   expect(smallSchool, "regional default needs a located small main school").toBeDefined();
   for (const issue of ["regional-sustainability","special-education"]) {
     // Keep testing the actual default overlay, but select a school it includes.
-    const school = issue === "regional-sustainability" ? smallSchool! : { id: "B000005959", name: "전주초등학교" };
+    const school = issue === "regional-sustainability" ? smallSchool! : { id: "e2e-school-01", name: "강원테스트초등학교" };
     await page.goto(`/?scene=city&view=issues&issue=${issue}&school=${encodeURIComponent(school.id)}`);
     await expect(page.locator("#school-map")).toHaveAttribute("data-labels-ready","true");
     await expect(page.getByTestId("school-hud")).toContainText(school.name);

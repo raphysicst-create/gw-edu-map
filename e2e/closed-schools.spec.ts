@@ -7,9 +7,10 @@ test("폐교 지표: /?indicator=closed_schools 진입 → 범례 라벨 → 시
   });
   page.on("pageerror", (error) => consoleErrors.push(error.message));
 
-  // 군산시(52130) has 14 폐교 rows (per the raw CSV — see task-5-report.md's
-  // per-region table), so the 목록 is guaranteed non-empty here.
-  await page.goto("/?indicator=closed_schools&region=52130");
+  // The synthetic browser fixture gives 원주시 14 rows to keep the legacy
+  // list, disclosure, and source-date behavior covered without publishing
+  // unavailable Gangwon closed-school records.
+  await page.goto("/?indicator=closed_schools&region=51130");
   await openPanel(page);
     await page.getByRole("tab", { name: "시군 통계" }).click();
   await expect(page.locator("canvas")).toBeVisible({ timeout: 15000 });
@@ -30,7 +31,7 @@ test("폐교 지표: /?indicator=closed_schools 진입 → 범례 라벨 → 시
   // substring (with "(게시 2026-07-20)" appended).
   await expect(page.getByTestId("metric-legend").getByText("기준 2026-07-16", { exact: true })).toBeVisible();
 
-  await expect(page.getByRole("heading", { name: "군산시", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "원주시", exact: true })).toBeVisible();
 
   const section = page.getByTestId("closed-schools-section");
   await expect(section).toBeVisible();
@@ -46,7 +47,7 @@ test("폐교 지표: /?indicator=closed_schools 진입 → 범례 라벨 → 시
 
   // Footer (Task 5, Section C) — every named source with its own 기준일.
   await expect(page.getByTestId("footer-source")).toHaveCount(4);
-  const closedSchoolsSource = page.getByTestId("footer-source").filter({ hasText: "폐교재산" });
+  const closedSchoolsSource = page.getByTestId("footer-source").filter({ hasText: "합성 폐교재산" });
   await expect(closedSchoolsSource).toContainText("기준일 2026-07-16");
   await expect(closedSchoolsSource).toContainText("게시 2026-07-20");
   await expect(page.getByTestId("footer-school-count-definition")).toBeVisible();

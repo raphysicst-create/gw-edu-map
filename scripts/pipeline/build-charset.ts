@@ -1,3 +1,4 @@
+import { assertLegacyPipelineDisabled } from "./gangwon/legacy-guard";
 // Builds public/data/charset.json — a static list of every character the
 // deck.gl scene's TextLayer instances might need to render, so their SDF
 // font atlases can be generated once instead of regenerating every time a
@@ -20,7 +21,7 @@ const OUTPUT_PATH = path.join(ROOT, "public/data/charset.json");
 // need, so labels never fall back to a missing-glyph tofu box even for
 // characters that happen not to appear in any region/school name.
 const FIXED_CHARACTERS =
-  "0123456789.,%()/-+:·  ㎡명교급개학년증감률자료없음전북평균순위학생수교원학급소규모특수다문화폐면지역초중고";
+  "0123456789.,%()/-+:·  ㎡명교급개학년증감률자료없음강원특별자치도평균순위학생수교원학급소규모특수다문화폐면지역초중고";
 
 const ASCII_LETTERS =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -61,6 +62,7 @@ async function readSchoolNames(): Promise<string[]> {
 }
 
 async function main() {
+  assertLegacyPipelineDisabled();
   const regionNames = REGIONS.map((r) => r.name);
   const schoolNames = await readSchoolNames();
   const charset = buildCharset([...regionNames, ...schoolNames]);
@@ -84,3 +86,4 @@ if (isMainModule) {
     process.exitCode = 1;
   });
 }
+

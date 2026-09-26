@@ -4,11 +4,13 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 
 import { splitRegionIslands } from "../geo/geo";
 import { assertBundle, loadBundle } from "./load";
+import { DataPreparationError, type ReleaseManifest } from "./release";
 import type { EnrichedDataBundle } from "./types";
 
 type DataState =
   | { status: "loading" }
   | { status: "ready"; bundle: EnrichedDataBundle }
+  | { status: "preparing"; manifest: ReleaseManifest }
   | { status: "error"; error: string };
 
 const DataContext = createContext<DataState>({ status: "loading" });
@@ -56,7 +58,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       })
       .catch((err: unknown) => {
         if (!cancelled) {
-          setState({ status: "error", error: err instanceof Error ? err.message : String(err) });
+          setState(err instanceof DataPreparationError ? { status: "preparing", manifest: err.manifest } : { status: "error", error: err instanceof Error ? err.message : String(err) });
         }
       });
     return () => {

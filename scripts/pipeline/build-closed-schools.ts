@@ -1,3 +1,4 @@
+import { assertLegacyPipelineDisabled } from "./gangwon/legacy-guard";
 /**
  * Builds data/interim/closed-schools-<YYYYMMDD>.json and
  * public/data/closed-schools.json (전북 폐교재산 현황, Task 5 — 폐교 지표)
@@ -75,6 +76,7 @@ function readNewestCommittedInterim(): ClosedSchoolsFile {
  * result for build-indicators.ts to aggregate into the 3 indicator files.
  */
 export async function buildClosedSchoolsInterim(): Promise<ClosedSchoolsFile> {
+  assertLegacyPipelineDisabled();
   const csvFilename = findRawCsvFile();
   let result: ClosedSchoolsFile;
 
@@ -116,3 +118,4 @@ if (isMainModule) {
     process.exitCode = 1;
   });
 }
+

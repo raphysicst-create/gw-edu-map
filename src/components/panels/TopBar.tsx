@@ -18,6 +18,7 @@ export interface TopBarProps {
   onExploreIssues?: () => void;
   /** null while DataProvider is loading/erroring — IndicatorMenu and KpiTiles show skeletons in that case. */
   bundle: DataBundle | null;
+  preparing?: boolean;
 }
 
 function SkeletonBar({ className }: { className: string }) {
@@ -32,7 +33,7 @@ function SkeletonBar({ className }: { className: string }) {
  * in DOM order in the same stacking context and would otherwise paint over
  * an unstacked header).
  */
-export default function TopBar({ bundle, onExploreIssues }: TopBarProps) {
+export default function TopBar({ bundle, onExploreIssues, preparing = false }: TopBarProps) {
   // Task 5 fix round 1 (coordinator ruling): this caption sits directly
   // beside KpiTiles' 4 fixed KESS-sourced tiles, so it must show THEIR OWN
   // reference date — never the currently-selected MAP indicator's (that
@@ -52,21 +53,22 @@ export default function TopBar({ bundle, onExploreIssues }: TopBarProps) {
   return (
     <div className="cyber-command" data-map-obstacle="header">
     <header className="cyber-header flex w-full min-w-0 flex-col items-stretch gap-1 px-3 py-1 lg:flex-row lg:items-center lg:gap-5 lg:px-5 lg:py-0">
-      <span className="cyber-brand flex min-h-11 shrink-0 items-center pl-1 text-sm font-bold tracking-wide text-ink lg:text-base">{ACTIVE_PROFILE.province.shortName}교육지도<span className="ml-3 hidden text-[10px] font-normal tracking-[.15em] text-accent-text 2xl:inline">교육 현황 관제</span></span>
+      <span className="cyber-brand flex min-h-11 shrink-0 items-center pl-1 text-sm font-bold tracking-wide text-ink lg:text-base">{ACTIVE_PROFILE.province.shortName} 교육지도<span className="ml-3 text-[10px] font-normal text-accent-text">개인 업무 참고용</span></span>
+      {bundle?.manifest.releaseStatus === "limited" && <span className="text-[11px] text-warning-text">{bundle.manifest.latestYear}년 통계 · 제한 공개</span>}
 
       {bundle ? (
         <MapTopicMenu series={bundle.series} onExploreIssues={onExploreIssues} />
-      ) : (
+      ) : preparing ? <span className="text-sm text-ink-muted">공식 자료 확인 중</span> : (
         <SkeletonBar className="h-7 w-56" />
       )}
 
     </header>
-    <section aria-label="전북 교육 현황" className="cyber-kpi-rail flex min-w-0 items-center gap-3">
-      <span className="hidden shrink-0 text-[11px] font-bold tracking-[0.08em] text-accent-text lg:block">전북 현황</span>
+    <section aria-label="강원 교육 현황" className="cyber-kpi-rail flex min-w-0 items-center gap-3">
+      <span className="hidden shrink-0 text-[11px] font-bold tracking-[0.08em] text-accent-text lg:block">강원 현황</span>
       <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain">
         {bundle ? (
           <KpiTiles indicators={bundle.indicators} series={bundle.series} manifest={bundle.manifest} />
-        ) : (
+        ) : preparing ? <p className="py-3 text-xs text-ink-muted">자료 확인 후 지표를 공개합니다.</p> : (
           <div className="flex items-center gap-2" aria-hidden>
             {Array.from({ length: 4 }).map((_, i) => (
               <SkeletonBar key={i} className="h-14 min-w-36 flex-1" />
@@ -76,7 +78,7 @@ export default function TopBar({ bundle, onExploreIssues }: TopBarProps) {
 
       </div>
       <span data-testid="topbar-reference-date" className="hidden shrink-0 text-[11px] tabular-nums text-ink-muted lg:block">
-        {bundle && kpiFile ? `기준 ${kpiFile.referenceDate}` : <SkeletonBar className="h-4 w-20" />}
+        {bundle && kpiFile ? `기준 ${kpiFile.referenceDate}` : preparing ? "자료 준비 중" : <SkeletonBar className="h-4 w-20" />}
       </span>
     </section>
     {bundle && <MetricCommandRail />}

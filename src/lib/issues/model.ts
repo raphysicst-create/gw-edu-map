@@ -83,6 +83,7 @@ export function issueValue(
     return data.designations[code as RegionCode] ?? null;
   if (metric === "student-change" || metric === "decline-small") return studentChange(bundle, code);
   if (metric === "unused-count" || metric === "unused-share") {
+    if (!bundle.closedSchools) return null;
     const assets = bundle.closedSchools.rows.filter(r => code === PROVINCE_CODE || r.regionCode === code);
     const unused = assets.filter(r => r.usage === "미활용").length;
     return metric === "unused-count" ? unused : assets.length ? unused / assets.length * 100 : null;
@@ -247,8 +248,8 @@ export function buildIssueModel(
     legend.push({ label: "자료 없음", color: MISSING });
   const note =
     isResourceMetric(metric) ? (data.resourceSources?.[metric] ?? data.resourceSources?.[RESOURCE_METRIC_ISSUES[metric]])?.scope ?? "공개 자료의 수록 범위만 표시합니다."
-    : metric === "librarian-schools" ? "KESS 2026 학교별 정규 사서교사가 1명 이상인 본교 수입니다. 도서관의 장서·개방시간·사서직원 수를 뜻하지 않습니다."
-    : metric === "counselor-schools" ? "KESS 2026 학교별 정규 전문상담교사가 1명 이상인 본교 수입니다. 상담 이용 가능 시간이나 기간제·외부 상담인력을 뜻하지 않습니다."
+    : metric === "librarian-schools" ? `${data.statsReferenceDate} 기준 학교별 정규 사서교사가 1명 이상인 본교 수입니다. 도서관의 장서·개방시간·사서직원 수를 뜻하지 않습니다.`
+    : metric === "counselor-schools" ? `${data.statsReferenceDate} 기준 학교별 정규 전문상담교사가 1명 이상인 본교 수입니다. 상담 이용 가능 시간이나 기간제·외부 상담인력을 뜻하지 않습니다.`
     : metric === "school-size" ? "본교 기준 · 60명 이하 / 61~999명 / 1,000명 이상은 앱의 탐색 구간이며 과밀·부실 판정이 아닙니다. 휴교 포함, 분교 제외."
     : metric.startsWith("unused-") ? "자료에 수록된 폐교재산 기준입니다. 전체 폐교 이력이 아니며, 비율은 해당 지역 수록 재산을 분모로 합니다. 주소만 제공되므로 개별 위치는 표시하지 않습니다."
     : metric === "decline-small" ? "면 색은 시군 학생수 증감률, 점은 학생 60명 이하 본교입니다. 서로 다른 집계 단위이며 통폐합 예정이나 정책 효과를 뜻하지 않습니다."
@@ -266,8 +267,8 @@ export function buildIssueModel(
   const source = isResourceMetric(metric)
     ? data.resourceSources?.[metric] ?? data.resourceSources?.[RESOURCE_METRIC_ISSUES[metric]]
     : metric.startsWith("unused-")
-    ? { ...bundle.closedSchools.source, referenceDate: bundle.closedSchools.referenceDate }
-    : data.sources[metric === "designation" ? 0 : 1];
+    ? bundle.closedSchools ? { ...bundle.closedSchools.source, referenceDate: bundle.closedSchools.referenceDate } : undefined
+    : metric === "designation" ? data.sources[0] : data.sources.find(item => item.referenceDate === data.statsReferenceDate);
   return {
     issue,
     level,

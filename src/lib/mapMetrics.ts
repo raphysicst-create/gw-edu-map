@@ -22,6 +22,7 @@ export interface MapMetricSpec {
   regionOverlay?: boolean;
   summary: string;
   specialEducation: boolean;
+  unavailableReason?: string;
   value: (school: School) => number | null;
   color: (school: School) => MetricColor;
   regionColor: (code: string) => MetricColor;
@@ -54,9 +55,17 @@ export function buildMapMetric(
   indicator: string,
   issue: IssueMapModel | null | undefined,
   facts?: EducationIssuesFile | null,
+  requestedIssueId?: string | null,
 ): MapMetricSpec {
   const def = indicatorById(indicator);
   if (!def) throw new Error(`Unknown map indicator: ${indicator}`);
+  const availability = requestedIssueId ? bundle.manifest.issues[requestedIssueId] : bundle.manifest.indicators[indicator];
+  if (!issue && availability.status === "unavailable") return {
+    kind: "region", title: requestedIssueId ? ACTIVE_PROFILE.policy.issues.find(i => i.id === requestedIssueId)?.title ?? def.label : def.label, unit: def.unit, date: "자료 미제공", note: availability.reason, unavailableReason: availability.reason,
+    maximum: 0, summary: "자료 미제공", specialEducation: false,
+    value: () => null, color: () => MISSING_COLOR, regionColor: () => MISSING_COLOR,
+    legend: [{ label: "자료 미제공", color: MISSING_COLOR }],
+  };
   const metric = schoolChartMetric(indicator, issue?.metric, facts);
   const value = metric?.value ?? (() => null);
   const population =
@@ -69,7 +78,8 @@ export function buildMapMetric(
     0,
     ...values.filter((v): v is number => v !== null && Number.isFinite(v)),
   );
-  const kind: MapMetricKind = !metric
+  const hasSchoolLocations = population.some(school => school.lat !== null && school.lng !== null);
+  const kind: MapMetricKind = !metric || !hasSchoolLocations
     ? "region"
     : metric.heightMode
       ? "category"
@@ -186,7 +196,7 @@ export function buildMapMetric(
     (kind === "density"
       ? "학교 위치를 기준으로 한 분포입니다. 거주지나 통학권을 뜻하지 않습니다."
       : kind === "region"
-        ? `시군 전체 집계 · 학교별 값으로 배분하지 않습니다.${regional.colorBuckets === "quantile" && !change ? " 색 구간: 고유값 5분위." : ""}`
+        ? `시군 전체 집계 · 학교별 값으로 배분하지 않습니다.${!hasSchoolLocations ? " 공식 학교 좌표 미확보로 시군 집계를 표시합니다." : ""}${regional.colorBuckets === "quantile" && !change ? " 색 구간: 고유값 5분위." : ""}`
         : kind === "category"
           ? "본교 기준 · 분교 제외. 학교수는 해당 여부로 표시합니다."
           : specialEducation
@@ -217,7 +227,7 @@ export function buildMapMetric(
     regionColor,
     legend,
     specialEducation,
-    date: issue?.date ?? `기준 ${bundle.indicators[indicator].referenceDate}`,
+    date: issue?.date ?? `기준 ${bundle.indicators[indicator]?.referenceDate ?? "미확인"}`,
     note,
   };
 }

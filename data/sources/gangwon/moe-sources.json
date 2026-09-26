@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "profileId": "gangwon",
+  "sources": [
+    {
+      "sourceId": "moe-school-level-2022",
+      "profileId": "gangwon",
+      "providerName": "교육부",
+      "providerType": "national-agency",
+      "title": "2022년 유초중등 학교별 학년별 학생수 학급수 입학 졸업 교원 직원 면적(코드포함)",
+      "landingUrl": "https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=92557&lev=0&m=0310",
+      "downloadUrl": "https://www.moe.go.kr/boardCnts/fileDown.do?m=0310&s=moe&fileSeq=adadbce690df6e94fa4971be836b9b71",
+      "officialEvidenceUrl": "https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=92557&lev=0&m=0310",
+      "referenceDate": "2022-04-01",
+      "publishedAt": "2022-09-14",
+      "retrievedAt": "2026-09-25T15:43:36Z",
+      "scope": "교육부 직접 첨부 2022 전국 유·초·중등 학교별 주요통계 XLSX에서 강원 18시군 초등·중·고·특수 4급 662 원시 행. 원본은 유치원·방송통신·각종학교도 포함한 강원 전체 1040행. 원문 조사 기준일 2022-04-01, 자료 추출일 2022-08-22.",
+      "coveredRegions": ["춘천시", "원주시", "강릉시", "동해시", "태백시", "속초시", "삼척시", "홍천군", "횡성군", "영월군", "평창군", "정선군", "철원군", "화천군", "양구군", "인제군", "고성군", "양양군"],
+      "schoolLevels": ["초등학교", "중학교", "고등학교", "특수학교"],
+      "fields": ["조사기준일", "시도", "행정구", "학교급", "학교명", "KEDI학교코드", "나이스학교코드", "본분교", "상태", "지역규모", "주소", "학교수", "편성학급수_계", "학생수_총계_계", "교원수_총계_계", "입학자_계", "특수학급_학급수", "특수학급_학생수_계", "일반교실", "교과교실", "특별교실", "수준별교실", "기타교실", "교지면적"],
+      "license": "공공누리 제1유형: 출처표시",
+      "redistribution": "allowed",
+      "storagePolicy": "allowed",
+      "sha256": "33f0c250c5accb93d987103f169c073a8779d4fba6f2267c4eb72ee0ba388cf5",
+      "localPath": "data/raw/gangwon/research-schools/moe-2022-school-level.xlsx",
+      "parserVersion": "moe-school-level-2022-v1",
+      "reviewStatus": "publishable",
+      "publicationReview": {
+        "reviewer": "independent-verification-2026-09-26",
+        "reviewedAt": "2026-09-25T16:00:59Z",
+        "evidence": "교육부 게시물 boardSeq=92557의 직접 첨부·공공누리 제1유형·조사일 확인. 원본 SHA 및 19,221,634바이트 일치. tests/pipeline/gangwon-moe.test.ts 5/5. 원문 요약정보 강원 전체 1005교·8838학급·161900학생·16871교원과 상세행 합계 일치. 별도 2022 강원교육통계연보 1-2 학교현황(PDF index 5)의 대상 본교 634교(초349·중161·고115·특수9) 대조. 상세: docs/GANGWON_VERIFICATION.md."
+      },
+      "providerReview": {
+        "status": "verified",
+        "evidence": "교육부 정책-교육 통계 및 정보화 게시물(교육데이터과, 2022-09-14)이 학교별 코드 포함 XLSX를 직접 첨부하고 파일이 포함된 해당 게시물에 공공누리 출처표시 유형을 표시. 원본 자체의 2022-04-01 조사일과 2022-08-22 추출일 확인."
+      },
+      "limitations": [
+        "2022년 단독 시점이며 2026년 강원교육청 일람표의 누락 학교 값을 보충하거나 이름만으로 자동 연결할 수 없음",
+        "교육부 직접 첨부와 기존 KESS 2022 다운로드 파일은 SHA-256 및 크기가 달라 동일사본으로 간주 불가",
+        "학교별 교실수는 5개 열 모두 명시값일 때만 합산하고 일부 결측은 그대로 결측 처리",
+        "학교 좌표 미확보. 학교당 교실수는 유형별 결측과 시설 중복 검토가 남아 공개 지표에서 보류"
+      ],
+      "licenseEvidenceUrl": "https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=92557&lev=0&m=0310",
+      "extractedAt": "2022-08-22"
+    }
+  ]
+}

@@ -18,8 +18,8 @@ import {
 } from "@/lib/geo/geo";
 
 describe("REGIONS", () => {
-  it("has exactly 14 entries", () => {
-    expect(REGIONS).toHaveLength(14);
+  it("has exactly 18 entries", () => {
+    expect(REGIONS).toHaveLength(18);
   });
 
   it("has unique codes", () => {
@@ -31,21 +31,21 @@ describe("REGIONS", () => {
     expect(REGION_CODES).toEqual(REGIONS.map((r) => r.code));
   });
 
-  it("PROVINCE_CODE is 52000", () => {
-    expect(PROVINCE_CODE).toBe("52000");
+  it("PROVINCE_CODE is 51000", () => {
+    expect(PROVINCE_CODE).toBe("51000");
   });
 
   it("isRegionCode narrows known codes and rejects unknown ones", () => {
-    expect(isRegionCode("52110")).toBe(true);
-    expect(isRegionCode("52800")).toBe(true);
+    expect(isRegionCode("51110")).toBe(true);
+    expect(isRegionCode("51830")).toBe(true);
     expect(isRegionCode("99999")).toBe(false);
-    expect(isRegionCode("52000")).toBe(false); // province code is not a region code
+    expect(isRegionCode("51000")).toBe(false); // province code is not a region code
   });
 
   it("regionName returns the Korean name for a known code", () => {
-    expect(regionName("52110")).toBe("전주시");
-    expect(regionName("52130")).toBe("군산시");
-    expect(regionName("52800")).toBe("부안군");
+    expect(regionName("51110")).toBe("춘천시");
+    expect(regionName("51130")).toBe("원주시");
+    expect(regionName("51830")).toBe("양양군");
   });
 });
 
@@ -186,10 +186,10 @@ describe("splitRegionIslands", () => {
   }
 
   it("puts a single-part Polygon region entirely into `main`, contributing nothing to `islands`", () => {
-    const solo = rectFeature("52130", [0, 0, 1, 1]);
+    const solo = rectFeature("51130", [0, 0, 1, 1]);
     const { main, islands } = splitRegionIslands(fc([solo]));
     expect(main.features).toHaveLength(1);
-    expect(main.features[0].properties.code).toBe("52130");
+    expect(main.features[0].properties.code).toBe("51130");
     expect(main.features[0].geometry.type).toBe("Polygon");
     expect(islands.features).toHaveLength(0);
   });
@@ -199,15 +199,15 @@ describe("splitRegionIslands", () => {
     // input order.
     const mainland = square(0, 0, 4);
     const islet = square(6, 6, 1);
-    const region = multiPolygonFeature("52130", [islet, mainland]); // islet listed FIRST
+    const region = multiPolygonFeature("51130", [islet, mainland]); // islet listed FIRST
     const { main, islands } = splitRegionIslands(fc([region]));
 
     expect(main.features).toHaveLength(1);
     expect(main.features[0].geometry).toEqual({ type: "Polygon", coordinates: [mainland] });
-    expect(main.features[0].properties.code).toBe("52130");
+    expect(main.features[0].properties.code).toBe("51130");
 
     expect(islands.features).toHaveLength(1);
-    expect(islands.features[0].properties.code).toBe("52130");
+    expect(islands.features[0].properties.code).toBe("51130");
     expect(islands.features[0].geometry).toEqual({ type: "Polygon", coordinates: [islet] });
   });
 
@@ -215,7 +215,7 @@ describe("splitRegionIslands", () => {
     const mainland = square(0, 0, 5);
     const isletA = square(6, 6, 1);
     const isletB = square(8, 8, 0.5);
-    const region = multiPolygonFeature("52130", [mainland, isletA, isletB]);
+    const region = multiPolygonFeature("51130", [mainland, isletA, isletB]);
     const { main, islands } = splitRegionIslands(fc([region]));
 
     expect(main.features[0].geometry).toEqual({ type: "Polygon", coordinates: [mainland] });
@@ -227,26 +227,26 @@ describe("splitRegionIslands", () => {
   });
 
   it("only regions that actually have extra parts contribute an `islands` feature", () => {
-    const soloRegion = rectFeature("52110", [0, 0, 1, 1]); // Polygon, no islands
-    const multiRegion = multiPolygonFeature("52130", [square(0, 0, 4), square(6, 6, 1)]);
+    const soloRegion = rectFeature("51110", [0, 0, 1, 1]); // Polygon, no islands
+    const multiRegion = multiPolygonFeature("51130", [square(0, 0, 4), square(6, 6, 1)]);
     const { main, islands } = splitRegionIslands(fc([soloRegion, multiRegion]));
 
     expect(main.features).toHaveLength(2); // every region always contributes to `main`
-    expect(islands.features).toHaveLength(1); // only 52130 has a leftover part
-    expect(islands.features[0].properties.code).toBe("52130");
+    expect(islands.features).toHaveLength(1); // only 51130 has a leftover part
+    expect(islands.features[0].properties.code).toBe("51130");
   });
 
   it("preserves the region's properties (code/name/bbox/labelPoint) on both main and island features", () => {
-    const region = multiPolygonFeature("52130", [square(0, 0, 4), square(6, 6, 1)]);
+    const region = multiPolygonFeature("51130", [square(0, 0, 4), square(6, 6, 1)]);
     const { main, islands } = splitRegionIslands(fc([region]));
     expect(main.features[0].properties).toEqual(region.properties);
     expect(islands.features[0].properties).toEqual(region.properties);
   });
 
   it("compares areas per-region only (a huge part of one region never masks a genuinely-largest part of another)", () => {
-    const small = multiPolygonFeature("52130", [square(0, 0, 1), square(20, 20, 0.5)]);
+    const small = multiPolygonFeature("51130", [square(0, 0, 1), square(20, 20, 0.5)]);
     const { main } = splitRegionIslands(fc([small]));
-    // 52130's own largest part (1x1=1) wins for 52130, regardless of any
+    // 51130's own largest part (1x1=1) wins for 51130, regardless of any
     // other region's absolute size.
     expect(main.features[0].geometry).toEqual({ type: "Polygon", coordinates: [square(0, 0, 1)] });
   });

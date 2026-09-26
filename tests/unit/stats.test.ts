@@ -24,13 +24,13 @@ function fileFixture(): IndicatorFile {
     referenceDate: "2026-04-01",
     source: { name: "KESS", url: "https://example.com", year: 2026 },
     rows: [
-      { regionCode: "52110", value: 100 },
-      { regionCode: "52130", value: 50 },
-      { regionCode: "52000", value: 150 },
+      { regionCode: "51110", value: 100 },
+      { regionCode: "51130", value: 50 },
+      { regionCode: "51000", value: 150 },
       // byLevel breakdown rows (level set) — must be excluded by valueMap.
-      { regionCode: "52110", value: 60, level: "elem" },
-      { regionCode: "52130", value: 30, level: "elem" },
-      { regionCode: "52000", value: 90, level: "elem" },
+      { regionCode: "51110", value: 60, level: "elem" },
+      { regionCode: "51130", value: 30, level: "elem" },
+      { regionCode: "51000", value: 90, level: "elem" },
     ],
   };
 }
@@ -39,28 +39,28 @@ describe("valueMap", () => {
   it("keeps only rows without a level, keyed by regionCode", () => {
     const map = valueMap(fileFixture());
     expect(map.size).toBe(3);
-    expect(map.get("52110")).toBe(100);
-    expect(map.get("52130")).toBe(50);
-    expect(map.get("52000")).toBe(150);
+    expect(map.get("51110")).toBe(100);
+    expect(map.get("51130")).toBe(50);
+    expect(map.get("51000")).toBe(150);
   });
 
   it("preserves null values (not dropped)", () => {
     const file: IndicatorFile = {
       ...fileFixture(),
-      rows: [{ regionCode: "52110", value: null }],
+      rows: [{ regionCode: "51110", value: null }],
     };
     const map = valueMap(file);
-    expect(map.get("52110")).toBeNull();
+    expect(map.get("51110")).toBeNull();
   });
 });
 
 describe("regionValues", () => {
-  it("excludes 52000 and returns the remaining {code, value} pairs", () => {
+  it("excludes 51000 and returns the remaining {code, value} pairs", () => {
     const map = valueMap(fileFixture());
     const values = regionValues(map);
     expect(values).toHaveLength(2);
-    expect(values.map((v) => v.code).sort()).toEqual(["52110", "52130"]);
-    expect(values.find((v) => v.code === "52000")).toBeUndefined();
+    expect(values.map((v) => v.code).sort()).toEqual(["51110", "51130"]);
+    expect(values.find((v) => v.code === "51000")).toBeUndefined();
   });
 });
 
@@ -71,69 +71,69 @@ describe("rank", () => {
   // near-duplicate per-polarity tests that used to pin this down (when
   // `polarity` was still an accepted-but-unused argument) are collapsed
   // into one, since there is no longer a parameter to vary.
-  it("ranks the 14 시군 by descending raw value (largest = rank 1), excluding 52000", () => {
+  it("ranks sample 시군 by descending raw value (largest = rank 1), excluding 51000", () => {
     const map = new Map([
-      ["52110", 30],
-      ["52130", 10],
-      ["52140", 20],
-      ["52000", 999],
+      ["51110", 30],
+      ["51130", 10],
+      ["51150", 20],
+      ["51000", 999],
     ]);
     const ranks = rank(map);
-    expect(ranks.get("52110")).toBe(1);
-    expect(ranks.get("52140")).toBe(2);
-    expect(ranks.get("52130")).toBe(3);
-    expect(ranks.has("52000")).toBe(false);
+    expect(ranks.get("51110")).toBe(1);
+    expect(ranks.get("51150")).toBe(2);
+    expect(ranks.get("51130")).toBe(3);
+    expect(ranks.has("51000")).toBe(false);
   });
 
   it("gives ties the same (competition-style) rank and skips the next", () => {
     const map = new Map([
-      ["52110", 10],
-      ["52130", 10],
-      ["52140", 8],
+      ["51110", 10],
+      ["51130", 10],
+      ["51150", 8],
     ]);
     const ranks = rank(map);
-    expect(ranks.get("52110")).toBe(1);
-    expect(ranks.get("52130")).toBe(1);
-    expect(ranks.get("52140")).toBe(3); // skips rank 2
+    expect(ranks.get("51110")).toBe(1);
+    expect(ranks.get("51130")).toBe(1);
+    expect(ranks.get("51150")).toBe(3); // skips rank 2
   });
 
   it("omits regions with a null value entirely", () => {
     const map = new Map<string, number | null>([
-      ["52110", 10],
-      ["52130", null],
+      ["51110", 10],
+      ["51130", null],
     ]);
     const ranks = rank(map);
-    expect(ranks.has("52130")).toBe(false);
-    expect(ranks.get("52110")).toBe(1);
+    expect(ranks.has("51130")).toBe(false);
+    expect(ranks.get("51110")).toBe(1);
   });
 });
 
 describe("collisionPriorityFromRank", () => {
   const regionCount = REGION_CODES.length;
 
-  it("negates the rank: rank 1 -> -1, rank 14 -> -14", () => {
+  it("negates the rank", () => {
     expect(collisionPriorityFromRank(1, regionCount)).toBe(-1);
-    expect(collisionPriorityFromRank(14, regionCount)).toBe(-14);
+    expect(collisionPriorityFromRank(regionCount, regionCount)).toBe(-regionCount);
   });
 
-  it("undefined or null (no rank at all, i.e. no data) maps to the lowest priority of all: -(regionCount+1) = -15", () => {
-    expect(collisionPriorityFromRank(undefined, regionCount)).toBe(-15);
-    expect(collisionPriorityFromRank(null, regionCount)).toBe(-15);
+  it("undefined or null (no rank at all, i.e. no data) maps below every region rank", () => {
+    expect(collisionPriorityFromRank(undefined, regionCount)).toBe(-(regionCount + 1));
+    expect(collisionPriorityFromRank(null, regionCount)).toBe(-(regionCount + 1));
   });
 
   // A school label's collision priority (schoolLayers.ts's
   // schoolCollisionPriority) is clamped to [-1000, -100] specifically so it
   // can NEVER outrank a 시군 (region) label, selected or not — this pins
   // down the region side of that guarantee: every real output this function
-  // can ever produce stays within [-15, -1], strictly above -100.
-  it("every output stays within [-15, -1], always above the school-label priority ceiling of -100", () => {
+  // can ever produce stays within [-(regionCount+1), -1], strictly above -100.
+  it("every output stays within the Gangwon rank bounds and above school-label priority -100", () => {
     const outputs = [
       ...Array.from({ length: regionCount }, (_, i) => collisionPriorityFromRank(i + 1, regionCount)),
       collisionPriorityFromRank(undefined, regionCount),
       collisionPriorityFromRank(null, regionCount),
     ];
     for (const priority of outputs) {
-      expect(priority).toBeGreaterThanOrEqual(-15);
+      expect(priority).toBeGreaterThanOrEqual(-(regionCount + 1));
       expect(priority).toBeLessThanOrEqual(-1);
       expect(priority).toBeGreaterThan(-100);
     }
@@ -141,75 +141,75 @@ describe("collisionPriorityFromRank", () => {
 });
 
 describe("vsProvince", () => {
-  it("returns value minus the 52000 row", () => {
+  it("returns value minus the province row", () => {
     const map = valueMap(fileFixture());
-    expect(vsProvince(map, "52110")).toBe(100 - 150);
+    expect(vsProvince(map, "51110")).toBe(100 - 150);
   });
 
   it("returns null when the region's own value is null", () => {
     const map = new Map<string, number | null>([
-      ["52110", null],
-      ["52000", 150],
+      ["51110", null],
+      ["51000", 150],
     ]);
-    expect(vsProvince(map, "52110")).toBeNull();
+    expect(vsProvince(map, "51110")).toBeNull();
   });
 
   it("returns null when the province value is null", () => {
     const map = new Map<string, number | null>([
-      ["52110", 100],
-      ["52000", null],
+      ["51110", 100],
+      ["51000", null],
     ]);
-    expect(vsProvince(map, "52110")).toBeNull();
+    expect(vsProvince(map, "51110")).toBeNull();
   });
 });
 
 describe("shareOfProvince", () => {
-  it("returns value/52000 * 100, on a 0-100 scale", () => {
+  it("returns value/province * 100, on a 0-100 scale", () => {
     const map = new Map<string, number | null>([
-      ["52110", 25],
-      ["52000", 100],
+      ["51110", 25],
+      ["51000", 100],
     ]);
-    expect(shareOfProvince(map, "52110")).toBe(25);
+    expect(shareOfProvince(map, "51110")).toBe(25);
   });
 
   it("handles a region value larger than any single-region share intuition would suggest (still just value/province*100)", () => {
     const map = new Map<string, number | null>([
-      ["52110", 700],
-      ["52000", 500],
+      ["51110", 700],
+      ["51000", 500],
     ]);
-    expect(shareOfProvince(map, "52110")).toBe(140);
+    expect(shareOfProvince(map, "51110")).toBe(140);
   });
 
   it("returns 0 for a region with value 0 (not null — a real, known zero share)", () => {
     const map = new Map<string, number | null>([
-      ["52110", 0],
-      ["52000", 100],
+      ["51110", 0],
+      ["51000", 100],
     ]);
-    expect(shareOfProvince(map, "52110")).toBe(0);
+    expect(shareOfProvince(map, "51110")).toBe(0);
   });
 
   it("returns null when the region's own value is null", () => {
     const map = new Map<string, number | null>([
-      ["52110", null],
-      ["52000", 100],
+      ["51110", null],
+      ["51000", 100],
     ]);
-    expect(shareOfProvince(map, "52110")).toBeNull();
+    expect(shareOfProvince(map, "51110")).toBeNull();
   });
 
   it("returns null when the province value is null", () => {
     const map = new Map<string, number | null>([
-      ["52110", 10],
-      ["52000", null],
+      ["51110", 10],
+      ["51000", null],
     ]);
-    expect(shareOfProvince(map, "52110")).toBeNull();
+    expect(shareOfProvince(map, "51110")).toBeNull();
   });
 
   it("returns null when the province value is 0 (avoids Infinity/NaN)", () => {
     const map = new Map<string, number | null>([
-      ["52110", 10],
-      ["52000", 0],
+      ["51110", 10],
+      ["51000", 0],
     ]);
-    expect(shareOfProvince(map, "52110")).toBeNull();
+    expect(shareOfProvince(map, "51110")).toBeNull();
   });
 });
 
@@ -217,17 +217,17 @@ function seriesFixture(): SeriesFile {
   return {
     id: "students_total",
     rows: [
-      { regionCode: "52110", year: 2024, value: 100 },
-      { regionCode: "52110", year: 2022, value: 80 },
-      { regionCode: "52110", year: 2023, value: 90 },
-      { regionCode: "52130", year: 2023, value: 40 },
+      { regionCode: "51110", year: 2024, value: 100 },
+      { regionCode: "51110", year: 2022, value: 80 },
+      { regionCode: "51110", year: 2023, value: 90 },
+      { regionCode: "51130", year: 2023, value: 40 },
     ],
   };
 }
 
 describe("trend", () => {
   it("returns a region's rows sorted by ascending year", () => {
-    const rows = trend(seriesFixture(), "52110");
+    const rows = trend(seriesFixture(), "51110");
     expect(rows).toEqual([
       { year: 2022, value: 80 },
       { year: 2023, value: 90 },
@@ -242,27 +242,27 @@ describe("trend", () => {
 
 describe("deltaPrevYear", () => {
   it("returns latest minus the immediately preceding year", () => {
-    expect(deltaPrevYear(seriesFixture(), "52110", 2024)).toBe(100 - 90);
+    expect(deltaPrevYear(seriesFixture(), "51110", 2024)).toBe(100 - 90);
   });
 
   it("returns null when there is no preceding year", () => {
-    const series: SeriesFile = { id: "x", rows: [{ regionCode: "52110", year: 2022, value: 80 }] };
-    expect(deltaPrevYear(series, "52110", 2022)).toBeNull();
+    const series: SeriesFile = { id: "x", rows: [{ regionCode: "51110", year: 2022, value: 80 }] };
+    expect(deltaPrevYear(series, "51110", 2022)).toBeNull();
   });
 
   it("returns null when the latest year itself is missing", () => {
-    expect(deltaPrevYear(seriesFixture(), "52110", 2099)).toBeNull();
+    expect(deltaPrevYear(seriesFixture(), "51110", 2099)).toBeNull();
   });
 
   it("returns null when either value is null", () => {
     const series: SeriesFile = {
       id: "x",
       rows: [
-        { regionCode: "52110", year: 2022, value: null },
-        { regionCode: "52110", year: 2023, value: 90 },
+        { regionCode: "51110", year: 2022, value: null },
+        { regionCode: "51110", year: 2023, value: 90 },
       ],
     };
-    expect(deltaPrevYear(series, "52110", 2023)).toBeNull();
+    expect(deltaPrevYear(series, "51110", 2023)).toBeNull();
   });
 });
 

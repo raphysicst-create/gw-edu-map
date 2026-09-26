@@ -1,13 +1,15 @@
-import { jeonbukProfile } from "./jeonbuk";
+import { gangwonProfile } from "./gangwon";
 import type { RegionProfile } from "./types";
 
-export const PROFILES: Readonly<Record<string, RegionProfile>> = { jeonbuk: jeonbukProfile };
+export const PROFILES: Readonly<Record<string, RegionProfile>> = { gangwon: gangwonProfile };
 
 function requestedProfileId(): string {
   const arg = typeof process !== "undefined"
     ? process.argv.find((value) => value.startsWith("--profile="))?.slice("--profile=".length)
     : undefined;
-  return arg || process.env.NEXT_PUBLIC_EDU_MAP_PROFILE || process.env.EDU_MAP_PROFILE || "jeonbuk";
+  const requested = [arg, process.env.NEXT_PUBLIC_EDU_MAP_PROFILE, process.env.EDU_MAP_PROFILE].filter(Boolean);
+  if (requested.some((id) => id !== "gangwon")) throw new Error("이 저장소는 강원 전용입니다. profile을 gangwon으로 설정해 주세요.");
+  return "gangwon";
 }
 
 export const ACTIVE_PROFILE_ID = requestedProfileId();

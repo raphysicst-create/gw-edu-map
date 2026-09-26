@@ -116,6 +116,7 @@ export interface SeriesFile {
  * referenceDate (currently: 폐교재산 현황 only — see the "날짜기준 규칙").
  */
 export interface ManifestSource {
+  providerName?: string;
   name: string;
   url: string;
   referenceDate: string;

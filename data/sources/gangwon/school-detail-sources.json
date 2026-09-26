@@ -1,0 +1,1052 @@
+{
+  "schemaVersion": 1,
+  "profileId": "gangwon",
+  "sources": [
+    {
+      "sourceId": "gwe-directory-36645",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "초등학교 일람표",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128323&type=bbs",
+      "discoveryUrl": "https://open.gwe.go.kr/open/bbs/getFileList.do?key=bTIzMDUzMTA3NjEwNjY=",
+      "discoveryMethod": "POST",
+      "discoveryBody": {
+        "bbsSn": "36645"
+      },
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "referenceYear": 2026,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2026 강원교육통계연보 일람표의 초등학교 일람표 학교별 총계행. 특수학교는 00.전체과정만 학교 단위.",
+      "schoolLevels": [
+        "초등학교"
+      ],
+      "category": "elementary",
+      "rawSchoolRows": 357,
+      "fields": [
+        "학교명",
+        "소재지(행정구역)",
+        "주소",
+        "설립구분",
+        "학교상태구분",
+        "학급수계",
+        "학생수계",
+        "특수학급",
+        "특수학급학생",
+        "입학자",
+        "교원수계",
+        "전문상담교사",
+        "사서교사",
+        "교실수계",
+        "교지면적",
+        "건물면적"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "67f3edb18d5ad74f3a0f2f7a03f85942dbd73b6ee1e2dd6272819b5ff373a73b",
+      "localPath": "data/raw/gangwon/research-schools/gwe-directory-36645.xlsx",
+      "parserVersion": "gwe-school-details-v1",
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 정보공개 통계연보 일람표 게시판의 첨부 목록 API와 원문 다운로드 파일 대조"
+      },
+      "limitations": [
+        "공식 학교 코드 미수록; 원문 행 위치는 내부 레코드 위치일 뿐 공식 ID가 아님",
+        "정확한 조사 기준일과 가공·재배포 이용조건 미확인",
+        "2026 학교개황과 자동 이름 결합 금지",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "attachmentRegisteredAt": "2026-09-12 11:21:08.0",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-directory-36646",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "중학교 일람표",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128307&type=bbs",
+      "discoveryUrl": "https://open.gwe.go.kr/open/bbs/getFileList.do?key=bTIzMDUzMTA3NjEwNjY=",
+      "discoveryMethod": "POST",
+      "discoveryBody": {
+        "bbsSn": "36646"
+      },
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "referenceYear": 2026,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2026 강원교육통계연보 일람표의 중학교 일람표 학교별 총계행. 특수학교는 00.전체과정만 학교 단위.",
+      "schoolLevels": [
+        "중학교"
+      ],
+      "category": "middle",
+      "rawSchoolRows": 159,
+      "fields": [
+        "학교명",
+        "소재지(행정구역)",
+        "주소",
+        "설립구분",
+        "학교상태구분",
+        "학급수계",
+        "학생수계",
+        "특수학급",
+        "특수학급학생",
+        "입학자",
+        "교원수계",
+        "전문상담교사",
+        "사서교사",
+        "교실수계",
+        "교지면적",
+        "건물면적"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "ca7d35fff42bec124196539932b7eb02606e339388f3921a036dbbe9b816d17d",
+      "localPath": "data/raw/gangwon/research-schools/gwe-directory-36646.xlsx",
+      "parserVersion": "gwe-school-details-v1",
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 정보공개 통계연보 일람표 게시판의 첨부 목록 API와 원문 다운로드 파일 대조"
+      },
+      "limitations": [
+        "공식 학교 코드 미수록; 원문 행 위치는 내부 레코드 위치일 뿐 공식 ID가 아님",
+        "정확한 조사 기준일과 가공·재배포 이용조건 미확인",
+        "2026 학교개황과 자동 이름 결합 금지",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "attachmentRegisteredAt": "2026-09-12 11:21:32.0",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-directory-36647",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "일반고등학교 일람표",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128324&type=bbs",
+      "discoveryUrl": "https://open.gwe.go.kr/open/bbs/getFileList.do?key=bTIzMDUzMTA3NjEwNjY=",
+      "discoveryMethod": "POST",
+      "discoveryBody": {
+        "bbsSn": "36647"
+      },
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "referenceYear": 2026,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2026 강원교육통계연보 일람표의 일반고등학교 일람표 학교별 총계행. 특수학교는 00.전체과정만 학교 단위.",
+      "schoolLevels": [
+        "고등학교"
+      ],
+      "category": "general-high",
+      "rawSchoolRows": 83,
+      "fields": [
+        "학교명",
+        "소재지(행정구역)",
+        "주소",
+        "설립구분",
+        "학교상태구분",
+        "학급수계",
+        "학생수계",
+        "특수학급",
+        "특수학급학생",
+        "입학자",
+        "교원수계",
+        "전문상담교사",
+        "사서교사",
+        "교실수계",
+        "교지면적",
+        "건물면적"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "b3161e86d2d674fd2b3b0f5975a8fc9070863e4e0ce963520e8cbe1b3632b78a",
+      "localPath": "data/raw/gangwon/research-schools/gwe-directory-36647.xlsx",
+      "parserVersion": "gwe-school-details-v1",
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 정보공개 통계연보 일람표 게시판의 첨부 목록 API와 원문 다운로드 파일 대조"
+      },
+      "limitations": [
+        "공식 학교 코드 미수록; 원문 행 위치는 내부 레코드 위치일 뿐 공식 ID가 아님",
+        "정확한 조사 기준일과 가공·재배포 이용조건 미확인",
+        "2026 학교개황과 자동 이름 결합 금지",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "attachmentRegisteredAt": "2026-09-12 11:21:47.0",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-directory-36648",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "특성화고등학교 일람표(직업)",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128326&type=bbs",
+      "discoveryUrl": "https://open.gwe.go.kr/open/bbs/getFileList.do?key=bTIzMDUzMTA3NjEwNjY=",
+      "discoveryMethod": "POST",
+      "discoveryBody": {
+        "bbsSn": "36648"
+      },
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "referenceYear": 2026,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2026 강원교육통계연보 일람표의 특성화고등학교 일람표(직업) 학교별 총계행. 특수학교는 00.전체과정만 학교 단위.",
+      "schoolLevels": [
+        "고등학교"
+      ],
+      "category": "vocational-high",
+      "rawSchoolRows": 20,
+      "fields": [
+        "학교명",
+        "소재지(행정구역)",
+        "주소",
+        "설립구분",
+        "학교상태구분",
+        "학급수계",
+        "학생수계",
+        "특수학급",
+        "특수학급학생",
+        "입학자",
+        "교원수계",
+        "전문상담교사",
+        "사서교사",
+        "교실수계",
+        "교지면적",
+        "건물면적"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "309dad1cf903651d0bf755d5f90fe809259c31ab61517d9980029ebee1f05474",
+      "localPath": "data/raw/gangwon/research-schools/gwe-directory-36648.xlsx",
+      "parserVersion": "gwe-school-details-v1",
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 정보공개 통계연보 일람표 게시판의 첨부 목록 API와 원문 다운로드 파일 대조"
+      },
+      "limitations": [
+        "공식 학교 코드 미수록; 원문 행 위치는 내부 레코드 위치일 뿐 공식 ID가 아님",
+        "정확한 조사 기준일과 가공·재배포 이용조건 미확인",
+        "2026 학교개황과 자동 이름 결합 금지",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "attachmentRegisteredAt": "2026-09-12 11:22:04.0",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-directory-36649",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "특성화고등학교 일람표(대안)",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128327&type=bbs",
+      "discoveryUrl": "https://open.gwe.go.kr/open/bbs/getFileList.do?key=bTIzMDUzMTA3NjEwNjY=",
+      "discoveryMethod": "POST",
+      "discoveryBody": {
+        "bbsSn": "36649"
+      },
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "referenceYear": 2026,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2026 강원교육통계연보 일람표의 특성화고등학교 일람표(대안) 학교별 총계행. 특수학교는 00.전체과정만 학교 단위.",
+      "schoolLevels": [
+        "고등학교"
+      ],
+      "category": "alternative-high",
+      "rawSchoolRows": 3,
+      "fields": [
+        "학교명",
+        "소재지(행정구역)",
+        "주소",
+        "설립구분",
+        "학교상태구분",
+        "학급수계",
+        "학생수계",
+        "특수학급",
+        "특수학급학생",
+        "입학자",
+        "교원수계",
+        "전문상담교사",
+        "사서교사",
+        "교실수계",
+        "교지면적",
+        "건물면적"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "0cf61d931515305df1114147068064c04d41142284cacc6e0072705104c9acb5",
+      "localPath": "data/raw/gangwon/research-schools/gwe-directory-36649.xlsx",
+      "parserVersion": "gwe-school-details-v1",
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 정보공개 통계연보 일람표 게시판의 첨부 목록 API와 원문 다운로드 파일 대조"
+      },
+      "limitations": [
+        "공식 학교 코드 미수록; 원문 행 위치는 내부 레코드 위치일 뿐 공식 ID가 아님",
+        "정확한 조사 기준일과 가공·재배포 이용조건 미확인",
+        "2026 학교개황과 자동 이름 결합 금지",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "attachmentRegisteredAt": "2026-09-12 11:22:20.0",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-directory-36650",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "특목고등학교 일람표",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128328&type=bbs",
+      "discoveryUrl": "https://open.gwe.go.kr/open/bbs/getFileList.do?key=bTIzMDUzMTA3NjEwNjY=",
+      "discoveryMethod": "POST",
+      "discoveryBody": {
+        "bbsSn": "36650"
+      },
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "referenceYear": 2026,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2026 강원교육통계연보 일람표의 특목고등학교 일람표 학교별 총계행. 특수학교는 00.전체과정만 학교 단위.",
+      "schoolLevels": [
+        "고등학교"
+      ],
+      "category": "special-purpose-high",
+      "rawSchoolRows": 6,
+      "fields": [
+        "학교명",
+        "소재지(행정구역)",
+        "주소",
+        "설립구분",
+        "학교상태구분",
+        "학급수계",
+        "학생수계",
+        "특수학급",
+        "특수학급학생",
+        "입학자",
+        "교원수계",
+        "전문상담교사",
+        "사서교사",
+        "교실수계",
+        "교지면적",
+        "건물면적"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "e028939d18906d163f919c0a6147d4895314d8fd153bbd0afe9df7d9f27d39c8",
+      "localPath": "data/raw/gangwon/research-schools/gwe-directory-36650.xlsx",
+      "parserVersion": "gwe-school-details-v1",
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 정보공개 통계연보 일람표 게시판의 첨부 목록 API와 원문 다운로드 파일 대조"
+      },
+      "limitations": [
+        "공식 학교 코드 미수록; 원문 행 위치는 내부 레코드 위치일 뿐 공식 ID가 아님",
+        "정확한 조사 기준일과 가공·재배포 이용조건 미확인",
+        "2026 학교개황과 자동 이름 결합 금지",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "attachmentRegisteredAt": "2026-09-12 11:22:34.0",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-directory-36651",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "자율고등학교 일람표",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128329&type=bbs",
+      "discoveryUrl": "https://open.gwe.go.kr/open/bbs/getFileList.do?key=bTIzMDUzMTA3NjEwNjY=",
+      "discoveryMethod": "POST",
+      "discoveryBody": {
+        "bbsSn": "36651"
+      },
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "referenceYear": 2026,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2026 강원교육통계연보 일람표의 자율고등학교 일람표 학교별 총계행. 특수학교는 00.전체과정만 학교 단위.",
+      "schoolLevels": [
+        "고등학교"
+      ],
+      "category": "autonomous-high",
+      "rawSchoolRows": 5,
+      "fields": [
+        "학교명",
+        "소재지(행정구역)",
+        "주소",
+        "설립구분",
+        "학교상태구분",
+        "학급수계",
+        "학생수계",
+        "특수학급",
+        "특수학급학생",
+        "입학자",
+        "교원수계",
+        "전문상담교사",
+        "사서교사",
+        "교실수계",
+        "교지면적",
+        "건물면적"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "c2c275d4bcb3d5a2ba2882f0457a79c8057b803aee662357dd5950f1b9409589",
+      "localPath": "data/raw/gangwon/research-schools/gwe-directory-36651.xlsx",
+      "parserVersion": "gwe-school-details-v1",
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 정보공개 통계연보 일람표 게시판의 첨부 목록 API와 원문 다운로드 파일 대조"
+      },
+      "limitations": [
+        "공식 학교 코드 미수록; 원문 행 위치는 내부 레코드 위치일 뿐 공식 ID가 아님",
+        "정확한 조사 기준일과 가공·재배포 이용조건 미확인",
+        "2026 학교개황과 자동 이름 결합 금지",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "attachmentRegisteredAt": "2026-09-12 11:22:49.0",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-directory-36652",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "특수학교 일람표",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128330&type=bbs",
+      "discoveryUrl": "https://open.gwe.go.kr/open/bbs/getFileList.do?key=bTIzMDUzMTA3NjEwNjY=",
+      "discoveryMethod": "POST",
+      "discoveryBody": {
+        "bbsSn": "36652"
+      },
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D",
+      "referenceYear": 2026,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2026 강원교육통계연보 일람표의 특수학교 일람표 학교별 총계행. 특수학교는 00.전체과정만 학교 단위.",
+      "schoolLevels": [
+        "특수학교"
+      ],
+      "category": "special-school",
+      "rawSchoolRows": 9,
+      "fields": [
+        "학교명",
+        "소재지(행정구역)",
+        "주소",
+        "설립구분",
+        "학교상태구분",
+        "학급수계",
+        "학생수계",
+        "특수학급",
+        "특수학급학생",
+        "입학자",
+        "교원수계",
+        "전문상담교사",
+        "사서교사",
+        "교실수계",
+        "교지면적",
+        "건물면적"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "9312d0849234286b7f3e9f5957fcf18e87800a641c11d3acb41a7c1ed394b0b0",
+      "localPath": "data/raw/gangwon/research-schools/gwe-directory-36652.xlsx",
+      "parserVersion": "gwe-school-details-v1",
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 정보공개 통계연보 일람표 게시판의 첨부 목록 API와 원문 다운로드 파일 대조"
+      },
+      "limitations": [
+        "공식 학교 코드 미수록; 원문 행 위치는 내부 레코드 위치일 뿐 공식 ID가 아님",
+        "정확한 조사 기준일과 가공·재배포 이용조건 미확인",
+        "2026 학교개황과 자동 이름 결합 금지",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDUzMTA3NjEwNjY%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "attachmentRegisteredAt": "2026-09-12 11:23:04.0",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-school-status-web",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "학교현황 엑셀",
+      "landingUrl": "https://www.gwe.go.kr/main/school/list.do?key=m2307211206805",
+      "downloadUrl": "https://www.gwe.go.kr/main/school/excelDownload.do?key=m2307211206805",
+      "downloadMethod": "POST",
+      "downloadBody": {
+        "key": "m2307211206805",
+        "pageIndex": "1",
+        "sc_area": "",
+        "sc_part": "",
+        "sc_schoolNm": ""
+      },
+      "officialEvidenceUrl": "https://www.gwe.go.kr/main/school/list.do?key=m2307211206805",
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "학교이름·주소·전화번호·홈페이지 명단 971행. 웹페이지 상단 2025-06-24 총괄표와 엑셀 명단의 자체 기준일은 구분.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [
+        "학교이름",
+        "주소",
+        "전화번호",
+        "홈페이지"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "32d007bb8002dd7f2f72b516a66f3620c9e96ad5879f5c4db28bfa50d24c31b0",
+      "localPath": "data/raw/gangwon/research-schools/gwe-school-status.xls",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "www.gwe.go.kr 강원특별자치도교육청 학교현황 페이지의 엑셀 다운로드 form action을 POST로 호출"
+      },
+      "limitations": [
+        "학교급·학교코드·본분교·운영상태·학생/학급/교원 수 없음",
+        "엑셀 자체 기준일 미표기",
+        "2026 학교개황과 이름 자동 결합 금지",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://www.gwe.go.kr/main/school/list.do?key=m2307211206805"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-annual-2025",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "2025 강원교육통계연보",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=123554&type=bbs",
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373",
+      "referenceYear": 2025,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2025 강원교육통계연보 통합 PDF 767쪽. PDF 0-based 718~766쪽에 유치원·초·중·고·특수·각종학교 학교별 일람표 수록. 2026 XLSX 누락 8개 학교의 2025 원문 존재 확인; 기준일·모집단 완전성 미검증.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [
+        "학교명",
+        "소재지(행정구역)",
+        "주소",
+        "학교상태구분",
+        "학급수계",
+        "학생수계",
+        "입학자",
+        "교원수계",
+        "교실수",
+        "교지면적",
+        "건물면적"
+      ],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "862a3bb713331e57e6ab6672bdb58c99ce0bf3c665cc0577d4ce5d0a646a2209",
+      "localPath": "data/raw/gangwon/research-schools/gwe-annual-53024.pdf",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 연도별 통계연보 게시판 및 첨부 목록 API"
+      },
+      "limitations": [
+        "PDF 학교별 표는 확인했으나 전수 추출·조사 기준일·이용조건 추가 검증 필요",
+        "2026 일람표와 학교 코드를 통한 시계열 연결 불가",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-annual-2024",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "2024 강원교육통계연보",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=123534&type=bbs",
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373",
+      "referenceYear": 2024,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "연도별 통계연보 통합 PDF. 학교별 표와 범위는 추가 추출·확인 필요.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "3216b133cbee1c303f0bca1612e24945bd5ec8bffb3605d0e402f796952efcfc",
+      "localPath": "data/raw/gangwon/research-schools/gwe-annual-53013.pdf",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 연도별 통계연보 게시판 및 첨부 목록 API"
+      },
+      "limitations": [
+        "PDF 학교별 세부 표·조사 기준일·이용조건 추가 검증 필요",
+        "2026 일람표와 학교 코드를 통한 시계열 연결 불가",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-annual-2023",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "2023 강원교육통계연보",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=123533&type=bbs",
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373",
+      "referenceYear": 2023,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "연도별 통계연보 통합 PDF. 학교별 표와 범위는 추가 추출·확인 필요.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "778469ea87ef684c61b560555ebe5ec12e954fe37ca6a806eadc0ca78f17f436",
+      "localPath": "data/raw/gangwon/research-schools/gwe-annual-53012.pdf",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 연도별 통계연보 게시판 및 첨부 목록 API"
+      },
+      "limitations": [
+        "PDF 학교별 세부 표·조사 기준일·이용조건 추가 검증 필요",
+        "2026 일람표와 학교 코드를 통한 시계열 연결 불가",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-annual-2022",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "2022 강원교육통계연보",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=63050&type=bbs",
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373",
+      "referenceYear": 2022,
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "연도별 통계연보 통합 PDF. 학교별 표와 범위는 추가 추출·확인 필요.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "0c3ad57e49e19bc965cb2ef0fca41ffc7876b4a818bc24f31290f33ae93600da",
+      "localPath": "data/raw/gangwon/research-schools/gwe-annual-23353.pdf",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 연도별 통계연보 게시판 및 첨부 목록 API"
+      },
+      "limitations": [
+        "PDF 학교별 세부 표·조사 기준일·이용조건 추가 검증 필요",
+        "2026 일람표와 학교 코드를 통한 시계열 연결 불가",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=m2305310761373"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-yearbook-summary-35777",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "1-1 학교 총개황",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128314&type=bbs",
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "referenceYears": [
+        2024,
+        2025,
+        2026
+      ],
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2024~2026 학교급별/설립별 총괄표. 학교별 자료 아님.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "2e3e1e3d613cda43514226faf7e26e04fa74a9005050195524b139aeba9a198c",
+      "localPath": "data/raw/gangwon/research-schools/gwe-yearbook-school-overview.xls",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 통계연보 각급학교개황 게시판 및 첨부 목록 API"
+      },
+      "limitations": [
+        "학교별 행 없음",
+        "2024~2026 도 전체/학교급 집계만 제공",
+        "정확한 조사 기준일과 이용조건 추가 검증 필요",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-yearbook-summary-35778",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "1-2 학교 현황",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128351&type=bbs",
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "referenceYears": [
+        2024,
+        2025,
+        2026
+      ],
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2024~2026 학교급별/설립별 총괄표. 학교별 자료 아님.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "f6c681f4724b281a56c543ee30a830ff24979e0a2db325ac80a242772ccafe07",
+      "localPath": "data/raw/gangwon/research-schools/gwe-yearbook-35778.xls",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 통계연보 각급학교개황 게시판 및 첨부 목록 API"
+      },
+      "limitations": [
+        "학교별 행 없음",
+        "2024~2026 도 전체/학교급 집계만 제공",
+        "정확한 조사 기준일과 이용조건 추가 검증 필요",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-yearbook-summary-35779",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "1-3 학생 현황",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128315&type=bbs",
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "referenceYears": [
+        2024,
+        2025,
+        2026
+      ],
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2024~2026 학교급별/설립별 총괄표. 학교별 자료 아님.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "dd755c774311dd3f684afc34baa6b84f593bc087cefe911ec1d7aaceba5a2e29",
+      "localPath": "data/raw/gangwon/research-schools/gwe-yearbook-35779.xls",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 통계연보 각급학교개황 게시판 및 첨부 목록 API"
+      },
+      "limitations": [
+        "학교별 행 없음",
+        "2024~2026 도 전체/학교급 집계만 제공",
+        "정확한 조사 기준일과 이용조건 추가 검증 필요",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-yearbook-summary-35780",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "1-4 시설 현황",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128316&type=bbs",
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "referenceYears": [
+        2024,
+        2025,
+        2026
+      ],
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2024~2026 학교급별/설립별 총괄표. 학교별 자료 아님.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "a4466a090e25709dd102390e2bf15dbad3e07ac727f709e7e72305a16cbecea9",
+      "localPath": "data/raw/gangwon/research-schools/gwe-yearbook-35780.xls",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 통계연보 각급학교개황 게시판 및 첨부 목록 API"
+      },
+      "limitations": [
+        "학교별 행 없음",
+        "2024~2026 도 전체/학교급 집계만 제공",
+        "정확한 조사 기준일과 이용조건 추가 검증 필요",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    },
+    {
+      "sourceId": "gwe-yearbook-summary-35782",
+      "profileId": "gangwon",
+      "providerName": "강원특별자치도교육청",
+      "providerType": "education-office",
+      "title": "1-5 교원 현황",
+      "landingUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "downloadUrl": "https://open.gwe.go.kr/cmm/fileDown.do?key=128352&type=bbs",
+      "officialEvidenceUrl": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D",
+      "referenceYears": [
+        2024,
+        2025,
+        2026
+      ],
+      "referenceDate": null,
+      "publishedAt": null,
+      "retrievedAt": "2026-09-25T15:19:54.839Z",
+      "scope": "2024~2026 학교급별/설립별 총괄표. 학교별 자료 아님.",
+      "schoolLevels": [
+        "유치원",
+        "초등학교",
+        "중학교",
+        "고등학교",
+        "특수학교",
+        "각종학교"
+      ],
+      "fields": [],
+      "license": null,
+      "redistribution": "unverified",
+      "storagePolicy": "unverified",
+      "sha256": "4c9e6c819f4ca5ea2819b8c7c7c09687b970ed10a1e7cebec7f397f05cf1fb29",
+      "localPath": "data/raw/gangwon/research-schools/gwe-yearbook-35782.xls",
+      "parserVersion": null,
+      "reviewStatus": "acquired",
+      "providerReview": {
+        "status": "verified",
+        "evidence": "open.gwe.go.kr 강원특별자치도교육청 통계연보 각급학교개황 게시판 및 첨부 목록 API"
+      },
+      "limitations": [
+        "학교별 행 없음",
+        "2024~2026 도 전체/학교급 집계만 제공",
+        "정확한 조사 기준일과 이용조건 추가 검증 필요",
+        "교육청 저작권정책은 자료별 공공누리 표시 확인을 요구하나, 해당 첨부의 유형 표시 미확인",
+        "시군별 수록 범위와 모집단 완전성은 별도 대조 중"
+      ],
+      "requestHeaders": {
+        "Referer": "https://open.gwe.go.kr/open/bbs/list.do?key=bTIzMDcyNTQ1NTc3MTI%3D"
+      },
+      "licenseEvidenceUrl": "https://www.gwe.go.kr/main/content.do?key=bTIzMDcwNjE4NjcxMjM%3D",
+      "coveredRegions": []
+    }
+  ]
+}

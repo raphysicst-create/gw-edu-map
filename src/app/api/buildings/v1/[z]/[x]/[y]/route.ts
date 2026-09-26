@@ -1,10 +1,17 @@
 import { fetchBuildingTile } from "@/lib/buildings/server";
 import { validBuildingTile } from "@/lib/buildings/tiles";
+import { GANGWON_EXTERNAL_MAPS } from "@/lib/profiles/external-maps";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
-const fail = (status: number) => Response.json({ error: "건물 정보를 불러오지 못했습니다" }, { status, headers: { "Cache-Control": "no-store" } });
+const fail = (status: number, error = "건물 정보를 불러오지 못했습니다") => Response.json(
+  { error },
+  { status, headers: { "Cache-Control": "no-store", "CDN-Cache-Control": "no-store" } },
+);
 export async function GET(request: Request, context: { params: Promise<{ z: string; x: string; y: string }> }) {
+  if (!GANGWON_EXTERNAL_MAPS.buildings) {
+    return fail(503, "건물 지도는 외부 공간정보 이용조건 검토 중입니다");
+  }
   const { z, x, y } = await context.params;
   if (![z, x, y].every((part) => /^\d+$/.test(part)) || !validBuildingTile(Number(z), Number(x), Number(y))) return fail(400);
   const key = process.env.VWORLD_BUILDING_KEY;
@@ -12,8 +19,8 @@ export async function GET(request: Request, context: { params: Promise<{ z: stri
   try {
     const tile = await fetchBuildingTile(Number(x), Number(y), { key, domain: process.env.VWORLD_BUILDING_DOMAIN, signal: request.signal });
     return Response.json(tile, { headers: {
-      "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
-      "CDN-Cache-Control": "public, s-maxage=86400, stale-while-revalidate=604800",
+      "Cache-Control": "no-store",
+      "CDN-Cache-Control": "no-store",
     } });
   } catch (error) {
     if (request.signal.aborted) return fail(502); // Normal viewport cancellation.

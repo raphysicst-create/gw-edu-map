@@ -12,8 +12,16 @@ export interface RegionProfile {
   province: { name: string; shortName: string; aggregateCode: string };
   regions: readonly RegionEntry[];
   boundary: {
+    /** Code system of the original boundary geometry, not the app's region keys. */
+    sourceCodeSystem?: "admdongkor" | "sgis";
+    /** Source polygon's two-digit province code. */
     sidoCode: string;
+    /** Source polygon's neighboring province codes. */
     neighborSidoCodes: readonly string[];
+    /** Required when source geometry codes differ from public/internal codes. */
+    internalCodeSystem?: "legal-dong";
+    internalSidoCode?: string;
+    internalNeighborSidoCodes?: readonly string[];
     /** Source sgg codes that should be presented as one map region. */
     sggCodeOverrides?: Readonly<Record<string, string>>;
     sggPrefixOverrides?: Readonly<Record<string, string>>;

@@ -13,7 +13,7 @@
  * itself is client-only — see MapShell.tsx's `ssr:false` — but this module
  * makes no assumption about who calls it).
  */
-const STORAGE_KEY = "jbmap.emd";
+const STORAGE_KEY = "edu-map:gangwon:emd:v1";
 
 /** No stored value yet -> ON by default (matches the task brief: "기본값 ON"). */
 export function readEmdPref(): boolean {

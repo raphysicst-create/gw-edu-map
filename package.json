@@ -1,5 +1,5 @@
 {
-  "name": "jb-edu-map",
+  "name": "gw-edu-map",
   "version": "0.1.0",
   "private": false,
   "type": "module",
@@ -7,6 +7,10 @@
     "node": "22.x"
   },
   "scripts": {
+    "data:gangwon:fetch": "tsx scripts/pipeline/gangwon/intake.ts fetch",
+    "data:gangwon:audit": "tsx scripts/pipeline/gangwon/intake.ts audit",
+    "data:gangwon:preflight": "tsx scripts/pipeline/gangwon/build.ts preflight",
+    "data:gangwon:rollback": "tsx scripts/pipeline/gangwon/rollback.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -15,15 +19,15 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "playwright test",
-    "data:regions": "tsx scripts/pipeline/build-regions.ts",
-    "data:emd": "tsx scripts/pipeline/build-emd.ts",
-    "data:kess": "tsx scripts/pipeline/fetch-kess.ts && tsx scripts/pipeline/parse-kess.ts",
-    "data:schools": "tsx scripts/pipeline/build-schools.ts",
-    "data:indicators": "tsx scripts/pipeline/build-indicators.ts",
-    "data:charset": "tsx scripts/pipeline/build-charset.ts",
-    "data:validate": "tsx scripts/pipeline/validate.ts",
-    "data:build": "tsx scripts/pipeline/build.ts",
-    "data:issues": "tsx scripts/pipeline/build-education-issues.ts",
+    "data:regions": "tsx scripts/pipeline/gangwon/build.ts",
+    "data:emd": "tsx scripts/pipeline/gangwon/build.ts",
+    "data:kess": "tsx scripts/pipeline/gangwon/build.ts",
+    "data:schools": "tsx scripts/pipeline/gangwon/build.ts",
+    "data:indicators": "tsx scripts/pipeline/gangwon/build.ts",
+    "data:charset": "tsx scripts/pipeline/gangwon/build.ts",
+    "data:validate": "tsx scripts/pipeline/gangwon/build.ts validate",
+    "data:build": "tsx scripts/pipeline/gangwon/build.ts",
+    "data:issues": "tsx scripts/pipeline/gangwon/build.ts",
     "social:build": "node scripts/generate-social-assets.mjs"
   },
   "dependencies": {

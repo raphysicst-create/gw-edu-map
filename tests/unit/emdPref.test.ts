@@ -25,24 +25,24 @@ describe("readEmdPref/writeEmdPref", () => {
   });
 
   it("reads a stored '0' as false (OFF)", () => {
-    vi.stubGlobal("window", { localStorage: fakeStorage({ "jbmap.emd": "0" }) });
+    vi.stubGlobal("window", { localStorage: fakeStorage({ "edu-map:gangwon:emd:v1": "0" }) });
     expect(readEmdPref()).toBe(false);
   });
 
   it("reads a stored '1' as true (ON)", () => {
-    vi.stubGlobal("window", { localStorage: fakeStorage({ "jbmap.emd": "1" }) });
+    vi.stubGlobal("window", { localStorage: fakeStorage({ "edu-map:gangwon:emd:v1": "1" }) });
     expect(readEmdPref()).toBe(true);
   });
 
-  it("write then read round-trips through the same 'jbmap.emd' key", () => {
+  it("write then read round-trips through the same 'edu-map:gangwon:emd:v1' key", () => {
     const storage = fakeStorage();
     vi.stubGlobal("window", { localStorage: storage });
     writeEmdPref(false);
-    expect(storage.setItem).toHaveBeenCalledWith("jbmap.emd", "0");
+    expect(storage.setItem).toHaveBeenCalledWith("edu-map:gangwon:emd:v1", "0");
     expect(readEmdPref()).toBe(false);
 
     writeEmdPref(true);
-    expect(storage.setItem).toHaveBeenCalledWith("jbmap.emd", "1");
+    expect(storage.setItem).toHaveBeenCalledWith("edu-map:gangwon:emd:v1", "1");
     expect(readEmdPref()).toBe(true);
   });
 
@@ -78,7 +78,7 @@ describe("readEmdPref/writeEmdPref", () => {
     const storage = fakeStorage();
     vi.stubGlobal("window", { localStorage: storage });
     writeEmdPref(false);
-    expect(storage._store).toEqual({ "jbmap.emd": "0" });
-    expect(storage._store["jbmap.basemap"]).toBeUndefined();
+    expect(storage._store).toEqual({ "edu-map:gangwon:emd:v1": "0" });
+    expect(storage._store["edu-map:gangwon:basemap:v1"]).toBeUndefined();
   });
 });

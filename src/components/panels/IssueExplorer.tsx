@@ -12,7 +12,7 @@ import {
 import {
   METRIC_LABELS,
   POLICY_SOURCE,
-  PUBLISHED_ISSUES,
+  EDUCATION_ISSUES,
   issueById,
 } from "@/lib/issues/registry";
 import type { EducationIssuesFile, IssueMapModel } from "@/lib/issues/types";
@@ -121,7 +121,9 @@ export default function IssueExplorer({
             확인하세요.
           </p>
         </div>
-        {PUBLISHED_ISSUES.map((issue, index) => (
+        {EDUCATION_ISSUES.map((issue, index) => {
+          const availability = bundle.manifest.issues[issue.id];
+          return (
           <button
             key={issue.id}
             onClick={() => onIssue(issue.id)}
@@ -139,13 +141,15 @@ export default function IssueExplorer({
             <span className="mt-3 block text-xs text-ink-muted">
               정책 연계 · {issue.policy}
             </span>
-            <span className="mt-1 block text-xs text-ink-muted">{buildIssueModel(bundle, data, issue, issue.metrics[0], query.issueLevel).date}</span>
-            <span className="mt-2 block text-sm font-semibold">{buildIssueModel(bundle, data, issue, issue.metrics[0], query.issueLevel).provinceText}</span>
+            {availability.status === "available" ? <>
+              <span className="mt-1 block text-xs text-ink-muted">{buildIssueModel(bundle, data, issue, issue.metrics[0], query.issueLevel).date}</span>
+              <span className="mt-2 block text-sm font-semibold">{buildIssueModel(bundle, data, issue, issue.metrics[0], query.issueLevel).provinceText}</span>
+            </> : <span className="mt-2 block text-xs">자료 미제공 · {availability.reason}</span>}
             <span className="mt-3 block text-xs font-semibold text-accent-text">
               지도에서 살펴보기 →
             </span>
           </button>
-        ))}
+        ); })}
         <p className="text-xs leading-relaxed text-ink-muted">
           질문과 지표의 연결은 이 앱의 탐색 설계입니다. 수치만으로 지역의
           위험이나 정책의 성과를 평가하지 않습니다.
@@ -156,7 +160,7 @@ export default function IssueExplorer({
           target="_blank"
           rel="noreferrer"
         >
-          정책 근거 · 인수위원회 활동 백서
+          강원교육청 주요업무계획 안내
         </a>
       </div>
     );
@@ -419,7 +423,7 @@ export default function IssueExplorer({
             target="_blank"
             rel="noreferrer"
           >
-            {POLICY_SOURCE.name} {definition.policyPage}쪽 · 발행{" "}
+            {POLICY_SOURCE.name} {definition.policyPage !== null ? `${definition.policyPage}쪽` : "원문 쪽수 확인 중"} · 발행{" "}
             {POLICY_SOURCE.referenceDate}
           </a>
           <p>

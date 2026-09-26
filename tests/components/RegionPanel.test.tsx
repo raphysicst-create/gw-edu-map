@@ -10,13 +10,14 @@ import { INDICATORS } from "@/lib/indicators/registry";
 import { shareOfProvince, valueMap } from "@/lib/stats";
 import { formatShare } from "@/lib/tooltipText";
 import { useMapQuery } from "@/lib/state/urlState";
-import type { IndicatorDef, IndicatorFile, Manifest, SeriesFile } from "@/lib/indicators/types";
+import type { IndicatorDef, IndicatorFile, SeriesFile } from "@/lib/indicators/types";
+import { publishedManifest } from "../fixtures/gangwon-release";
 import type { School, SchoolsFile } from "@/lib/schools/types";
 import type { ClosedSchoolRow, ClosedSchoolsFile } from "@/lib/closedSchools/types";
 
-const REGION = "52110"; // 전주시
-const OTHER_REGION = "52130"; // 군산시
-const PROVINCE = "52000";
+const REGION = "51110"; // 춘천시
+const OTHER_REGION = "51130"; // 원주시
+const PROVINCE = "51000";
 
 function genericFile(id: string): IndicatorFile {
   return {
@@ -32,17 +33,17 @@ function genericFile(id: string): IndicatorFile {
   };
 }
 
-/** students_total mirrors the task brief's own aria-live example (70,851명, 1위) — 전주시 is the largest of the 3 fixture regions. */
+/** students_total mirrors the task brief's own aria-live example (70,851명, 1위) — 춘천시 is the largest of the 3 fixture regions. */
 function studentsTotalFile(): IndicatorFile {
   return {
     id: "students_total",
     year: 2026,
     referenceDate: "2026-04-01",
-    source: { name: "한국교육개발원 교육통계서비스(KESS) 교육기본통계 학교별 데이터셋", url: "https://kess.kedi.re.kr/contents/dataset", year: 2026 },
+    source: { name: "검사용 합성 학교 통계", url: "https://example.com/synthetic-stats", year: 2026 },
     rows: [
       { regionCode: REGION, value: 70851 },
       { regionCode: OTHER_REGION, value: 50000 },
-      { regionCode: "52140", value: 30000 },
+      { regionCode: "51150", value: 30000 },
       { regionCode: PROVINCE, value: 150851 },
     ],
   };
@@ -61,8 +62,10 @@ function studentsTotalSeries(): SeriesFile {
   };
 }
 
-function manifestFixture(): Manifest {
-  return { latestYear: 2026, indicators: {}, builtAt: "2026-01-01T00:00:00.000Z", sources: [] };
+function manifestFixture() {
+  const manifest = publishedManifest(INDICATORS.map((def) => def.id));
+  manifest.features.closedSchools = { status: "available", sourceIds: ["synthetic-official-source"], referenceDate: "2026-07-16", scope: "검사 전용 합성 자료" };
+  return manifest;
 }
 
 function schoolFixture(overrides: Partial<School> & Pick<School, "id" | "regionCode">): School {
@@ -84,23 +87,23 @@ function schoolFixture(overrides: Partial<School> & Pick<School, "id" | "regionC
 
 const NO_LOCATION_REASON = "특수학교는 위치 표준데이터(2026-03-20)에 없음";
 
-/** 5 schools in REGION (전주시): unsorted by students on purpose, so sort-order assertions are meaningful; one is a 분교장, one is 소규모, levels span elem/mid/high/special. `special1` has no coordinates (lat/lng null + locationMissingReason) — mirrors real data, where every 특수학교 row is like this (fix-round-1). Plus 1 school in OTHER_REGION (must never appear). */
+/** 5 schools in REGION (춘천시): unsorted by students on purpose, so sort-order assertions are meaningful; one is a 분교장, one is 소규모, levels span elem/mid/high/special. `special1` has no coordinates (lat/lng null + locationMissingReason) — mirrors real data, where every 특수학교 row is like this (fix-round-1). Plus 1 school in OTHER_REGION (must never appear). */
 function schoolsFixture(): SchoolsFile {
   return {
     referenceDate: { location: "2026-03-20", stats: "2026-04-01" },
     source: {
-      location: { name: "한국교육시설안전원 초중등학교위치 표준데이터", url: "https://example.com/location", referenceDate: "2026-03-20" },
-      stats: { name: "KESS", url: "https://example.com/kess", referenceDate: "2026-04-01" },
+      location: { name: "검사용 합성 위치", url: "https://example.com/location", referenceDate: "2026-03-20" },
+      stats: { name: "검사용 합성 통계", url: "https://example.com/stats", referenceDate: "2026-04-01" },
     },
     schools: [
-      schoolFixture({ id: "mid1", regionCode: REGION, name: "전주중학교", level: "mid", students: 300, classes: 12, studentsPerClass: 25 }),
-      schoolFixture({ id: "small1", regionCode: REGION, name: "전주소규모초등학교", level: "elem", students: 40, classes: 4, studentsPerClass: 10, small: true }),
-      schoolFixture({ id: "high1", regionCode: REGION, name: "전주고등학교", level: "high", students: 500, classes: 15, studentsPerClass: 33.3 }),
-      schoolFixture({ id: "branch1", regionCode: REGION, name: "전주분교", level: "elem", branch: true, students: 15, classes: 1, studentsPerClass: 15, small: true }),
+      schoolFixture({ id: "mid1", regionCode: REGION, name: "춘천중학교", level: "mid", students: 300, classes: 12, studentsPerClass: 25 }),
+      schoolFixture({ id: "small1", regionCode: REGION, name: "춘천소규모초등학교", level: "elem", students: 40, classes: 4, studentsPerClass: 10, small: true }),
+      schoolFixture({ id: "high1", regionCode: REGION, name: "춘천고등학교", level: "high", students: 500, classes: 15, studentsPerClass: 33.3 }),
+      schoolFixture({ id: "branch1", regionCode: REGION, name: "춘천분교", level: "elem", branch: true, students: 15, classes: 1, studentsPerClass: 15, small: true }),
       schoolFixture({
         id: "special1",
         regionCode: REGION,
-        name: "전주특수학교",
+        name: "춘천특수학교",
         level: "special",
         students: 80,
         classes: 8,
@@ -109,7 +112,7 @@ function schoolsFixture(): SchoolsFile {
         lng: null,
         locationMissingReason: NO_LOCATION_REASON,
       }),
-      schoolFixture({ id: "other1", regionCode: OTHER_REGION, name: "군산초등학교", level: "elem", students: 999 }),
+      schoolFixture({ id: "other1", regionCode: OTHER_REGION, name: "원주초등학교", level: "elem", students: 999 }),
     ],
   };
 }
@@ -121,21 +124,21 @@ function closedSchoolRow(overrides: Partial<ClosedSchoolRow> & Pick<ClosedSchool
     usage: "미활용",
     buildingArea: 100,
     siteArea: 200,
-    address: "전북특별자치도 전주시 어딘가",
+    address: "강원특별자치도 춘천시 어딘가",
     ...overrides,
   };
 }
 
-/** 2 폐교 in REGION(전주시) — different years to pin the "최신 연도 먼저" sort — plus 1 in OTHER_REGION (must never appear). */
+/** 2 폐교 in REGION(춘천시) — different years to pin the "최신 연도 먼저" sort — plus 1 in OTHER_REGION (must never appear). */
 function closedSchoolsFixture(): ClosedSchoolsFile {
   return {
     referenceDate: "2026-07-16",
     publishedAt: "2026-07-20",
-    source: { name: "전북특별자치도교육청 폐교재산 현황(공공데이터포털)", url: "https://example.com/closed-schools", year: 2026 },
+    source: { name: "강원특별자치도교육청 폐교재산 현황(공공데이터포털)", url: "https://example.com/closed-schools", year: 2026 },
     rows: [
-      closedSchoolRow({ name: "전주오래된폐교", year: 2005, usage: "자체활용", level: "mid" }),
-      closedSchoolRow({ name: "전주최근폐교", year: 2023, usage: "미활용", level: "high" }),
-      closedSchoolRow({ regionCode: OTHER_REGION, name: "군산폐교", year: 2020 }),
+      closedSchoolRow({ name: "춘천오래된폐교", year: 2005, usage: "자체활용", level: "mid" }),
+      closedSchoolRow({ name: "춘천최근폐교", year: 2023, usage: "미활용", level: "high" }),
+      closedSchoolRow({ regionCode: OTHER_REGION, name: "원주폐교", year: 2020 }),
     ],
   };
 }
@@ -186,7 +189,7 @@ describe("RegionPanel", () => {
 
   it("shows the region name as a heading", () => {
     renderSelected(`?region=${REGION}`);
-    expect(screen.getByRole("heading", { name: "전주시" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "춘천시" })).toBeInTheDocument();
   });
 
   it("shows the current indicator's label, formatted value, and unit", () => {
@@ -196,27 +199,27 @@ describe("RegionPanel", () => {
     expect(screen.getByText("명")).toBeInTheDocument();
   });
 
-  it("shows the rank out of 14 시군, derived from REGION_CODES.length (fix round 1, review finding #4 — not hardcoded)", () => {
+  it("shows the rank out of 18 시군, derived from REGION_CODES.length", () => {
     renderSelected(`?region=${REGION}&indicator=students_total`);
     expect(screen.getByText(`${REGION_CODES.length}개 시군 중 1위`)).toBeInTheDocument();
   });
 
-  it("shows '전북 대비 비중' (share, not a signed delta) for students_total, a count-kind indicator (Task 5, Section D)", () => {
+  it("shows '강원 대비 비중' (share, not a signed delta) for students_total, a count-kind indicator (Task 5, Section D)", () => {
     renderSelected(`?region=${REGION}&indicator=students_total`);
     const file = studentsTotalFile();
     const expectedShare = shareOfProvince(valueMap(file), REGION)!;
     // 70851 / 150851 * 100
     expect(screen.getByTestId("region-panel-delta")).toHaveTextContent(
-      `전북 대비 비중 ${formatShare(expectedShare)}`,
+      `강원 대비 비중 ${formatShare(expectedShare)}`,
     );
     // Never signed (a share isn't a directional delta).
     expect(screen.getByTestId("region-panel-delta")).not.toHaveTextContent(/[+-]\d/);
   });
 
-  it("shows '전북 평균 대비' with a signed delta for a ratio-kind indicator", () => {
+  it("shows '강원 평균 대비' with a signed delta for a ratio-kind indicator", () => {
     renderSelected(`?region=${REGION}&indicator=students_per_class`);
     // genericFile: REGION=100, OTHER_REGION=40, PROVINCE=140 -> delta = 100-140 = -40
-    expect(screen.getByTestId("region-panel-delta")).toHaveTextContent(/전북 평균 대비 -/);
+    expect(screen.getByTestId("region-panel-delta")).toHaveTextContent(/강원 평균 대비 -/);
   });
 
   it("shows the current indicator's description in the current-indicator card (Task 5, Section C)", () => {
@@ -309,17 +312,17 @@ describe("RegionPanel", () => {
       const rows = screen.getAllByTestId(/^school-row-/);
       expect(rows).toHaveLength(5); // REGION has 5; OTHER_REGION's school must be excluded
       const names = rows.map((r) => r.textContent);
-      expect(names[0]).toContain("전주고등학교"); // 500
-      expect(names[1]).toContain("전주중학교"); // 300
-      expect(names[2]).toContain("전주특수학교"); // 80
-      expect(names[3]).toContain("전주소규모초등학교"); // 40
-      expect(names[4]).toContain("전주분교"); // 15
-      expect(screen.queryByText("군산초등학교")).not.toBeInTheDocument();
+      expect(names[0]).toContain("춘천고등학교"); // 500
+      expect(names[1]).toContain("춘천중학교"); // 300
+      expect(names[2]).toContain("춘천특수학교"); // 80
+      expect(names[3]).toContain("춘천소규모초등학교"); // 40
+      expect(names[4]).toContain("춘천분교"); // 15
+      expect(screen.queryByText("원주초등학교")).not.toBeInTheDocument();
     });
 
     it("shows a summary line: 학교 N개 · 소규모 M개", () => {
       renderSelected(`?region=${REGION}`);
-      // 5 schools total, 2 소규모 (전주소규모초등학교 40명, 전주분교 15명)
+      // 5 schools total, 2 소규모 (춘천소규모초등학교 40명, 춘천분교 15명)
       expect(screen.getByText(/학교 5개/)).toBeInTheDocument();
       expect(screen.getByText(/소규모 2개/)).toBeInTheDocument();
     });
@@ -345,10 +348,10 @@ describe("RegionPanel", () => {
       await user.click(screen.getByRole("button", { name: "초" }));
 
       const rows = screen.getAllByTestId(/^school-row-/);
-      expect(rows).toHaveLength(2); // 전주소규모초등학교 + 전주분교 (both elem)
-      expect(rows.map((r) => r.textContent).join("")).toContain("전주소규모초등학교");
-      expect(rows.map((r) => r.textContent).join("")).toContain("전주분교");
-      expect(screen.queryByText("전주고등학교")).not.toBeInTheDocument();
+      expect(rows).toHaveLength(2); // 춘천소규모초등학교 + 춘천분교 (both elem)
+      expect(rows.map((r) => r.textContent).join("")).toContain("춘천소규모초등학교");
+      expect(rows.map((r) => r.textContent).join("")).toContain("춘천분교");
+      expect(screen.queryByText("춘천고등학교")).not.toBeInTheDocument();
       // Summary reflects the filtered set, matching the table below it.
       expect(screen.getByText(/학교 2개/)).toBeInTheDocument();
       expect(screen.getByText(/소규모 2개/)).toBeInTheDocument();
@@ -456,7 +459,7 @@ describe("RegionPanel", () => {
         // keyboard-reachable), not just focusable via .focus().
         screen.getByRole("button", { name: "특수" }).focus();
         await user.tab();
-        const button = screen.getByRole("button", { name: "전주고등학교" });
+        const button = screen.getByRole("button", { name: "춘천고등학교" });
         expect(button).toHaveFocus();
         expect(button).not.toHaveAttribute("aria-current");
 
@@ -474,7 +477,7 @@ describe("RegionPanel", () => {
         const onHighlightSchool = vi.fn();
         renderSelected(`?region=${REGION}`, {}, { onHighlightSchool });
 
-        await user.click(screen.getByRole("button", { name: "전주고등학교" }));
+        await user.click(screen.getByRole("button", { name: "춘천고등학교" }));
 
         expect(onHighlightSchool).toHaveBeenCalledTimes(1);
         expect(onHighlightSchool).toHaveBeenCalledWith("high1");
@@ -500,7 +503,7 @@ describe("RegionPanel", () => {
           wrapper: withNuqsTestingAdapter({ searchParams: `?region=${REGION}`, hasMemory: true }),
         });
 
-        // Narrow to 고 (전주고등학교 only) within REGION.
+        // Narrow to 고 (춘천고등학교 only) within REGION.
         await user.click(screen.getByRole("button", { name: "고" }));
         expect(screen.getAllByTestId(/^school-row-/)).toHaveLength(1);
 
@@ -508,15 +511,15 @@ describe("RegionPanel", () => {
         // Wait for the region switch to actually propagate through
         // useMapQuery before asserting — OTHER_REGION's heading appearing
         // confirms the re-render happened.
-        await screen.findByRole("heading", { name: "군산시" });
+        await screen.findByRole("heading", { name: "원주시" });
 
         // If the filter hadn't reset, it would still be "고" — but
-        // OTHER_REGION's only fixture school (군산초등학교) is 'elem', so the
+        // OTHER_REGION's only fixture school (원주초등학교) is 'elem', so the
         // list would incorrectly show 0 rows.
         expect(screen.getByRole("button", { name: "전체" })).toHaveAttribute("aria-pressed", "true");
         const rows = screen.getAllByTestId(/^school-row-/);
         expect(rows).toHaveLength(1);
-        expect(rows[0]).toHaveTextContent("군산초등학교");
+        expect(rows[0]).toHaveTextContent("원주초등학교");
       });
     });
   });
@@ -533,31 +536,31 @@ describe("RegionPanel", () => {
       renderSelected(`?region=${REGION}`);
       const rows = screen.getAllByTestId(/^closed-school-row-/);
       expect(rows).toHaveLength(2);
-      expect(rows[0]).toHaveTextContent("전주최근폐교");
+      expect(rows[0]).toHaveTextContent("춘천최근폐교");
       expect(rows[0]).toHaveTextContent("2023");
-      expect(rows[1]).toHaveTextContent("전주오래된폐교");
+      expect(rows[1]).toHaveTextContent("춘천오래된폐교");
       expect(rows[1]).toHaveTextContent("2005");
-      expect(screen.queryByText("군산폐교")).not.toBeInTheDocument();
+      expect(screen.queryByText("원주폐교")).not.toBeInTheDocument();
     });
 
     it("shows 급 배지 and 활용현황 (usage) on each row", () => {
       renderSelected(`?region=${REGION}`);
-      const row = screen.getByTestId("closed-school-row-전주최근폐교-2023");
+      const row = screen.getByTestId("closed-school-row-춘천최근폐교-2023");
       expect(row).toHaveTextContent("고"); // SCHOOL_LEVEL_LABELS.high
       expect(row).toHaveTextContent("미활용");
     });
 
     it("shows a 'no history' message when the region has no 폐교 rows", () => {
-      renderSelected("?region=52140"); // 익산시 — no closed-schools fixture rows for this region
+      renderSelected("?region=51150"); // 강릉시 — no closed-schools fixture rows for this region
       expect(screen.getByText("폐교 목록 (0개)")).toBeInTheDocument();
-      expect(screen.getByText("폐교 이력이 없습니다")).toBeInTheDocument();
+      expect(screen.getByText("이 명단에 등재된 폐교가 없습니다")).toBeInTheDocument();
     });
   });
 
   it("shows the source name and reference date (기준 YYYY.M.D, via referenceDateLabel — Task 5 fix round 1: TopBar's own caption now uses a different, raw-ISO format for a different anchor indicator, see TopBar.test.tsx)", () => {
     renderSelected(`?region=${REGION}&indicator=students_total`);
     expect(
-      screen.getByText(/한국교육개발원 교육통계서비스\(KESS\) 교육기본통계 학교별 데이터셋/),
+      screen.getByText(/검사용 합성 학교 통계/),
     ).toBeInTheDocument();
     expect(screen.getByText(/기준 2026\.4\.1/)).toBeInTheDocument();
   });

@@ -22,7 +22,7 @@ test("모바일에서도 지도와 학교 검색을 사용하고 선택 후 패�
   ).toBeFocused();
   await page
     .getByRole("searchbox", { name: "학교명 검색" })
-    .fill("전주초등학교");
+    .fill("강원테스트초등학교");
   await page.locator('[data-testid^="school-row-"]').first().click();
   await expect(dialog).toHaveCount(0);
   await expect
@@ -36,7 +36,7 @@ test("모바일에서도 지도와 학교 검색을 사용하고 선택 후 패�
   await expect(dialog).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(
-    page.getByRole("heading", { name: "전주초등학교" }),
+    page.getByRole("heading", { name: "강원테스트초등학교" }),
   ).toBeVisible();
   await expect(dialog).toHaveCount(0);
   await expect(
@@ -47,7 +47,7 @@ test("모바일에서도 지도와 학교 검색을 사용하고 선택 후 패�
 test("모바일과 PC 사이 크기 변경 후에도 선택과 배율이 유지된다", async ({
   page,
 }) => {
-  await page.goto("/?region=52110");
+  await page.goto("/?region=51110");
   await expect(page.locator('[data-map-ready="true"]')).toBeAttached({
     timeout: 20000,
   });
@@ -61,7 +61,7 @@ test("모바일과 PC 사이 크기 변경 후에도 선택과 배율이 유지�
   await expect(page.getByRole("complementary")).toBeVisible();
   await expect(
     page.getByRole("combobox", { name: "시군", exact: true }),
-  ).toHaveValue("52110");
+  ).toHaveValue("51110");
   expect(
     await page.evaluate(() => window.__jbmap!.deck.getViewports()[0].zoom),
   ).toBeCloseTo(zoom, 2);
